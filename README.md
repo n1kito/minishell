@@ -23,7 +23,6 @@ You will learn a lot about processes and file descriptors.
 
 # Project Requirement Checklist
 
-
 <details><summary><i>(+ click to expand)</i></summary>
 
 | Program name       | minishell                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
