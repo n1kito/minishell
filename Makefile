@@ -28,35 +28,34 @@ LIB			:= $(shell echo $(LIB_DIR) | cut -c 4-)
 # COLORS
 
 GREEN			:= \033[0;92m
+RED				:= \033[0;31m
 YELLOW			:= \033[0;93m
 BLUE			:= \033[0;94m
 PURPLE			:= \033[0;35m
 IPURPLE			:= \033[3;35m
+RED_BLINK		:= \033[31;5m
 END_COLOR		:= \033[0;39m
 
 # **************************************************************************** #
 # SOURCES
 
-SRC_FILES		:=
+SRC_FILES		:= main
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
 # RULES
 
-all: $(NAME)
+all: header $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	make -C libft
+	@make --no-print-directory -C libft
 	@$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB)
-	@echo "$(GREEN)$(NAME) compiled 🔥$(END_COLOR)"
+	@echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
+
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@$(CC) -MD -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/$(INC_DIR) $< -o $@
-	@echo "$(BLUE)> compiling $(notdir $<)$(END_COLOR)"
-
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(BIN_DIR)
-	@$(CC) -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
-	@echo "$(BLUE)Compiling $(notdir $<)$(END_COLOR)"
+	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
 	@mkdir $(BIN_DIR)
@@ -65,7 +64,7 @@ $(BIN_DIR):
 clean:
 	@rm -rf $(BIN_DIR)
 	@echo "$(YELLOW)$(NAME) all object & dependency files cleaned.$(END_COLOR)"
-	@make clean -C libft
+	@make clean --no-print-directory -C libft
 
 fclean: clean
 	@rm -f $(NAME)
@@ -73,12 +72,18 @@ fclean: clean
 	@rm -f libft/libft.a
 	@echo "$(YELLOW)$(LIB_DIR) executable file cleaned as well!$(END_COLOR)"
 
-re: fclean all
-	@echo "$(GREEN)Cleaned all and rebuilt $(NAME) and $(LIB_DIR)!$(END_COLOR)"
+re: fclean space all
+	@#echo "Cleaned all and rebuilt $(NAME) and $(LIB_DIR)! ✔️"
+
+header:
+	@echo "😈 building $(NAME)"
+
+space:
+	@echo
 
 -include $(OBJ_FILES:%.o=%.d)
 
 # **************************************************************************** #
 # PHONY
 
-.PHONY: all clean fclean re bonus
+.PHONY: all clean fclean re header space

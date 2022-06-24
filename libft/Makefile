@@ -28,8 +28,11 @@ BIN_DIR			:= bin
 # COLORS
 
 GREEN			:= \033[0;92m
+RED				:= \033[0;31m
 YELLOW			:= \033[0;93m
 BLUE			:= \033[0;94m
+PURPLE			:= \033[0;35m
+IPURPLE			:= \033[3;35m
 END_COLOR		:= \033[0;39m
 
 # **************************************************************************** #
@@ -86,19 +89,19 @@ OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 # **************************************************************************** #
 # RULES
 
-all: $(NAME)
+all: space header $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@$(AR) $(NAME) $(OBJ_FILES)
-	@echo "$(GREEN)$(NAME) compiled :)$(END_COLOR)"
+	@echo "\n++ $(GREEN)$(NAME) compiled :)$(END_COLOR)"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile | $(BIN_DIR)
 	@$(CC) -MD -c $(CFLAGS) -I $(INC_DIR) $< -o $@
-	@echo "$(BLUE)Compiling $(notdir $<)$(END_COLOR)"
+	@printf "\r++ $(BLUE)compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
 	@mkdir $(BIN_DIR)
-	@echo "Created $(BIN_DIR)/ directory."
+	@echo "++ $(IPURPLE)created $(BIN_DIR)/ directory.$(END_COLOR)"
 
 clean:
 	@rm -rf $(BIN_DIR)
@@ -111,9 +114,15 @@ fclean: clean
 re: fclean all
 	@echo "$(GREEN)Cleaned all and rebuilt $(NAME)!$(END_COLOR)"
 
+header:
+	@echo "\n++ building $(NAME)"
+
+space:
+	@echo
+
 -include $(OBJ_FILES:%.o=%.d)
 
 # **************************************************************************** #
 # PHONY
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re header space
