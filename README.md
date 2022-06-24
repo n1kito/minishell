@@ -1,6 +1,6 @@
 <h1 align="center">mini(s)hell 🔥</h1>
 <p align="center">
-<img src="img/hell.gif" width="200px" alt="beetlejuice table gif"><br />
+<img src="img/hell.gif" width="200px" alt="elmo hell gif"><br />
 Our work on the 42Born2Code <b>minishell</b> project.<br /><br />
 </p>
 
