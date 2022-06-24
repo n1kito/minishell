@@ -71,11 +71,11 @@ You will learn a lot about processes and file descriptors.
 
 # Research
 
-* https://www.gnu.org/software/bash/manual/bash.html
-* https://pubs.opengroup.org/onlinepubs/9699919799/
-* https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
-* https://catonmat.net/bash-one-liners-explained-part-three
-* https://brennan.io/2015/01/16/write-a-shell-in-c/
+- [ ] https://www.gnu.org/software/bash/manual/bash.html
+- [ ] https://pubs.opengroup.org/onlinepubs/9699919799/
+- [ ] https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
+- [ ] https://catonmat.net/bash-one-liners-explained-part-three
+- [ ] https://brennan.io/2015/01/16/write-a-shell-in-c/
 
 # Resources
 
