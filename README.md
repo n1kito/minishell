@@ -71,6 +71,7 @@ You will learn a lot about processes and file descriptors.
 
 # Research
 
+- [ ] [Effective shell](https://effective-shell.com/)
 - [ ] https://www.gnu.org/software/bash/manual/bash.html
 - [ ] https://pubs.opengroup.org/onlinepubs/9699919799/
 - [ ] https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
