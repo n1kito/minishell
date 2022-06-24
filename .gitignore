@@ -1,0 +1,20 @@
+# Mac Files
+.DS_Store
+
+# CLion Files
+.idea/
+
+# Object files
+*/*.o
+
+# Prerequisites
+*/*.d
+
+# Libraries
+*/*.a
+
+# Executables
+*/*.out
+
+# Bin directory
+*/bin
