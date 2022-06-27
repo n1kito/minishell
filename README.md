@@ -19,6 +19,7 @@ You will learn a lot about processes and file descriptors.
 	- Un repo avec des banches pour chaque feature + Pull Requests, et chaque PR doit être reviewed ensemble avant d'être merged, pour qu'on soit tout le temps au fait de chaque aspect du projet même si on ne l'a pas codé nous-même ?
 	- Discuter de la manière d'implémenter chacune de nos features respectives avant de commencer à coder l'implémentation ?
 	- Est-ce qu'on se fait des points réguliers ? Tous les jours c'est un peu beaucoup mais si on veut aller vite sur ce projet je pense qu'il faut qu'on puisse se suivre régulièrement pour s'assurer que ca avance, et ne pas laisser l'un galérer sur un point à la con pendant une plombe s'il a juste pas envie de déranger l'autre.
+	- Le code de chaque merge doit-il être normé ? Ca peut nous faire gagner du temps.
 
 
 # Project Requirement Checklist
