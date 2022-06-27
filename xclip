@@ -1,0 +1,1 @@
+	@norminette | if grep -qc Error: ; then echo "\r🙀 $(RED)Norm errors. 💀$(END_COLOR)     "; else echo "\r😻 Norm $(BGREEN)OK$(END_COLOR)      "; fi

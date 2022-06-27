@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/05 10:05:59 by mjallada          #+#    #+#              #
-#    Updated: 2022/06/24 09:02:44 by mjallada         ###   ########.fr        #
+#    Updated: 2022/06/27 14:08:37 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ LIB			:= $(shell echo $(LIB_DIR) | cut -c 4-)
 # COLORS
 
 GREEN			:= \033[0;92m
+BGREEN			:= \033[1;92m
 RED				:= \033[0;31m
 YELLOW			:= \033[0;93m
 BLUE			:= \033[0;94m
@@ -45,13 +46,12 @@ OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 # **************************************************************************** #
 # RULES
 
-all: header $(NAME)
+all: header norm $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@make --no-print-directory -C libft
 	@$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB)
 	@echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
-
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@$(CC) -MD -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/$(INC_DIR) $< -o $@
@@ -76,9 +76,14 @@ re: fclean space all
 	@#echo "Cleaned all and rebuilt $(NAME) and $(LIB_DIR)! ✔️"
 
 header:
-	@echo "😈 building $(NAME)"
+	@echo "😈 $(NAME)\n"
 
 space:
+	@echo
+
+norm:
+	@echo -n "😼 Norm check..."
+	@norminette | if grep -qc Error: ; then echo "\r🙀 $(RED)Norm errors. 💀$(END_COLOR)     "; else echo "\r😻 Norm $(BGREEN)OK$(END_COLOR)      "; fi
 	@echo
 
 -include $(OBJ_FILES:%.o=%.d)
@@ -86,4 +91,4 @@ space:
 # **************************************************************************** #
 # PHONY
 
-.PHONY: all clean fclean re header space
+.PHONY: all clean fclean re header space norm
