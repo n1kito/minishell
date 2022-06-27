@@ -17,12 +17,13 @@ You will learn a lot about processes and file descriptors.
 
 ### Teamwork Guidelines
 
-- [ ] Définir notre manière de travailler ensemble
-	- Un repo avec des banches pour chaque feature + Pull Requests, et chaque PR doit être reviewed ensemble avant d'être merged, pour qu'on soit tout le temps au fait de chaque aspect du projet même si on ne l'a pas codé nous-même ?
-	- Discuter de la manière d'implémenter chacune de nos features respectives avant de commencer à coder l'implémentation ?
-	- Est-ce qu'on se fait des points réguliers ? Tous les jours c'est un peu beaucoup mais si on veut aller vite sur ce projet je pense qu'il faut qu'on puisse se suivre régulièrement pour s'assurer que ca avance, et ne pas laisser l'un galérer sur un point à la con pendant une plombe s'il a juste pas envie de déranger l'autre.
-	- Le code de chaque merge doit-il être normé ? Ca peut nous faire gagner du temps.
+- Utilisation d'un [Trello](https://trello.com/b/2fylEX2B/mod%C3%A8le-kanban) pour faciliter le suivi de l'avancement et des choses à faire.
+- Points réguliers à 11h00.
+- Fonctionnement avec branches et Pull Requests.
+	- Les PRs doivent être reviewed par nous deux avant d'être `merged`.
+	- Tout ce qui est `merged` doit être normé.
 
+- [ ] Discuter de la manière d'implémenter chacune de nos features respectives avant de commencer à coder l'implémentation ?
 
 # Project Requirement Checklist
 
