@@ -79,6 +79,11 @@ You will learn a lot about processes and file descriptors.
 - [ ] https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
 - [x] https://catonmat.net/bash-one-liners-explained-part-three
 - [ ] https://brennan.io/2015/01/16/write-a-shell-in-c/
+	
+## 42 Docs
+	- [ ] [Git with concepts explained](https://github.com/Swoorup/mysh)
+	- [ ] [Understanding the shell syntax](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html)
+	- [ ] ['lexer' -> 'parser' -> 'expander' -> 'executor](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 
 # Resources
 
