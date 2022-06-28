@@ -80,6 +80,8 @@ You will learn a lot about processes and file descriptors.
 - [x] https://catonmat.net/bash-one-liners-explained-part-three
 - [ ] https://brennan.io/2015/01/16/write-a-shell-in-c/
 	
+- [ ] [Bash in Backus-Naur form](https://cmdse.github.io/pages/appendix/bash-grammar.html)
+	
 ## 42 Docs
 	- [ ] [Git with concepts explained](https://github.com/Swoorup/mysh)
 	- [ ] [Understanding the shell syntax](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html)
