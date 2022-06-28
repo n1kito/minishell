@@ -12,8 +12,7 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
-- [ ] Apprendre à utiliser un repo git en collaboration
-    * [The Ultimate Github Collaboration Guide](https://medium.com/@jonathanmines/the-ultimate-github-collaboration-guide-df816e98fb67)
+- 
 
 ### Teamwork Guidelines
 
@@ -22,8 +21,6 @@ You will learn a lot about processes and file descriptors.
 - Fonctionnement avec branches et Pull Requests.
 	- Les PRs doivent être reviewed par nous deux avant d'être `merged`.
 	- Tout ce qui est `merged` doit être normé.
-
-- [ ] Discuter de la manière d'implémenter chacune de nos features respectives avant de commencer à coder l'implémentation ?
 
 # Project Requirement Checklist
 
