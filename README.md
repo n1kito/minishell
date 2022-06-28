@@ -79,6 +79,24 @@ You will learn a lot about processes and file descriptors.
 - [ ] https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
 - [x] https://catonmat.net/bash-one-liners-explained-part-three
 - [ ] https://brennan.io/2015/01/16/write-a-shell-in-c/
+
+The shell language grammer is defined as follows in Backus–Naur form:
+
+<command line>	::	<job>
+		|	<job> '&'
+		| 	<job> '&' <command line>
+		|	<job> ';'
+		|	<job> ';' <command line>
+					         
+<job>		::=	<command>
+		|	< job > '|' < command >
+					        
+<command	::=	<simple command>
+	        |	<simple command> '<' <filename>
+	        |	<simple command> '>' <filename>
+					        
+<simple command>::=	<pathname>
+	        |	<simple command>  <token>
 	
 ## 42 Docs
 	- [ ] [Git with concepts explained](https://github.com/Swoorup/mysh)
