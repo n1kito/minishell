@@ -12,7 +12,7 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
-- 
+- [ ] 
 
 ### Teamwork Guidelines
 
@@ -72,12 +72,36 @@ You will learn a lot about processes and file descriptors.
 
 # Research
 
+## Shell operations
+
+Shell reads and executes commands in the following way:
+1. Reads its input from a file or terminal.
+2. Breaks this input into words and operators, obeying the shell quoting rules.
+   - Alias expansion is performed here.
+3. parses the token in to _simple_ and _compound_ commands.
+4. Perfoms the various shell expansions, breaking expanded tokens into lists of filenames and commands and arguments.
+5. Performs any necessary redirections and removes the redirection operators and their operands from the argument list.
+6. Executes the command.
+7. Optionally waits for the command to complete and collects its exit status.
+
+## Simple Command Expansion
+
+When a simple command is executed, the shell performs the following expansions, assignments, and redirections, from left to right, in the following order:
+1. The words that the parser has marked as variable assignments (those preceding the command name) and redirections are saved for later processing.
+2. The words that are not variable assignments or redirections are expanded. If any words remain after expansion, the first word is taken to be the name of the command and the remaining words are the arguments.
+3. Redirections are performed.
+4. The text after the `=` in each variable assignment undergoes tilde expansion, parameter expansion, command substitution, arithmetic expansion, and quote removal before being assigned to the variable.
+
+# Resources
+
+## Online
+
 - [x] [42Docs](https://harm-smits.github.io/42docs/projects/minishell)
 	- [ ] [Git with concepts explained](https://github.com/Swoorup/mysh)
 	- [ ] [Understanding the shell syntax](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html) ⭐
 	- [ ] [lexer -> parser -> expander -> executor](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 - [ ] [Effective shell](https://effective-shell.com/)
-- [ ] [Manuel bash](https://www.gnu.org/software/bash/manual/bash.html)
+- [ ] [Manuel bash](https://www.gnu.org/software/bash/manual/bash.html) ⭐
 - [ ] [POSIX Docs](https://pubs.opengroup.org/onlinepubs/9699919799/)
 - [ ] [Writing your own shell](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 - [x] [Bash one liners explained](https://catonmat.net/bash-one-liners-explained-part-three)
@@ -87,11 +111,8 @@ You will learn a lot about processes and file descriptors.
 
 ### La syntaxe de shell :
 - [ ] [Bash in Backus-Naur form](https://cmdse.github.io/pages/appendix/bash-grammar.html)
-	
-## 42 Docs
-	
 
-# Resources
+## From other 42 students
 
 - @vietdu91's [project](https://github.com/vietdu91/42_minishell)  
     - And his [minishell bible](https://docs.google.com/spreadsheets/d/1uJHQu0VPsjjBkR4hxOeCMEt3AOM1Hp_SmUzPFhAH-nA/edit#gid=0) ✝
