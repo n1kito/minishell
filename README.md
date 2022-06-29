@@ -72,20 +72,24 @@ You will learn a lot about processes and file descriptors.
 
 # Research
 
-- [ ] [42Docs](https://harm-smits.github.io/42docs/projects/minishell)
+- [x] [42Docs](https://harm-smits.github.io/42docs/projects/minishell)
+	- [ ] [Git with concepts explained](https://github.com/Swoorup/mysh)
+	- [ ] [Understanding the shell syntax](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html) ⭐
+	- [ ] [lexer -> parser -> expander -> executor](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 - [ ] [Effective shell](https://effective-shell.com/)
-- [ ] https://www.gnu.org/software/bash/manual/bash.html
-- [ ] https://pubs.opengroup.org/onlinepubs/9699919799/
-- [ ] https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf
-- [x] https://catonmat.net/bash-one-liners-explained-part-three
-- [ ] https://brennan.io/2015/01/16/write-a-shell-in-c/
-	
+- [ ] [Manuel bash](https://www.gnu.org/software/bash/manual/bash.html)
+- [ ] [POSIX Docs](https://pubs.opengroup.org/onlinepubs/9699919799/)
+- [ ] [Writing your own shell](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
+- [x] [Bash one liners explained](https://catonmat.net/bash-one-liners-explained-part-three)
+- [x] [Write a shell in C (Tutorial)](https://brennan.io/2015/01/16/write-a-shell-in-c/)
+- [ ] 🎥 [Writing a Programming Language - The Lexer](https://www.youtube.com/watch?v=TG0qRDrUPpA)
+- [ ] 🎥 [Writing a Programming Language - The Parser](https://www.youtube.com/watch?v=9-EYWLbmiG0)
+
+### La syntaxe de shell :
 - [ ] [Bash in Backus-Naur form](https://cmdse.github.io/pages/appendix/bash-grammar.html)
 	
 ## 42 Docs
-	- [ ] [Git with concepts explained](https://github.com/Swoorup/mysh)
-	- [ ] [Understanding the shell syntax](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html)
-	- [ ] [lexer -> parser -> expander -> executor](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
+	
 
 # Resources
 
