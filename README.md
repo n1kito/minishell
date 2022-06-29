@@ -8,7 +8,7 @@ Our work on the 42Born2Code <b>minishell</b> project.<br /><br />
 Yes, your own little bash.
 You will learn a lot about processes and file descriptors.
 
-# [Minishell B*tch]([https://trello.com/b/2fylEX2B/mod%C3%A8le-kanban](https://www.notion.so/Task-List-Matthieu-Victor-09bcc22ebede42a09f040a39379b5baf))
+# [Minishell B*tch](https://www.notion.so/Task-List-Matthieu-Victor-09bcc22ebede42a09f040a39379b5baf)
 
 # To-do
 
