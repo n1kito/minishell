@@ -8,7 +8,7 @@ Our work on the 42Born2Code <b>minishell</b> project.<br /><br />
 Yes, your own little bash.
 You will learn a lot about processes and file descriptors.
 
-# [Lien vers le Trello](https://trello.com/b/2fylEX2B/mod%C3%A8le-kanban)
+# [Minishell B*tch]([https://trello.com/b/2fylEX2B/mod%C3%A8le-kanban](https://www.notion.so/Task-List-Matthieu-Victor-09bcc22ebede42a09f040a39379b5baf))
 
 # To-do
 
@@ -117,6 +117,7 @@ When a simple command is executed, the shell performs the following expansions, 
 - [ ] [Understanding ASTs (Abstract Syntax Trees)](https://ruslanspivak.com/lsbasi-part7/)
 ### La syntaxe de shell :
 - [ ] [Bash in Backus-Naur form](https://cmdse.github.io/pages/appendix/bash-grammar.html)
+- [ ] [Programme Shell expliqué](https://www.youtube.com/watch?v=ubt-UjcQUYg) ⭐
 
 ## From other 42 students
 
