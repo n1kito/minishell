@@ -12,7 +12,11 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
-- [ ] 
+- [ ] Implementer le prompt
+	- [ ] Comprendre comment fonctionne l'historique
+- [ ] Lexer / Parser
+	- [ ] Discuter des structs necessaires au parsing
+	- [ ] Coder une fonction print qui permet d'imprimer tous les ASTs pour visualiser que le parsing se passe correctement.
 
 ### Teamwork Guidelines
 
