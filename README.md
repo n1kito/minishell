@@ -112,8 +112,8 @@ When a simple command is executed, the shell performs the following expansions, 
 - [ ] [Writing your own shell](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 - [x] [Bash one liners explained](https://catonmat.net/bash-one-liners-explained-part-three)
 - [x] [Write a shell in C (Tutorial)](https://brennan.io/2015/01/16/write-a-shell-in-c/)
-- [ ] 🎥 [Writing a Programming Language - The Lexer](https://www.youtube.com/watch?v=TG0qRDrUPpA)
-- [ ] 🎥 [Writing a Programming Language - The Parser](https://www.youtube.com/watch?v=9-EYWLbmiG0)
+- [ ] 🎥 [Shell Code Explained (1/2)](https://www.youtube.com/watch?v=ubt-UjcQUYg&t=337s)
+- [ ] 🎥 [Shell Code - More Details (2/2)](https://www.youtube.com/watch?v=ZjzMdsTWF0U&t=1614s)
 - [ ] [Understanding ASTs (Abstract Syntax Trees)](https://ruslanspivak.com/lsbasi-part7/)
 ### La syntaxe de shell :
 - [ ] [Bash in Backus-Naur form](https://cmdse.github.io/pages/appendix/bash-grammar.html)
