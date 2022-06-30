@@ -102,6 +102,8 @@ When a simple command is executed, the shell performs the following expansions, 
 
 ## Online
 
+- [ ] 🎥 [Shell Code Explained (1/2)](https://www.youtube.com/watch?v=ubt-UjcQUYg&t=337s) ⭐⭐
+- [ ] 🎥 [Shell Code - More Details (2/2)](https://www.youtube.com/watch?v=ZjzMdsTWF0U&t=1614s) ⭐⭐
 - [x] [42Docs](https://harm-smits.github.io/42docs/projects/minishell)
     - [ ] [Git with concepts explained](https://github.com/Swoorup/mysh)
     - [ ] [Understanding the shell syntax](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html) ⭐
@@ -112,8 +114,6 @@ When a simple command is executed, the shell performs the following expansions, 
 - [ ] [Writing your own shell](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 - [x] [Bash one liners explained](https://catonmat.net/bash-one-liners-explained-part-three)
 - [x] [Write a shell in C (Tutorial)](https://brennan.io/2015/01/16/write-a-shell-in-c/)
-- [ ] 🎥 [Shell Code Explained (1/2)](https://www.youtube.com/watch?v=ubt-UjcQUYg&t=337s)
-- [ ] 🎥 [Shell Code - More Details (2/2)](https://www.youtube.com/watch?v=ZjzMdsTWF0U&t=1614s)
 - [ ] [Understanding ASTs (Abstract Syntax Trees)](https://ruslanspivak.com/lsbasi-part7/)
 ### La syntaxe de shell :
 - [ ] [Bash in Backus-Naur form](https://cmdse.github.io/pages/appendix/bash-grammar.html)
