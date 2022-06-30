@@ -123,7 +123,6 @@ When a simple command is executed, the shell performs the following expansions, 
 - [ ] [Understanding ASTs (Abstract Syntax Trees)](https://ruslanspivak.com/lsbasi-part7/)
 ### La syntaxe de shell :
 - [ ] [Bash in Backus-Naur form](https://cmdse.github.io/pages/appendix/bash-grammar.html)
-- [ ] [Programme Shell expliqué](https://www.youtube.com/watch?v=ubt-UjcQUYg) ⭐
 
 ## From other 42 students
 
