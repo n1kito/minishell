@@ -98,8 +98,18 @@ When a simple command is executed, the shell performs the following expansions, 
 
 (Look at docs for details)
 
-## Command Search and Execution
+# Minishell Process
 
+```mermaid
+graph TD;
+    A[Lexer]-->B[Parser];
+    B-->C[Execution];
+```
+
+## Lexer
+### Token Recognition
+
+[See Bash Rules for Token Recognition](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03)
 
 
 # Resources
