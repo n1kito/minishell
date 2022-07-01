@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/05 10:05:59 by mjallada          #+#    #+#              #
-#    Updated: 2022/06/27 14:08:37 by mjallada         ###   ########.fr        #
+#    Updated: 2022/07/01 12:39:31 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 
 NAME			:= minishell
 CC			:= cc
-CFLAGS			:= -Wall -Wextra -Werror -lreadline
+CFLAGS			:= -Wall -Wextra -Werror
 
 INC_DIR			:= include
 SRC_DIR			:= src
@@ -50,7 +50,7 @@ all: header norm $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@make --no-print-directory -C libft
-	@$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB)
+	@$(CC) -lreadline -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB)
 	@echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
