@@ -50,7 +50,7 @@ all: header norm $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@make --no-print-directory -C libft
-	@$(CC) -lreadline -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB)
+	@$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB) -lreadline
 	@echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)

@@ -16,10 +16,13 @@ int	main()
 {
 	char	*line;
 
-	line = readline("mini(s)hell -> ");
-    // if (line)
-    //     add_history(line);
-	// free(line);
-	printf("%s\n", line);
+	while (1)
+	{
+		line = readline("mini(s)hell -> ");
+		if (line)
+			add_history(line);
+		printf("%s\n", line);
+		free(line);
+	}
 	return (0);
 }
