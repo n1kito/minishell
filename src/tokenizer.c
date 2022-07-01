@@ -45,11 +45,22 @@ void	print_tokens(t_tokens *tokens)
 	printf("\n");
 }
 
+t_tokens	*get_last_token(t_tokens *tokens_list)
+{
+	t_tokens *current;
+
+	current = tokens_list;
+	while (current && current->next)
+		current = current->next;
+	return (current);
+}
+
 void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
 {
 	t_tokens 	*new_token;
 	int 		i;
 
+	printf("adding token node\n");
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
 		return ;
@@ -61,7 +72,20 @@ void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
 		new_token->token[i] = token_start[i];
 	new_token->token[i] = '\0';
 	new_token->next = NULL;
-	*tokens = new_token;
+	if ((*tokens) == NULL)
+		*tokens = new_token;
+	else
+		get_last_token(*tokens)->next = new_token;
+}
+
+int ft_strlen(char *string)
+{
+	int i;
+
+	i = 0;
+	while (string[i])
+		i++;
+	return (i);
 }
 
 void	tokenizer(char *line, t_tokens **tokens)
@@ -71,9 +95,16 @@ void	tokenizer(char *line, t_tokens **tokens)
 
 	token_start = 0;
 	token_end = 0;
-	while (line[token_end] != '\0' && line[token_end] != ' ' && line[token_end] != '	')
+
+	while (token_end < ft_strlen(line))
+	{
+		if (line[token_end] == '\0' || line[token_end] == ' ' || line[token_end] == '	')
+		{
+			add_token_node(tokens, &line[token_start], token_end - token_start);
+			token_start = token_end;
+		}
 		token_end++;
-	add_token_node(tokens, line + token_start, token_end - token_start);
+	}
 }
 
 int	main(int argc, char **argv)
