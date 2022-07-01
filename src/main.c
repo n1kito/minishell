@@ -14,9 +14,11 @@
 
 int	main()
 {
-	char	*test;
+	char	*line;
 
-	test = malloc(sizeof(char) * 4);
-	free(test);
+	line = readline("mini(s)hell -> ");
+    // if (line)
+    //     add_history(line);
+	// free(line);
 	return (0);
 }

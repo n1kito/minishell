@@ -15,7 +15,7 @@
 
 NAME			:= minishell
 CC			:= cc
-CFLAGS			:= -Wall -Wextra -Werror
+CFLAGS			:= -Wall -Wextra -Werror -lreadline
 
 INC_DIR			:= include
 SRC_DIR			:= src
@@ -40,7 +40,7 @@ END_COLOR		:= \033[0;39m
 # **************************************************************************** #
 # SOURCES
 
-SRC_FILES		:= main
+SRC_FILES		:= main prompt
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
