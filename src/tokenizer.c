@@ -81,6 +81,13 @@ int	is_an_operator(char c)
 	return (0);
 }
 
+int	is_quote_character(char c)
+{
+	if (c == 92 || c == 39 || c == 34)
+		return (1);
+	return (0);
+}
+
 void	tokenizer(char *line, t_tokens **tokens)
 {
 	int	token_start;
@@ -90,11 +97,13 @@ void	tokenizer(char *line, t_tokens **tokens)
 	token_end = 0;
 	while (token_end <= ft_strlen(line))
 	{
+		// handle blank spaces
 		if (line[token_end] == '\0' || line[token_end] == ' ' || line[token_end] == '	')
 		{
 			add_token_node(tokens, &line[token_start], token_end - token_start);
 			token_start = token_end + 1;
 		}
+		// handle operators
 		else if (is_an_operator(line[token_start]))
 		{
 			if (is_an_operator(line[token_start + 1]))
@@ -108,6 +117,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 			}
 			token_start = token_end + 1;
 		}
+		// TODO : add quoting handling
 		token_end++;
 	}
 }
