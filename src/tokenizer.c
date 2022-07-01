@@ -32,22 +32,23 @@ typedef struct s_tokens
 
 void	print_tokens(t_tokens *tokens)
 {
-	t_tokens *current;
+	t_tokens	*current;
 
+	printf("\033[0;35m[\033[0m");
 	current = tokens;
 	while (current)
 	{
 		printf("%s", current->token);
 		if (current->next)
-			printf("\033[0;35|\033[0m\n");
+			printf("\033[0;35m|\033[0m");
 		current = current->next;
 	}
-	printf("\n");
+	printf("\033[0;35m]\033[0m\n");
 }
 
 t_tokens	*get_last_token(t_tokens *tokens_list)
 {
-	t_tokens *current;
+	t_tokens	*current;
 
 	current = tokens_list;
 	while (current && current->next)
@@ -57,10 +58,9 @@ t_tokens	*get_last_token(t_tokens *tokens_list)
 
 void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
 {
-	t_tokens 	*new_token;
-	int 		i;
+	t_tokens	*new_token;
+	int			i;
 
-	printf("adding token node\n");
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
 		return ;
@@ -96,12 +96,12 @@ void	tokenizer(char *line, t_tokens **tokens)
 	token_start = 0;
 	token_end = 0;
 
-	while (token_end < ft_strlen(line))
+	while (token_end <= ft_strlen(line))
 	{
 		if (line[token_end] == '\0' || line[token_end] == ' ' || line[token_end] == '	')
 		{
 			add_token_node(tokens, &line[token_start], token_end - token_start);
-			token_start = token_end;
+			token_start = token_end + 1;
 		}
 		token_end++;
 	}
@@ -114,12 +114,15 @@ int	main(int argc, char **argv)
 	tokens = NULL;
 	if (argc != 2)
 		printf("Error\n> %s needs a quoted string in argv[1].\n", argv[0]);
-	tokenizer(argv[1], &tokens);
-	printf("[TOKENS]\n");
-	print_tokens(tokens);
+	else
+	{
+		printf(" %s\n", argv[1]);
+		tokenizer(argv[1], &tokens);
+		print_tokens(tokens);
+	}
 	return (0);
 }
 
 // tests
 // ./tokenizer "a"
-// ./tokenizer "a a"
+// ./tokenizer "a b c d e f gh ij kl mnop ejrkewjrkewjrkwejrwejkrew"
