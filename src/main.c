@@ -6,23 +6,14 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/07/01 12:38:07 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/07/01 14:44:27 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main()
+int	main(void)
 {
-	char	*line;
-
-	while (1)
-	{
-		line = readline("mini(s)hell -> ");
-		if (line)
-			add_history(line);
-		printf("%s\n", line);
-		free(line);
-	}
+	read_prompt();
 	return (0);
 }
