@@ -1,6 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// Blank Characters
+#define SPACE 32
+#define TAB 9
+// Operator Characters
+#define PIPE 124
+#define LEFT_CHEVRON 60
+#define RIGHT_CHEVRON 62
+// Quote Characters
+#define BACKSLASH 92
+#define SINGLE_QUOTE 39
+#define DOUBLE_QUOTE 34
+
 /*
 
 The tokenizer() function follows the shell guidelines.
@@ -46,7 +58,8 @@ void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
 	int			i;
 
 	if (token_len == 0)
-		return ;
+//		return ;
+		token_len = 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
 		return ;
@@ -74,18 +87,37 @@ int ft_strlen(char *string)
 	return (i);
 }
 
-int	is_an_operator(char c)
+int	is_operator(char c)
 {
 	if (c && (c == '<' || c == '>' || c == '|'))
+//	if (c && (c == LEFT_CHEVRON || c == RIGHT_CHEVRON || c == PIPE))
 		return (1);
 	return (0);
 }
 
+int	can_form_operator(char *second_token)
+{
+	char *first_token;
+
+	first_token = second_token - 1;
+	if (*first_token == '>' && *second_token == '>')
+		return (1);
+	//TODO – Add other operators conditions
+}
+
 int	is_quote_character(char c)
 {
-	if (c == 92 || c == 39 || c == 34)
+	if (c == BACKSLASH || c == SINGLE_QUOTE || c == DOUBLE_QUOTE)
 		return (1);
 	return (0);
+}
+
+void	extract_node(t_tokens **tokens, char *token_ptr, int *token_start, int *token_end)
+{
+	add_token_node(tokens, token_ptr, (*token_end - *token_start));
+//	*token_start = *token_end + 1;
+//	*token_end = *token_start;
+//	*token_end += 1;
 }
 
 void	tokenizer(char *line, t_tokens **tokens)
@@ -97,28 +129,72 @@ void	tokenizer(char *line, t_tokens **tokens)
 	token_end = 0;
 	while (token_end <= ft_strlen(line))
 	{
-		// handle blank spaces
+		// If the end of input is recognized, the current token (if any) shall
+		// be delimited.
 		if (line[token_end] == '\0' || line[token_end] == ' ' || line[token_end] == '	')
 		{
-			add_token_node(tokens, &line[token_start], token_end - token_start);
-			token_start = token_end + 1;
+			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+			token_end++;
+			token_start = token_end;
 		}
-		// handle operators
-		else if (is_an_operator(line[token_start]))
+		// If the previous character was used as part of an operator and the
+		// current character is not quoted and can be used with the previous
+		// characters to form an operator, it shall be used as part of that (operator) token.
+		else if (is_operator(line[token_end - 1]) && can_form_operator(line + token_end) && token_end - token_start == 2)
 		{
-			if (is_an_operator(line[token_start + 1]))
-			{
-				token_end++;
-				add_token_node(tokens, &line[token_start], token_end - token_start + 1);
-			}
-			else
-			{
-				add_token_node(tokens, &line[token_start], token_end - token_start + 1);
-			}
-			token_start = token_end + 1;
+			printf("#1\n");
+			extract_node(tokens, &line[token_start], &token_start, &token_end);
+			token_start = token_end;
+//			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
+//			extract_node(tokens, &line[token_start], &token_start, &token_end);
+//			token_end++;
+//			token_start = token_end + 1;
 		}
-		// TODO : add quoting handling
+		// If the previous character was used as part of an operator and the
+		// current character cannot be used with the previous characters to form
+		// an operator, the operator containing the previous character shall be delimited.
+		else if (is_operator(line[token_start]) && !can_form_operator(line + token_end))
+		{
+			printf("#2\n");
+//			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
+			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+			token_start = token_end;
+		}
+		// If the current character is not quoted and can be used as the first
+		// character of a new operator, the current token (if any) shall be
+		// delimited. The current character shall be used as the beginning of
+		// the next (operator) token.
+		else if (is_operator(line[token_end]) && !is_operator(line[token_start]))
+		{
+			printf("#3\n");
+//			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
+			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+//			token_end++;
+			token_start = token_end;
+		}
 		token_end++;
+//		else if (is_operator(line[token_end]))
+//		{
+//			extract_node(tokens, &line[token_start], &token_start, &token_end);
+//		}
+//		else if (is_quote_character(line[token_start]))
+//		{
+//			// here I could token_end++ puisque je vais toujours commencer a regarder a partir du prochain char
+//			if (line[token_start] == 92) // if character is backslash
+//			{
+//				token_end++;
+//				add_token_node(tokens, &line[token_start], token_end - token_start + 1);
+//			}
+//			else
+//			{
+//				token_end++;
+//				while (line[token_end] != line[token_start])
+//					token_end++;
+//				add_token_node(tokens, &line[token_start], token_end - token_start + 1);
+//			}
+//			token_start = token_end + 1;
+//		}
+//		else
 	}
 }
 
@@ -141,3 +217,8 @@ int	main(int argc, char **argv)
 // tests
 // ./tokenizer "a"
 // ./tokenizer "a b c d e f gh ij kl mnop ejrkewjrkewjrkwejrwejkrew"
+// operator tests
+//
+// quotes tests
+//
+
