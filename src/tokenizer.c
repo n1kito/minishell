@@ -52,31 +52,6 @@ t_tokens	*get_last_token(t_tokens *tokens_list)
 	return (current);
 }
 
-void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
-{
-	t_tokens	*new_token;
-	int			i;
-
-	if (token_len == 0)
-//		return ;
-		token_len = 1;
-	new_token = malloc(sizeof(t_tokens));
-	if (!new_token)
-		return ;
-	new_token->token = malloc(sizeof(char) * (token_len + 1));
-	if (!new_token->token)
-		return ;
-	i = -1;
-	while (++i < token_len)
-		new_token->token[i] = token_start[i];
-	new_token->token[i] = '\0';
-	new_token->next = NULL;
-	if ((*tokens) == NULL)
-		*tokens = new_token;
-	else
-		get_last_token(*tokens)->next = new_token;
-}
-
 int ft_strlen(char *string)
 {
 	int i;
@@ -122,9 +97,38 @@ int	is_blank_character(char c)
 	return (0);
 }
 
-void	extract_node(t_tokens **tokens, char *token_ptr, int *token_start, int *token_end)
+void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
 {
-	add_token_node(tokens, token_ptr, (*token_end - *token_start));
+	t_tokens	*new_token;
+	int			i;
+
+	if (token_len == 0)
+		token_len++;
+	new_token = malloc(sizeof(t_tokens));
+	if (!new_token)
+		return ;
+	new_token->token = malloc(sizeof(char) * (token_len + 1));
+	if (!new_token->token)
+		return ;
+	i = -1;
+	while (++i < token_len)
+		new_token->token[i] = token_start[i];
+	new_token->token[i] = '\0';
+	new_token->next = NULL;
+	if ((*tokens) == NULL)
+		*tokens = new_token;
+	else
+		get_last_token(*tokens)->next = new_token;
+}
+
+int extract = 0;
+
+void	extract_node(t_tokens **tokens, char *token_ptr, char *token_start, char *token_end)
+{
+//	printf("extract #%d\n", ++extract);
+//	printf("token len: %d\n", (int)(token_end - token_start));
+	add_token_node(tokens, token_ptr, (int)(token_end - token_start + 1));
+//	printf("extracted %s\n", get_last_token(*tokens)->token);
 }
 
 void	tokenizer(char *line, t_tokens **tokens)
@@ -142,33 +146,36 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// be delimited.
 		if (line[token_end] == '\0')
 		{
-			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+			if (token_end != token_start)
+				extract_node(tokens, &line[token_start], &line[token_start], &line[token_end] - 1);
 //			add_token_node(tokens, &line[token_start], token_end - 1 - token_start);
 //			token_end++;
-			token_start = token_end;
+//			token_start = token_end;
 		}
 		// If the previous character was used as part of an operator and the
 		// current character is not quoted and can be used with the previous
 		// characters to form an operator, it shall be used as part of that (operator) token.
-//		else if (is_operator(line[token_end - 1]) && can_form_operator(&line[token_start], &line[token_end]))
-//		{
+		else if (is_operator(line[token_end - 1]) && can_form_operator(&line[token_start], &line[token_end]))
+		{
 //			printf("#1\n");
-//			extract_node(tokens, &line[token_start], &token_start, &token_end);
+//			printf("token start is %p, token end is %p\n", &line[token_start], &line[token_end]);
+			extract_node(tokens, &line[token_start], &line[token_start], &line[token_end]);
 //			add_token_node(tokens, &line[token_start], token_end - token_start);
 //			token_start = token_end;
 //			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
 //			extract_node(tokens, &line[token_start], &token_start, &token_end);
 //			token_end++;
-//			token_start = token_end + 1;
-//		}
+			token_start = token_end + 1;
+			token_end = token_start;
+		}
 		// If the previous character was used as part of an operator and the
 		// current character cannot be used with the previous characters to form
 		// an operator, the operator containing the previous character shall be delimited.
-		else if (is_operator(line[token_start]) && !can_form_operator(&line[token_start], &line[token_end]))
+		else if (is_operator(line[token_end - 1]) && !can_form_operator(&line[token_start], &line[token_end]))
 		{
 //			printf("#2\n");
 //			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
-			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+			extract_node(tokens, &line[token_start], &line[token_start], &line[token_end] - 1);
 //			add_token_node(tokens, &line[token_start], (token_end - 1) - token_start);
 			token_start = token_end;
 		}
@@ -185,31 +192,34 @@ void	tokenizer(char *line, t_tokens **tokens)
 		}
 		// If the current character is an unquoted '$' or '',
 		// TODO Find the actual rule because I have a doubt
+		//
 		// TODO and do something here
+		//
 		// If the current character is not quoted and can be used as the first
 		// character of a new operator, the current token (if any) shall be
 		// delimited. The current character shall be used as the beginning of
 		// the next (operator) token.
 		else if (is_operator(line[token_end]) && quoting == 0)
 		{
-			printf("#3\n");
+//			printf("#3\n");
 //			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
-			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+			if (token_end != token_start)
+				extract_node(tokens, &line[token_start], &line[token_start], &line[token_end - 1]);
 //			token_end++;
 			token_start = token_end;
 		}
 		else if (is_blank_character(line[token_end]) && quoting == 0)
 		{
-			printf("found blank char @ %d\n", token_end);
-			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+//			printf("found blank char @ %d\n", token_end);
+			extract_node(tokens, &line[token_start], &line[token_start], &line[token_end] - 1);
 			token_start = token_end + 1;
 		}
 		//If the current character is a '#', it and all subsequent characters up to,
 		// but excluding, the next shall be discarded as a comment. The that ends
 		// the line is not considered part of the comment.
 		// TODO Implement this bullshit
+//		printf("token++\n");
 		token_end++;
-		printf("token_end = %d\n", token_end);
 	}
 }
 
@@ -228,6 +238,12 @@ int	main(int argc, char **argv)
 	}
 	return (0);
 }
+
+// TODO
+// Fix this case, why is it adding a space after the first token ????
+// > >>|aabcd +++>>>>>>>|
+// [>| |>>|||aabcd|+++|>>|>>|>>|>||]
+
 
 // tests
 // ./tokenizer "a"
