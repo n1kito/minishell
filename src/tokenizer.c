@@ -95,14 +95,17 @@ int	is_operator(char c)
 	return (0);
 }
 
-int	can_form_operator(char *second_token)
+int	can_form_operator(char *token_start, char *second_token)
 {
 	char *first_token;
 
-	first_token = second_token - 1;
-	if (*first_token == '>' && *second_token == '>')
+	first_token = token_start;
+//	printf("operator len: %ld\n", second_token - first_token);
+	if ((second_token - first_token == 1)
+		&& ((*first_token == '>' && *second_token == '>')
+		|| (*first_token == '<' && *second_token == '<')))
 		return (1);
-	//TODO – Add other operators conditions
+	return (0);
 }
 
 int	is_quote_character(char c)
@@ -112,59 +115,82 @@ int	is_quote_character(char c)
 	return (0);
 }
 
+int	is_blank_character(char c)
+{
+	if (c == ' ' || c == '	') // TODO check for other possible blanks
+		return (1);
+	return (0);
+}
+
 void	extract_node(t_tokens **tokens, char *token_ptr, int *token_start, int *token_end)
 {
 	add_token_node(tokens, token_ptr, (*token_end - *token_start));
-//	*token_start = *token_end + 1;
-//	*token_end = *token_start;
-//	*token_end += 1;
 }
 
 void	tokenizer(char *line, t_tokens **tokens)
 {
 	int	token_start;
 	int	token_end;
+	int quoting;
 
 	token_start = 0;
 	token_end = 0;
+	quoting = 0;
 	while (token_end <= ft_strlen(line))
 	{
 		// If the end of input is recognized, the current token (if any) shall
 		// be delimited.
-		if (line[token_end] == '\0' || line[token_end] == ' ' || line[token_end] == '	')
+		if (line[token_end] == '\0')
 		{
 			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
-			token_end++;
+//			add_token_node(tokens, &line[token_start], token_end - 1 - token_start);
+//			token_end++;
 			token_start = token_end;
 		}
 		// If the previous character was used as part of an operator and the
 		// current character is not quoted and can be used with the previous
 		// characters to form an operator, it shall be used as part of that (operator) token.
-		else if (is_operator(line[token_end - 1]) && can_form_operator(line + token_end) && token_end - token_start == 2)
-		{
-			printf("#1\n");
-			extract_node(tokens, &line[token_start], &token_start, &token_end);
-			token_start = token_end;
+//		else if (is_operator(line[token_end - 1]) && can_form_operator(&line[token_start], &line[token_end]))
+//		{
+//			printf("#1\n");
+//			extract_node(tokens, &line[token_start], &token_start, &token_end);
+//			add_token_node(tokens, &line[token_start], token_end - token_start);
+//			token_start = token_end;
 //			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
 //			extract_node(tokens, &line[token_start], &token_start, &token_end);
 //			token_end++;
 //			token_start = token_end + 1;
-		}
+//		}
 		// If the previous character was used as part of an operator and the
 		// current character cannot be used with the previous characters to form
 		// an operator, the operator containing the previous character shall be delimited.
-		else if (is_operator(line[token_start]) && !can_form_operator(line + token_end))
+		else if (is_operator(line[token_start]) && !can_form_operator(&line[token_start], &line[token_end]))
 		{
-			printf("#2\n");
+//			printf("#2\n");
 //			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
 			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+//			add_token_node(tokens, &line[token_start], (token_end - 1) - token_start);
 			token_start = token_end;
 		}
+		// If the current character is <backslash>, single-quote, or double-quote
+		// and it is not quoted, it shall affect quoting for subsequent characters
+		// up to the end of the quoted text.
+		else if (is_quote_character(line[token_end]))
+		{
+			printf("quote char found\n");
+			if (is_quote_character(line[token_start]) && token_end - token_start)
+				quoting = 0;
+			else
+				quoting = 1;
+		}
+		// If the current character is an unquoted '$' or '',
+		// TODO Find the actual rule because I have a doubt
+		// TODO and do something here
 		// If the current character is not quoted and can be used as the first
 		// character of a new operator, the current token (if any) shall be
 		// delimited. The current character shall be used as the beginning of
 		// the next (operator) token.
-		else if (is_operator(line[token_end]) && !is_operator(line[token_start]))
+		else if (is_operator(line[token_end]) && quoting == 0)
 		{
 			printf("#3\n");
 //			printf("token_start is %c\ntoken_end is %c\n", line[token_start], line[token_end]);
@@ -172,29 +198,18 @@ void	tokenizer(char *line, t_tokens **tokens)
 //			token_end++;
 			token_start = token_end;
 		}
+		else if (is_blank_character(line[token_end]) && quoting == 0)
+		{
+			printf("found blank char @ %d\n", token_end);
+			extract_node(tokens, &line[token_start], &token_start, &token_end - 1);
+			token_start = token_end + 1;
+		}
+		//If the current character is a '#', it and all subsequent characters up to,
+		// but excluding, the next shall be discarded as a comment. The that ends
+		// the line is not considered part of the comment.
+		// TODO Implement this bullshit
 		token_end++;
-//		else if (is_operator(line[token_end]))
-//		{
-//			extract_node(tokens, &line[token_start], &token_start, &token_end);
-//		}
-//		else if (is_quote_character(line[token_start]))
-//		{
-//			// here I could token_end++ puisque je vais toujours commencer a regarder a partir du prochain char
-//			if (line[token_start] == 92) // if character is backslash
-//			{
-//				token_end++;
-//				add_token_node(tokens, &line[token_start], token_end - token_start + 1);
-//			}
-//			else
-//			{
-//				token_end++;
-//				while (line[token_end] != line[token_start])
-//					token_end++;
-//				add_token_node(tokens, &line[token_start], token_end - token_start + 1);
-//			}
-//			token_start = token_end + 1;
-//		}
-//		else
+		printf("token_end = %d\n", token_end);
 	}
 }
 
@@ -218,7 +233,9 @@ int	main(int argc, char **argv)
 // ./tokenizer "a"
 // ./tokenizer "a b c d e f gh ij kl mnop ejrkewjrkewjrkwejrwejkrew"
 // operator tests
+// a b c d e>f|>>g||h<<i<<<
+// [a|b|c|d|e|>|f|||>>|g|||||h|<<|i|<<|<]
+//
 //
 // quotes tests
 //
-
