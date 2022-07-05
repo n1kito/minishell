@@ -15,7 +15,7 @@
 
 /*
 
-The tokenizer() function follows the shell guidelines.
+The tokenizer() function strictly follows the shell guidelines.
 See README for more information.
 
 */
@@ -65,7 +65,6 @@ int ft_strlen(char *string)
 int	is_operator(char c)
 {
 	if (c && (c == '<' || c == '>' || c == '|'))
-//	if (c && (c == LEFT_CHEVRON || c == RIGHT_CHEVRON || c == PIPE))
 		return (1);
 	return (0);
 }
@@ -75,10 +74,9 @@ int	can_form_operator(char *token_start, char *second_token)
 	char *first_token;
 
 	first_token = token_start;
-//	printf("operator len: %ld\n", second_token - first_token);
 	if ((second_token - first_token == 1)
 		&& ((*first_token == '>' && *second_token == '>')
-		|| (*first_token == '<' && *second_token == '<')))
+			|| (*first_token == '<' && *second_token == '<')))
 		return (1);
 	return (0);
 }
@@ -97,13 +95,13 @@ int	is_blank_character(char c)
 	return (0);
 }
 
-void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
+void	add_token_node(t_tokens **tokens, char *token_start, char *token_end)
 {
+	int			token_len;
 	t_tokens	*new_token;
 	int			i;
 
-	if (token_len == 0)
-		token_len++;
+	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
 		return ;
@@ -119,18 +117,6 @@ void	add_token_node(t_tokens **tokens, char *token_start, int token_len)
 		*tokens = new_token;
 	else
 		get_last_token(*tokens)->next = new_token;
-}
-
-int extract = 0;
-
-void	extract_node(t_tokens **tokens, char *token_ptr, char *token_start, char *token_end)
-{
-//	printf("extract #%d\n", ++extract);
-//	printf("token len: %d\n", (int)(token_end - token_start));
-	if (!is_blank_character(*token_start) || !is_blank_character(*token_end))
-		add_token_node(tokens, token_ptr, (int)(token_end - token_start + 1));
-//	printf("extracted \"%s\"\n", get_last_token(*tokens)->token);
-	printf("+ ");
 }
 
 int	is_part_of_token(char *ptr)
@@ -157,7 +143,8 @@ void	tokenizer(char *line, t_tokens **tokens)
 		if (line[current_char] == '\0')
 		{
 			printf("[Rule 1] ");
-			extract_node(tokens, &line[token_start], &line[token_start], &line[current_char - 1]);
+			if (is_part_of_token(&line[current_char - 1]))
+				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			break ;
 		}
 		// 2
@@ -167,11 +154,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		else if (is_operator(line[current_char - 1]) && can_form_operator(&line[token_start], &line[current_char]))
 		{
 			printf("[Rule 2] ");
-//			extract_node(tokens, &line[token_start], &line[token_start], &line[current_char]);
-//			token_start = current_char + 1;
-//			current_char = token_start;
 			current_char++;
-			// I could replace this with token_start = ++current_char;
 		}
 		// 3
 		// If the previous character was used as part of an operator and the
@@ -180,7 +163,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		else if (is_operator(line[current_char - 1]) && !can_form_operator(&line[token_start], &line[current_char]))
 		{
 			printf("[Rule 3] ");
-			extract_node(tokens, &line[token_start], &line[token_start], &line[current_char] - 1);
+			add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			token_start = current_char;
 			current_char++;
 		}
@@ -198,7 +181,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 			printf("[Rule 6] ");
 			if (current_char && is_part_of_token(&line[current_char - 1])) // checks that we're not a the start of a line and that the previous char is not a blank
 			{
-				extract_node(tokens, &line[token_start], &line[token_start], &line[current_char - 1]);
+				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 				token_start = current_char;
 			}
 			current_char++;
@@ -210,10 +193,9 @@ void	tokenizer(char *line, t_tokens **tokens)
 		{
 			printf("[Rule 7] ");
 			if (current_char && is_part_of_token(&line[current_char - 1]))
-				extract_node(tokens, &line[token_start], &line[token_start], &line[current_char] - 1);
+				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			token_start = current_char + 1;
 			current_char = token_start;
-			// I could replace this with token_start = ++current_char;
 		}
 		// 8
 		// If the previous character was part of a word, the current character
@@ -267,6 +249,8 @@ int	main(int argc, char **argv)
 // a b c d e>f|>>g||h<<i<<<
 // [a|b|c|d|e|>|f|||>>|g|||||h|<<|i|<<|<]
 //
+// ./tokenizer " ||>ab bc|||>>>>|>   a " (copy paste is if it looks weird in CLION, it's because | + > is recognized as one symbol)
+// [||||>|ab|bc|||||||>>|>>|||>|a]
 //
 // quotes tests
 //
