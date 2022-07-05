@@ -127,8 +127,10 @@ void	extract_node(t_tokens **tokens, char *token_ptr, char *token_start, char *t
 {
 //	printf("extract #%d\n", ++extract);
 //	printf("token len: %d\n", (int)(token_end - token_start));
+	if (is_blank_character(*token_start) || is_blank_character(*token_end))
+		return ;
 	add_token_node(tokens, token_ptr, (int)(token_end - token_start + 1));
-//	printf("extracted %s\n", get_last_token(*tokens)->token);
+//	printf("extracted \"%s\"\n", get_last_token(*tokens)->token);
 }
 
 void	tokenizer(char *line, t_tokens **tokens)
@@ -184,7 +186,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// up to the end of the quoted text.
 		else if (is_quote_character(line[token_end]))
 		{
-			printf("quote char found\n");
+//			printf("quote char found\n");
 			if (is_quote_character(line[token_start]) && token_end - token_start)
 				quoting = 0;
 			else
