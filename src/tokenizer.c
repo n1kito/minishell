@@ -1,17 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-// Blank Characters
-#define SPACE 32
-#define TAB 9
-// Operator Characters
-#define PIPE 124
-#define LEFT_CHEVRON 60
-#define RIGHT_CHEVRON 62
-// Quote Characters
-#define BACKSLASH 92
-#define SINGLE_QUOTE 39
-#define DOUBLE_QUOTE 34
+#include "../include/tokenizer.h"
 
 /*
 
@@ -19,28 +6,6 @@ The tokenizer() function strictly follows the shell guidelines.
 See README for more information.
 
 */
-
-typedef struct s_tokens
-{
-	char			*token;
-	struct s_tokens	*next;
-}	t_tokens;
-
-void	print_tokens(t_tokens *tokens)
-{
-	t_tokens	*current;
-
-	printf("\033[0;35m[\033[0m");
-	current = tokens;
-	while (current)
-	{
-		printf("%s", current->token);
-		if (current->next)
-			printf("\033[0;35m|\033[0m");
-		current = current->next;
-	}
-	printf("\033[0;35m]\033[0m\n");
-}
 
 t_tokens	*get_last_token(t_tokens *tokens_list)
 {
@@ -50,16 +15,6 @@ t_tokens	*get_last_token(t_tokens *tokens_list)
 	while (current && current->next)
 		current = current->next;
 	return (current);
-}
-
-int ft_strlen(char *string)
-{
-	int i;
-
-	i = 0;
-	while (string[i])
-		i++;
-	return (i);
 }
 
 int	is_operator(char c)
@@ -218,39 +173,3 @@ void	tokenizer(char *line, t_tokens **tokens)
 		}
 	}
 }
-
-int	main(int argc, char **argv)
-{
-	t_tokens	*tokens;
-
-	tokens = NULL;
-	if (argc != 2)
-		printf("Error\n> %s needs a quoted string in argv[1].\n", argv[0]);
-	else
-	{
-		printf(" %s\n", argv[1]);
-		tokenizer(argv[1], &tokens);
-		printf("\n");
-		print_tokens(tokens);
-	}
-	return (0);
-}
-
-// TODO
-// Fix this case, why is it adding a space after the first token ????
-// > >>|aabcd +++>>>>>>>|
-// [>| |>>|||aabcd|+++|>>|>>|>>|>||]
-
-
-// tests
-// ./tokenizer "a"
-// ./tokenizer "a b c d e f gh ij kl mnop ejrkewjrkewjrkwejrwejkrew"
-// operator tests
-// a b c d e>f|>>g||h<<i<<<
-// [a|b|c|d|e|>|f|||>>|g|||||h|<<|i|<<|<]
-//
-// ./tokenizer " ||>ab bc|||>>>>|>   a " (copy paste is if it looks weird in CLION, it's because | + > is recognized as one symbol)
-// [||||>|ab|bc|||||||>>|>>|||>|a]
-//
-// quotes tests
-//
