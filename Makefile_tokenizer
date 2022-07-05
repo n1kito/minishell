@@ -1,2 +1,2 @@
 all:
-	gcc -Wall -Wextra -Werror src/tokenizer.c -o tokenizer
+	@gcc -Wall -Wextra -Werror src/tokenizer.c -o tokenizer
