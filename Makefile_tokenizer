@@ -1,2 +1,10 @@
 all:
 	@gcc -Wall -Wextra -Werror src/tokenizer*.c -Iinclude -o tokenizer
+
+test: all
+	@sh src/tokenizer_tester.sh
+
+visual:
+	@gcc -Wall -Wextra -Werror -D VISUAL src/tokenizer*.c -Iinclude -o tokenizer
+
+.PHONY: all visual test

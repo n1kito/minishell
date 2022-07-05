@@ -26,7 +26,7 @@ int	is_operator(char c)
 
 int	can_form_operator(char *token_start, char *second_token)
 {
-	char *first_token;
+	char	*first_token;
 
 	first_token = token_start;
 	if ((second_token - first_token == 1)
@@ -38,7 +38,7 @@ int	can_form_operator(char *token_start, char *second_token)
 
 int	is_quote_character(char c)
 {
-	if (c == BACKSLASH || c == SINGLE_QUOTE || c == DOUBLE_QUOTE)
+	if (c == SINGLE_QUOTE || c == DOUBLE_QUOTE) // Backslash character is not included in the subject
 		return (1);
 	return (0);
 }
@@ -56,6 +56,7 @@ void	add_token_node(t_tokens **tokens, char *token_start, char *token_end)
 	t_tokens	*new_token;
 	int			i;
 
+	PLUS
 	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
@@ -76,7 +77,7 @@ void	add_token_node(t_tokens **tokens, char *token_start, char *token_end)
 
 int	is_part_of_token(char *ptr)
 {
-	if (is_blank_character(*ptr) || is_operator(*ptr))
+	if ((is_blank_character(*ptr) || is_operator(*ptr)))
 		return (0);
 	return (1);
 }
@@ -85,7 +86,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 {
 	int	token_start;
 	int	current_char;
-//	int quoting;
+//	int	quoting;
 
 	token_start = 0;
 	current_char = 0;
@@ -97,8 +98,9 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// be delimited.
 		if (line[current_char] == '\0')
 		{
-			printf("[Rule 1] ");
-			if (is_part_of_token(&line[current_char - 1]))
+			ONE
+//			if (is_part_of_token(&line[current_char - 1]))
+			if (token_start != current_char && is_part_of_token(&line[current_char - 1]))
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			break ;
 		}
@@ -106,9 +108,10 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// If the previous character was used as part of an operator and the
 		// current character is not quoted and can be used with the previous
 		// characters to form an operator, it shall be used as part of that (operator) token.
-		else if (is_operator(line[current_char - 1]) && can_form_operator(&line[token_start], &line[current_char]))
+		else if (is_operator(line[current_char - 1])
+			&& can_form_operator(&line[token_start], &line[current_char]))
 		{
-			printf("[Rule 2] ");
+			TWO
 			current_char++;
 		}
 		// 3
@@ -117,13 +120,15 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// an operator, the operator containing the previous character shall be delimited.
 		else if (is_operator(line[current_char - 1]) && !can_form_operator(&line[token_start], &line[current_char]))
 		{
-			printf("[Rule 3] ");
+			THREE
 			add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			token_start = current_char;
 			current_char++;
 		}
 		// 4
-		//
+		// If the current character is single-quote, or double-quote
+		// and it is not quoted, it shall affect quoting for subsequent characters
+		// up to the end of the quoted text.
 		// 5
 		//
 		// 6
@@ -133,12 +138,13 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// the next (operator) token.
 		else if (is_operator(line[current_char]))
 		{
-			printf("[Rule 6] ");
+			SIX
 			if (current_char && is_part_of_token(&line[current_char - 1])) // checks that we're not a the start of a line and that the previous char is not a blank
 			{
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 				token_start = current_char;
 			}
+			token_start = current_char;
 			current_char++;
 		}
 		// 7
@@ -146,7 +152,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// the previous character is delimited and the current character shall be discarded.
 		else if (is_blank_character(line[current_char]))
 		{
-			printf("[Rule 7] ");
+			SEVEN
 			if (current_char && is_part_of_token(&line[current_char - 1]))
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			token_start = current_char + 1;
@@ -155,9 +161,9 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// 8
 		// If the previous character was part of a word, the current character
 		// shall be appended to that word.
-		else if (is_part_of_token(&line[current_char - 1]))
+		else if (current_char && is_part_of_token(&line[current_char - 1]))
 		{
-			printf("[Rule 8] ");
+			EIGHT
 			current_char++;
 		}
 		// 9
@@ -167,7 +173,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// The current character is used as the start of a new word.
 		else
 		{
-			printf("[Rule 10] ");
+			TEN
 			token_start = current_char;
 			current_char++;
 		}

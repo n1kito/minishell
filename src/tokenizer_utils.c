@@ -4,16 +4,16 @@ void	print_tokens(t_tokens *tokens)
 {
 	t_tokens	*current;
 
-	printf("\033[0;35m[\033[0m");
+	COLOR_CROCHET_START
 	current = tokens;
 	while (current)
 	{
 		printf("%s", current->token);
 		if (current->next)
-			printf("\033[0;35m|\033[0m");
+			PIPE
 		current = current->next;
 	}
-	printf("\033[0;35m]\033[0m\n");
+	COLOR_CROCHET_END
 }
 
 int ft_strlen(char *string)
@@ -35,9 +35,9 @@ int	main(int argc, char **argv)
 		printf("Error\n> %s needs a quoted string in argv[1].\n", argv[0]);
 	else
 	{
-		printf(" %s\n", argv[1]);
+		ARGUMENT
 		tokenizer(argv[1], &tokens);
-		printf("\n");
+		NEWLINE
 		print_tokens(tokens);
 	}
 	return (0);
@@ -56,6 +56,7 @@ int	main(int argc, char **argv)
 // a b c d e>f|>>g||h<<i<<<
 // [a|b|c|d|e|>|f|||>>|g|||||h|<<|i|<<|<]
 //
+// " >>> ||>ab bc|||>>>>|>>>>> > ||  a "
 // ./tokenizer " ||>ab bc|||>>>>|>   a " (copy paste is if it looks weird in CLION, it's because | + > is recognized as one symbol)
 // [||||>|ab|bc|||||||>>|>>|||>|a]
 //
