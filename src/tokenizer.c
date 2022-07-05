@@ -154,10 +154,10 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// 1
 		// If the end of input is recognized, the current token (if any) shall
 		// be delimited.
-		if (line[current_char + 1] == '\0')
+		if (line[current_char] == '\0')
 		{
 			printf("[Rule 1] ");
-			extract_node(tokens, &line[token_start], &line[token_start], &line[current_char]);
+			extract_node(tokens, &line[token_start], &line[token_start], &line[current_char - 1]);
 			break ;
 		}
 		// 2
@@ -182,7 +182,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 			printf("[Rule 3] ");
 			extract_node(tokens, &line[token_start], &line[token_start], &line[current_char] - 1);
 			token_start = current_char;
-//			current_char++;
+			current_char++;
 		}
 		// 4
 		//
@@ -201,7 +201,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 				extract_node(tokens, &line[token_start], &line[token_start], &line[current_char - 1]);
 				token_start = current_char;
 			}
-//			current_char++;
+			current_char++;
 		}
 		// 7
 		// If the current character is an unquoted `<blank>`, any token containing
