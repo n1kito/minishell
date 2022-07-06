@@ -10,9 +10,6 @@
 EXECUTABLE="tokenizer"
 EXECUTABLE_PATH="."
 
-TEST_COUNT=0
-TEST_PASSED=0
-
 ## COLORS
 ################################################################################
 
@@ -21,41 +18,13 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 NC='\033[0m' # No Color
 
-## TITLE
-################################################################################
-
-TITLE="
-🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥
-
-🔥                                 MINI(s)HELL                                🔥
-
-🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥
-                                \e[2m(tester by nikito)\e[22m
-"
-
-################################################################################
-##                                   TESTS                                    ##
-################################################################################
-
-# Tests are double arrays.
-# First element of each array is the test ran, second element is expected output.
-#
-#TEST[0]="abc"
-#RESULT[0]="[abc]"
-
 ################################################################################
 ##                                  HEADER                                    ##
 ################################################################################
 
-# CHECK IF PROGRAM EXISTS, RUN MAKE IF IT DOES NOT
-#if ! command -v ${PROGRAM_PATH}/${PROGRAM} >/dev/null;
-#then
-#  printf "push_swap not found in parent folder.\nCompiling push_swap...
-#fi
-
 ## DISPLAY TITLE
 clear -x # clears screen, equals to CTRL + L in Terminal
-#printf "${TITLE}"
+
 echo
 echo "  ███▄ ▄███▓ ██▓ ███▄    █  ██▓  ██████  ██░ ██ ▓█████  ██▓     ██▓    ";
 echo " ▓██▒▀█▀ ██▒▓██▒ ██ ▀█   █ ▓██▒▒██    ▒ ▓██░ ██▒▓█   ▀ ▓██▒    ▓██▒    ";
@@ -66,94 +35,118 @@ echo " ░ ▒░   ░  ░░▓  ░ ▒░   ▒ ▒ ░▓  ▒ ▒▓▒ �
 echo " ░  ░      ░ ▒ ░░ ░░   ░ ▒░ ▒ ░░ ░▒  ░ ░ ▒ ░▒░ ░ ░ ░  ░░ ░ ▒  ░░ ░ ▒  ░";
 echo " ░      ░    ▒ ░   ░   ░ ░  ▒ ░░  ░  ░   ░  ░░ ░   ░     ░ ░     ░ ░   ";
 echo "        ░    ░           ░  ░        ░   ░  ░  ░   ░  ░    ░  ░    ░  ░";
-printf "                         \e[2m(tester by nikito)\e[22m"
+printf "                        \e[2m(tester by nikito 🔥)\e[22m"
+
+################################################################################
+##                                RUNNING MAKE                                  ##
+################################################################################
 
 echo
 echo
 printf "🌈 Running ${YELLOW}make${NC} on Tokenizer...\n"
 make
 
-#printf "
-#******************
-#* Starting tests *
-#******************
-#"
+################################################################################
+##                                   TESTING                                  ##
+################################################################################
 
 echo
 echo "    ┌┬┐┌─┐┬┌─┌─┐┌┐┌┬┌─┐┌─┐┬─┐   ";
 echo " **  │ │ │├┴┐├┤ ││││┌─┘├┤ ├┬┘ **";
 echo "     ┴ └─┘┴ ┴└─┘┘└┘┴└─┘└─┘┴└─   ";
 
-################################################################################
-##                                   TESTING                                  ##
+## Word tests
 ################################################################################
 
 printf "\n\e[4mWord tokens\e[24m\n"
 
-OUTPUT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "abc")
-EXPECTED_OUTPUT="[abc]"
-if [ "$OUTPUT" = "$EXPECTED_OUTPUT" ]; then
-  printf "${GREEN}OK${NC} "
- else
-  printf "${RED}KO${NC} (Test returned <%s>)" "$OUTPUT"
-fi
+TEST_WORD[0]="abc"
+EXPECTED_OUTPUT_WORD[0]="[abc]"
+TEST_WORD[1]="abc >>> |> <<<sqf vdd "
+EXPECTED_OUTPUT_WORD[1]="[abc|>>|>|||>|<<|<|sqf|vdd]"
+TEST_WORD[2]="<<< a b c def ||>>> > "
+EXPECTED_OUTPUT_WORD[2]="[<<|<|a|b|c|def|||||>>|>|>]"
 
-OUTPUT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "abc >>> |> <<<sqf vdd ")
-EXPECTED_OUTPUT="[abc|>>|>|||>|<<|<|sqf|vdd]"
-if [ "$OUTPUT" = "$EXPECTED_OUTPUT" ]; then
-   printf "${GREEN}OK${NC} "
- else
-   printf "${RED}KO${NC} (${RED}Expected${NC} %s ${RED}returned${NC} %s)\n" "$EXPECTED_OUTPUT" "$OUTPUT"
-fi
-
-OUTPUT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "<<< a b c def ||>>> > ")
-EXPECTED_OUTPUT="[<<|<|a|b|c|def|||||>>|>|>]"
-if [ "$OUTPUT" = "$EXPECTED_OUTPUT" ]; then
-   printf "${GREEN}OK${NC} "
- else
-   printf "${RED}KO${NC} (${RED}Expected${NC} %s ${RED}returned${NC} %s)\n" "$EXPECTED_OUTPUT" "$OUTPUT"
-fi
+for i in "${!TEST_WORD[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
+do
+  RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_WORD[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
+   if [ "$RESULT" = "${EXPECTED_OUTPUT_WORD[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
+      printf "${GREEN}OK${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+    else
+      printf "${RED}KO${NC} ${RED}(ran${NC} %s ${RED}expected${NC} %s ${RED}returned${NC} %s${RED})${NC}\n" "${TEST_WORD[$i]}" "${EXPECTED_OUTPUT_WORD[$i]}" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
+   fi
+done
 
 echo
+
+## Word tests
+################################################################################
+
 printf "\n\e[4mOperator tokens\e[24m\n"
-echo No tests yet
+
+TEST_OP[0]="abc>>"
+EXPECTED_OUTPUT_OP[0]="[abc|>>]"
+TEST_OP[1]="abc|>>"
+EXPECTED_OUTPUT_OP[1]="abc|||>>"
+TEST_OP[2]="abc>>> "
+EXPECTED_OUTPUT_OP[2]="[abc|>>|>]"
+TEST_OP[3]=" <<<<||ab|> > "
+EXPECTED_OUTPUT_OP[3]="[<<|<<|||||ab|||>|>]"
+
+i=0
+for i in "${!TEST_OP[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
+do
+  RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_OP[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
+   if [ "$RESULT" = "${EXPECTED_OUTPUT_OP[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
+      printf "${GREEN}OK${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+    else
+      printf "${RED}KO${NC} ${RED}(ran${NC} %s ${RED}expected${NC} %s ${RED}returned${NC} %s${RED})${NC}\n" "${TEST_OP[$i]}" "${EXPECTED_OUTPUT_OP[$i]}" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
+   fi
+done
+
+echo
+
+## Quote tests
+################################################################################
 
 printf "\n\e[4mQuoted tokens\e[24m\n"
-OUTPUT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "abc \"coucou\" abc")
-EXPECTED_OUTPUT="[abc|coucou|abc]"
-if [ "$OUTPUT" = "$EXPECTED_OUTPUT" ]; then
-   printf "${GREEN}OK${NC} "
- else
-   printf "${RED}KO${NC} (${RED}Expected${NC} %s ${RED}returned${NC} %s)\n" "$EXPECTED_OUTPUT" "$OUTPUT"
-fi
 
-OUTPUT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "abc 'coucou>>||||||||\"\"pouet'abc")
-EXPECTED_OUTPUT="[abc|coucou>>||||||||\"\"pouet|abc]"
-if [ "$OUTPUT" = "$EXPECTED_OUTPUT" ]; then
-   printf "${GREEN}OK${NC} "
- else
-   printf "${RED}KO${NC} (${RED}Expected${NC} %s ${RED}returned${NC} %s)\n" "$EXPECTED_OUTPUT" "$OUTPUT"
-fi
+TEST_QUOTES[0]="abc \"coucou\" abc"
+EXPECTED_OUTPUT_QUOTES[0]="[abc|coucou|abc]"
+TEST_QUOTES[1]="abc 'coucou>>||||||||\"\"pouet'abc"
+EXPECTED_OUTPUT_QUOTES[1]="[abc|coucou>>||||||||\"\"pouet|abc]"
+
+i=0
+for i in "${!TEST_QUOTES[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
+do
+  RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_QUOTES[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
+   if [ "$RESULT" = "${EXPECTED_OUTPUT_QUOTES[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
+      printf "${GREEN}OK${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+    else
+      printf "${RED}KO${NC} ${RED}(ran${NC} %s ${RED}expected${NC} %s ${RED}returned${NC} %s${RED})${NC}\n" "${TEST_QUOTES[$i]}" "${EXPECTED_OUTPUT_QUOTES[$i]}" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
+   fi
+done
+
+echo
+
+## Env tests
+################################################################################
+
+printf "\n\e[4mEnvironment variable tokens\e[24m\n"
+
+TEST_ENV[0]="a b c fdfd\$coucou>>> d\"\"'lol'' \$coucou|test"
+EXPECTED_OUTPUT_ENV[0]="[a|b|c|fdfd|\$coucou|>>|>|d|lol|\$coucou|||test]"
+
+i=0
+for i in "${!TEST_ENV[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
+do
+  RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_ENV[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
+   if [ "$RESULT" = "${EXPECTED_OUTPUT_ENV[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
+      printf "${GREEN}OK${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+    else
+      printf "${RED}KO${NC} ${RED}(ran${NC} %s ${RED}expected${NC} %s ${RED}returned${NC} %s${RED})${NC}\n" "${TEST_ENV[$i]}" "${EXPECTED_OUTPUT_ENV[$i]}" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
+   fi
+done
 
 echo
 echo
-
-#
-#TEST_RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST[$i]}")
-#  echo ${TEST_RESULT}
-
-#for i in "${!TEST[@]}"
-#do
-#  TEST_RESULT=${${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST[$i]}"}
-#  echo ${TEST_RESULT}
-#    if [ "$TEST_RESULT" == "$RESULT[$i]" ]
-#    then
-#          printf "${GREEN}OK${NC} " # IF VARIABLE IS EMPTY, MEANS PROGRAM DID NOT RETURN ANYTHING AND IS OK
-#         (( TEST_PASSED++ ))
-#         (( TEST_COUNT++ ))
-#    else
-##          printf "${RED}Error${NC} (Test %s <%s> returned <%s>) " "$j" "${TEST_RETURNS_OPERATIONS[$j]}" "${RESULT}" # IF PROGRAM RETURNED SOMETHING, TEST FAILS AND SHOWS WHAT WAS TESTED
-#          printf KO
-#         (( TEST_COUNT++ ))
-#    fi
-#done

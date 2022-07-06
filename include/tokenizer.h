@@ -6,17 +6,17 @@
 #include <stdlib.h>
 
 # ifdef VISUAL
-#  define ONE printf("[Rule 1] ");
-#  define TWO printf("[Rule 2] ");
-#  define THREE printf("[Rule 3] ");
-#  define FOUR printf("[Rule 4] ");
-#  define FIVE printf("[Rule 5] ");
-#  define SIX printf("[Rule 6] ");
-#  define SEVEN printf("[Rule 7] ");
-#  define EIGHT printf("[Rule 8] ");
-#  define NINE printf("[Rule 9] ");
-#  define TEN printf("[Rule 10] ");
-#  define PLUS printf("+ ");
+#  define ONE printf("[1]");
+#  define TWO printf("[2]");
+#  define THREE printf("[3]");
+#  define FOUR printf("[4]");
+#  define FIVE printf("[5]");
+#  define SIX printf("[6]");
+#  define SEVEN printf("[7]");
+#  define EIGHT printf("[8]");
+#  define NINE printf("[9]");
+#  define TEN printf("[10]");
+#  define PLUS printf("\033[0;33m+\033[0m");
 #  define NEWLINE printf("\n");
 #  define ARGUMENT printf(" %s\n", argv[1]);
 #  define COLOR_CROCHET_START printf("\033[0;35m[\033[0m");

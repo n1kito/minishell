@@ -118,7 +118,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 //			if (is_part_of_token(&line[current_char - 1]))
 			if (token_start != current_char && is_part_of_token(&line[current_char - 1]))
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
-			break ;
+			current_char++;
 		}
 		// 2
 		// If the previous character was used as part of an operator and the
@@ -154,7 +154,6 @@ void	tokenizer(char *line, t_tokens **tokens)
 				token_start = current_char;
 			}
 			matching_quote_position = get_matching_quote_position(&line[current_char]);
-			printf("(%d) ", matching_quote_position);
 			if (matching_quote_position > 0)
 			{
 				if (matching_quote_position == 1)
@@ -177,9 +176,16 @@ void	tokenizer(char *line, t_tokens **tokens)
 			}
 		}
 		// 5
-		// If the current character is an unquoted $ or ``` (accent grave),
+		// If the current character is an unquoted $,
 		// the shell shall identify the start of any candidates for expansion.
-		//
+		else if (line[current_char] == '$')
+		{
+			FIVE
+			if (is_part_of_token(&line[current_char - 1]))
+				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+			token_start = current_char;
+			current_char++;
+		}
 		// 6
 		// If the current character is not quoted and can be used as the first
 		// character of a new operator, the current token (if any) shall be
@@ -191,7 +197,6 @@ void	tokenizer(char *line, t_tokens **tokens)
 			if (current_char && is_part_of_token(&line[current_char - 1])) // checks that we're not a the start of a line and that the previous char is not a blank
 			{
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
-				token_start = current_char;
 			}
 			token_start = current_char;
 			current_char++;
@@ -216,8 +221,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 			current_char++;
 		}
 		// 9
-		// I we don't handle this rule
-		//
+		// We don't handle this rule
 		// 10
 		// The current character is used as the start of a new word.
 		else
