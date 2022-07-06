@@ -102,11 +102,11 @@ void	tokenizer(char *line, t_tokens **tokens)
 {
 	int		token_start;
 	int		current_char;
-//	int		quoting;
+	int		matching_quote_position;
 
 	token_start = 0;
 	current_char = 0;
-//	quoting = 0;
+	matching_quote_position = 0;
 	while (current_char <= ft_strlen(line))
 	{
 		// 1
@@ -148,16 +148,33 @@ void	tokenizer(char *line, t_tokens **tokens)
 		else if (is_quote_character(line[current_char]))
 		{
 			FOUR
-			current_char += get_matching_quote_position(&line[current_char]);
-			if (current_char == -1)
+			if (is_part_of_token(&line[current_char - 1]) && !is_quote_character(line[current_char - 1]))
 			{
-				printf("\033[31;5mError\033[0;39m\n> Quotes not properly closed.\n");
-				exit (-1);
+				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+				token_start = current_char;
 			}
-			token_start++;
-			add_token_node(tokens, &line[token_start], &line[current_char - 1]);
-			current_char++;
-			token_start = current_char;
+			matching_quote_position = get_matching_quote_position(&line[current_char]);
+			printf("(%d) ", matching_quote_position);
+			if (matching_quote_position > 0)
+			{
+				if (matching_quote_position == 1)
+				{
+					current_char += 2;
+					token_start = current_char;
+				}
+				else
+				{
+					current_char += matching_quote_position;
+					token_start++;
+					add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+					current_char++;
+					token_start = current_char;
+				}
+			}
+			else
+			{
+				current_char++;
+			}
 		}
 		// 5
 		// If the current character is an unquoted $ or ``` (accent grave),
