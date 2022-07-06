@@ -61,9 +61,9 @@ echo 🌈 Running make...
 make
 
 printf "
-#################
-##   TESTING   ##
-#################
+******************
+* Starting tests *
+******************
 "
 
 ################################################################################
@@ -100,9 +100,16 @@ echo
 printf "\n\e[4mOperator tokens\e[24m\n"
 echo No tests yet
 
-printf "\n\e[4mWord tokens\e[24m\n"
-echo No tests available yet
+printf "\n\e[4mQuoted tokens\e[24m\n"
+OUTPUT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "abc \"coucou\" abc")
+EXPECTED_OUTPUT="[abc|coucou|abc]"
+if [ "$OUTPUT" = "$EXPECTED_OUTPUT" ]; then
+   printf "${GREEN}OK${NC} "
+ else
+   printf "${RED}KO${NC} (${RED}Expected${NC} %s ${RED}returned${NC} %s)\n" "$EXPECTED_OUTPUT" "$OUTPUT"
+fi
 
+echo
 echo
 
 #

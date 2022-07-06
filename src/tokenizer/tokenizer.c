@@ -1,4 +1,4 @@
-#include "../include/tokenizer.h"
+#include "../../include/tokenizer.h"
 
 /*
 
@@ -82,11 +82,27 @@ int	is_part_of_token(char *ptr)
 	return (1);
 }
 
+int	get_matching_quote_position(char *str)
+{
+	int		position;
+	char	quote_char;
+
+	quote_char = *str;
+	position = 1;
+	while (str[position])
+	{
+		if (str[position] == quote_char)
+			return (position);
+		position++;
+	}
+	return (-1);
+}
+
 void	tokenizer(char *line, t_tokens **tokens)
 {
-	int	token_start;
-	int	current_char;
-//	int	quoting;
+	int		token_start;
+	int		current_char;
+//	int		quoting;
 
 	token_start = 0;
 	current_char = 0;
@@ -129,7 +145,23 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// If the current character is single-quote, or double-quote
 		// and it is not quoted, it shall affect quoting for subsequent characters
 		// up to the end of the quoted text.
+		else if (is_quote_character(line[current_char]))
+		{
+			FOUR
+			current_char += get_matching_quote_position(&line[current_char]);
+			if (current_char == -1)
+			{
+				printf("\033[31;5mError\033[0;39m\n> Quotes not properly closed.\n");
+				exit (-1);
+			}
+			token_start++;
+			add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+			current_char++;
+			token_start = current_char;
+		}
 		// 5
+		// If the current character is an unquoted $ or ``` (accent grave),
+		// the shell shall identify the start of any candidates for expansion.
 		//
 		// 6
 		// If the current character is not quoted and can be used as the first
@@ -150,7 +182,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// 7
 		// If the current character is an unquoted `<blank>`, any token containing
 		// the previous character is delimited and the current character shall be discarded.
-		else if (is_blank_character(line[current_char]))
+		else if (is_blank_character(line[current_char]) && !is_quote_character(line[current_char - 1]))
 		{
 			SEVEN
 			if (current_char && is_part_of_token(&line[current_char - 1]))
