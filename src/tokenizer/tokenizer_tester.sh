@@ -24,11 +24,11 @@ NC='\033[0m' # No Color
 ################################################################################
 
 TITLE="
-🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-🔥                                                                            🔥
+🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥
+
 🔥                                 MINI(s)HELL                                🔥
-🔥                                                                            🔥
-🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥 🔥
                                 \e[2m(tester by nikito)\e[22m
 "
 
@@ -49,19 +49,28 @@ TITLE="
 # CHECK IF PROGRAM EXISTS, RUN MAKE IF IT DOES NOT
 #if ! command -v ${PROGRAM_PATH}/${PROGRAM} >/dev/null;
 #then
-#  printf "push_swap not found in parent folder.\nCompiling push_swap..."
-#  make --no-print-directory -C ${EXECUTABLE_PATH} -f Makefile_tokenizer
+#  printf "push_swap not found in parent folder.\nCompiling push_swap...
 #fi
 
 ## DISPLAY TITLE
 clear -x # clears screen, equals to CTRL + L in Terminal
 printf "${TITLE}"
 
+echo
+echo 🌈 Running make...
+make
+
+printf "
+#################
+##   TESTING   ##
+#################
+"
+
 ################################################################################
 ##                                   TESTING                                  ##
 ################################################################################
 
-printf "\n\e[4mTesting tokenizer\e[24m\n"
+printf "\n\e[4mWord tokens\e[24m\n"
 
 OUTPUT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "abc")
 EXPECTED_OUTPUT="[abc]"
@@ -88,6 +97,12 @@ if [ "$OUTPUT" = "$EXPECTED_OUTPUT" ]; then
 fi
 
 echo
+printf "\n\e[4mOperator tokens\e[24m\n"
+echo No tests yet
+
+printf "\n\e[4mWord tokens\e[24m\n"
+echo No tests available yet
+
 echo
 
 #
