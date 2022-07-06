@@ -82,6 +82,13 @@ int	is_part_of_token(char *ptr)
 	return (1);
 }
 
+int	is_part_of_word(char *ptr)
+{
+	if ((is_blank_character(*ptr)))
+		return (0);
+	return (1);
+}
+
 int	get_matching_quote_position(char *str)
 {
 	int		position;
@@ -116,7 +123,10 @@ void	tokenizer(char *line, t_tokens **tokens)
 		{
 			ONE
 //			if (is_part_of_token(&line[current_char - 1]))
-			if (token_start != current_char && is_part_of_token(&line[current_char - 1]))
+//			if (token_start != current_char && is_part_of_token(&line[current_char - 1]))
+			if (token_start != current_char && (is_part_of_word(&line[current_char - 1]) ||
+					is_operator(line[current_char - 1])))
+//			if (token_start != current_char)
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			current_char++;
 		}
@@ -197,6 +207,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 			if (current_char && is_part_of_token(&line[current_char - 1])) // checks that we're not a the start of a line and that the previous char is not a blank
 			{
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+//				token_start = current_char;
 			}
 			token_start = current_char;
 			current_char++;
