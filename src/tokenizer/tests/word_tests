@@ -1,0 +1,26 @@
+abc
+[abc]
+
+a b c
+[a|b|c]
+
+ a b c
+[a|b|c]
+
+ab c
+[ab|c]
+
+ a bc
+[a|bc]
+
+abc d e f ghi
+[abc|d|e|f|ghi]
+
+   a   b   c   d
+[a|b|c|d]
+
+a   b   cd    
+[a|b|cd]
+
+     abc
+[abc]

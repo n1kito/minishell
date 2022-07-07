@@ -1,0 +1,26 @@
+abc "coucou" abc
+[abc|coucou|abc]
+
+   "
+["]
+
+""
+[]
+
+    "   "
+[   ]
+
+  "test >> | >"
+[test >> | >]
+
+  hello"comment"ca"va"?
+[hello|comment|ca|va|?]
+
+   hello"comment ca va?
+[hello"comment|ca|va?]
+
+ cou'cou' "pouet '"
+[cou|cou|pouet ']
+
+abc 'coucou>>|||||||||""pouet'abc
+[abc|coucou>>|||||||||""pouet|abc]
