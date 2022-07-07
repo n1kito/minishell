@@ -3,3 +3,9 @@
 
 hello;comment >>;ca va ?
 [hello;comment|>>|;ca|va|?]
+
+a!\b \n ; \t|<> <&<<-
+[a!\b|\n|;|\t|||<|>|<|&|<<|-]
+
+;;;>><
+[;;;|>>|<]

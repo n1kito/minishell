@@ -21,3 +21,15 @@ a b c "$TOKEN ''>>>||" $TOKEN$token<><<
 
 a b c fdfd$coucou>>> d""'lol'' $coucou|test
 [a|b|c|fdfd|$coucou|>>|>|d|lol|'|$coucou|||test]
+
+$
+[$]
+
+$ $ $
+[$|$|$]
+
+\$TESTeur
+[\|$TESTeur]
+
+$MAMI   $NOVA   $
+[$MAMI|$NOVA|$]

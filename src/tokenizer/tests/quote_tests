@@ -24,3 +24,9 @@ abc "coucou" abc
 
 abc 'coucou>>|||||||||""pouet'abc
 [abc|coucou>>|||||||||""pouet|abc]
+
+hello"hello'''''$HOP"goodbye
+[hello|hello'''''$HOP|goodbye]
+
+hello"hello'''''$HOPgoodbye
+[hello"hello|'|$HOPgoodbye]

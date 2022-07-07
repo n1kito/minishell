@@ -192,7 +192,8 @@ void	tokenizer(char *line, t_tokens **tokens)
 		else if (line[current_char] == '$')
 		{
 			FIVE
-			if (is_part_of_token(&line[current_char - 1]))
+			if (current_char
+				&& (is_part_of_token(&line[current_char - 1]) || (!is_blank_character(line[current_char - 1]) && matching_quote_position == -1))) // TODO je dois fix la fonction is_token() en fait pour inclure le fait que des fois un quote peut etre token s'il n'a pas de matching.
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			token_start = current_char;
 			current_char++;
@@ -230,7 +231,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		// 8
 		// If the previous character was part of a word, the current character
 		// shall be appended to that word.
-		else if (current_char && is_part_of_token(&line[current_char - 1]))
+		else if (current_char && (is_part_of_token(&line[current_char - 1]) || matching_quote_position == -1))
 		{
 			EIGHT
 			current_char++;
