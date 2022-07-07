@@ -1,0 +1,88 @@
+# Word tokens
+
+abc
+[abc]
+
+a b c
+[a|b|c]
+
+ a b c 
+[a|b|c]
+
+ab c 
+[ab|c]
+
+ a bc
+[a|bc]
+
+abc d e f ghi
+[abc|d|e|f|ghi]
+
+   a   b   c   d   
+[a|b|c|d]
+
+a   b   cd    
+[a|b|cd]
+
+     abc
+[abc]
+
+# Operator tokens
+
+>abc
+[>|abc]
+
+>>abc
+[>>|abc]
+
+>>>abc
+[>>|>|abc]
+
+abc>>>
+[abc|>>|>]
+
+a|b|c
+[a|||b|||c]
+
+ <<<<||ab|> > 
+[<<|<<|||||ab|||>|>]
+
+ab>>> >|>   <>      
+[ab|>>|>|>|||>|<|>]
+
+     <><><>>>|>|>a   
+[<|>|<|>|<|>>|>|||>|||>|a]
+
+# Quote tokens
+
+abc \"coucou\" abc
+[abc|coucou|abc]
+
+   \"   
+[\"]
+
+\"\"
+[]
+
+    \"   \"
+[   ]
+
+  \"test >> | >\"
+[test >> | >]
+
+  hello\"comment\"ca\"va\"?   
+[hello|comment|ca|va|?]
+
+   hello\"comment ca va?
+[hello\"comment|ca|va?]
+
+ cou'cou' \"pouet '\"   
+[cou|cou|pouet ']
+
+abc 'coucou>>|||||||||\"\"pouet'abc]
+[abc|coucou>>|||||||||\"\"pouet|abc]
+
+# Environment variable tokens
+
+
+# Symbols we don't need to interpret
