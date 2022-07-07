@@ -109,3 +109,9 @@ a b c fdfd\$coucou>>> d\"\"'lol'' \$coucou|test
 [a|b|c|fdfd|$coucou|>>|>|d|lol|'|\$coucou|||test]
 
 # Symbols we don't need to interpret
+
+\\a\\b\\c\\d
+[\\a\\b\\c\\d]
+
+hello;comment >>;ca va ?
+[hello;comment|>>|;ca|va|?]
