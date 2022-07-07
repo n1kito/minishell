@@ -84,5 +84,28 @@ abc 'coucou>>|||||||||\"\"pouet'abc]
 
 # Environment variable tokens
 
+hello \$test
+[hello|\$test]
+
+hello\%test
+[hello|\$test]
+
+  hello\%testhello  
+[hello|\%test|hello]
+
+hello \%token1\%token2\%token3
+[hello|\%token1|\%token2|\%token3]
+
+  \%hello>>> 
+[\%hello|>>|>]
+
+>>\%TOKEN
+[>>|\%TOKEN]
+
+a b c \"\%TOKEN ''>>>||\" \%TOKEN\%token<><<
+[a|b|c|\%TOKEN ''>>>|||\%TOKEN\%token|<|>|<<]
+
+a b c fdfd\$coucou>>> d\"\"'lol'' \$coucou|test
+[a|b|c|fdfd|$coucou|>>|>|d|lol|'|\$coucou|||test]
 
 # Symbols we don't need to interpret

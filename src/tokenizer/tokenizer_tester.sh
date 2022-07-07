@@ -27,8 +27,10 @@ KO="❌"
 RED='\033[0;31m'
 BRED='\033[1;31m'
 GREEN='\033[0;32m'
+BGREEN='\033[1;32m'
 YELLOW='\033[0;33m'
 CODE='\e[1;41;100m' # White text on grey background
+# CODE='\e[7m' # Second option, this one just inverts
 NC='\033[0m' # No Color
 
 ################################################################################
@@ -107,7 +109,7 @@ for i in "${!TEST_WORD[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
 do
   RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_WORD[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
    if [ "$RESULT" = "${EXPECTED_OUTPUT_WORD[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
-      printf " ${GREEN}${OK}${NC}" # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+      printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
       (( TEST_PASSED++ ))
       (( TEST_COUNT++ ))
     else
@@ -152,7 +154,7 @@ for i in "${!TEST_OP[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
 do
   RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_OP[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
    if [ "$RESULT" = "${EXPECTED_OUTPUT_OP[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
-      printf " ${GREEN}${OK}${NC}" # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+      printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
       (( TEST_PASSED++ ))
       (( TEST_COUNT++ ))
     else
@@ -166,7 +168,7 @@ echo
 ## Quote tests
 ################################################################################
 
-printf "\n \e[4mQuoted tokens\e[24m:\n"
+printf "\n \e[4mQuote tokens\e[24m:\n"
 
 TEST_QUOTES[0]="abc \"coucou\" abc"
 EXPECTED_OUTPUT_QUOTES[0]="[abc|coucou|abc]"
@@ -200,7 +202,7 @@ for i in "${!TEST_QUOTES[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEF
 do
   RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_QUOTES[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
    if [ "$RESULT" = "${EXPECTED_OUTPUT_QUOTES[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
-      printf " ${GREEN}${OK}${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+      printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
       (( TEST_PASSED++ ))
       (( TEST_COUNT++ ))
     else
@@ -216,19 +218,67 @@ echo
 
 printf "\n \e[4mEnvironment variable tokens\e[24m:\n"
 
-TEST_ENV[0]="a b c fdfd\$coucou>>> d\"\"'lol'' \$coucou|test"
-EXPECTED_OUTPUT_ENV[0]="[a|b|c|fdfd|\$coucou|>>|>|d|lol|\$coucou|||test]"
+TEST_ENV[0]="hello \$test"
+EXPECTED_OUTPUT_ENV[0]="[hello|\$test]"
+
+TEST_ENV[1]="hello\$test"
+EXPECTED_OUTPUT_ENV[1]="[hello|\$test]"
+
+TEST_ENV[2]="  hello\$test hello"
+EXPECTED_OUTPUT_ENV[2]="[hello|\$test|hello]"
+
+TEST_ENV[3]="hello \$token1\$token2\$token3"
+EXPECTED_OUTPUT_ENV[3]="[hello|\$token1|\$token2|\$token3]"
+
+TEST_ENV[4]="  \%hello>>>"
+EXPECTED_OUTPUT_ENV[4]="[\%hello|>>|>]"
+
+TEST_ENV[5]=">>\%TOKEN"
+EXPECTED_OUTPUT_ENV[5]="[>>|\%TOKEN]"
+
+TEST_ENV[6]="a b c \"\%TOKEN ''>>>||\" \%TOKEN\%token<><<"
+EXPECTED_OUTPUT_ENV[6]="[a|b|c|\%TOKEN ''>>>|||\%TOKEN\%token|<|>|<<]"
+
+TEST_ENV[7]="a b c fdfd\$coucou>>> d\"\"'lol'' \$coucou|test"
+EXPECTED_OUTPUT_ENV[7]="[a|b|c|fdfd|\$coucou|>>|>|d|lol|'|\$coucou|||test]"
 
 i=0
 for i in "${!TEST_ENV[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
 do
   RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_ENV[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
    if [ "$RESULT" = "${EXPECTED_OUTPUT_ENV[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
-      printf " ${GREEN}${OK}${NC}" # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+      printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
       (( TEST_PASSED++ ))
       (( TEST_COUNT++ ))
     else
-      printf "\n ${RED}${KO}${NC}\t${RED}Tested:  ${NC} ${CODE}%s${NC} \n\t${RED}Expected:${NC} ${CODE}%s${NC}\n\t${RED}Returned:${NC} ${CODE}%s${NC}${RED}${NC}\n" "${TEST_ENV[$i]}" "${EXPECTED_OUTPUT_ENV[$i]}" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
+      printf "\n ${RED}${KO} ${i}${NC}\t${RED}Tested:  ${NC} ${CODE}%s${NC} \n\t${RED}Expected:${NC} ${CODE}%s${NC}\n\t${RED}Returned:${NC} ${CODE}%s${NC}${RED}${NC}\n" "${TEST_ENV[$i]}" "${EXPECTED_OUTPUT_ENV[$i]}" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
+      (( TEST_COUNT++ ))
+   fi
+done
+
+echo
+
+## Env tests
+################################################################################
+
+printf "\n \e[4mSymbols we don't need to handle\e[24m:\n"
+
+TEST_SYMB[0]="\\a\\b\\c\\d"
+EXPECTED_OUTPUT_SYMB[0]="[\\a\\b\\c\\d]"
+
+TEST_SYMB[1]="hello;comment >>;ca va ?"
+EXPECTED_OUTPUT_SYMB[1]="[hello;comment|>>|;ca|va|?]"
+
+i=0
+for i in "${!TEST_SYMB[@]}"; # ITERATES THROUGH TESTS UNTIL THERE ARE NONE LEFT
+do
+  RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "${TEST_SYMB[$i]}") # SETS TEST RESULT TO VARIABLE $RESULT
+   if [ "$RESULT" = "${EXPECTED_OUTPUT_SYMB[$i]}" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
+      printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
+      (( TEST_PASSED++ ))
+      (( TEST_COUNT++ ))
+    else
+      printf "\n ${RED}${KO} ${i}${NC}\t${RED}Tested:  ${NC} ${CODE}%s${NC} \n\t${RED}Expected:${NC} ${CODE}%s${NC}\n\t${RED}Returned:${NC} ${CODE}%s${NC}${RED}${NC}\n" "${TEST_SYMB[$i]}" "${EXPECTED_OUTPUT_SYMB[$i]}" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
       (( TEST_COUNT++ ))
    fi
 done
@@ -241,7 +291,7 @@ if [ ${TEST_PASSED} -eq ${TEST_COUNT} ]
 then
   printf "✅ ${GREEN}${TEST_PASSED}/${TEST_COUNT}${NC}"
 else
-  printf "💀 ${BRED}${TEST_PASSED}${NC}/${TEST_COUNT}"
+  printf "\e[5m💀\e[0m ${BRED}${TEST_PASSED}${NC}/${TEST_COUNT}"
 fi
 echo
 echo
