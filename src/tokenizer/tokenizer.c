@@ -7,16 +7,6 @@ See README for more information.
 
 */
 
-t_tokens	*get_last_token(t_tokens *tokens_list)
-{
-	t_tokens	*current;
-
-	current = tokens_list;
-	while (current && current->next)
-		current = current->next;
-	return (current);
-}
-
 int	is_operator(char c)
 {
 	if (c && (c == '<' || c == '>' || c == '|'))
@@ -38,46 +28,22 @@ int	can_form_operator(char *token_start, char *second_token)
 
 int	is_quote_character(char c)
 {
-	if (c == SINGLE_QUOTE || c == DOUBLE_QUOTE) // Backslash character is not included in the subject
+	if (c == '\'' || c == '\"')
 		return (1);
 	return (0);
 }
 
 int	is_blank_character(char c)
 {
-	if (c == ' ' || c == '	') // TODO check for other possible blanks
+	if (c == ' ' || c == '	')
 		return (1);
 	return (0);
 }
 
-void	add_token_node(t_tokens **tokens, char *token_start, char *token_end)
-{
-	int			token_len;
-	t_tokens	*new_token;
-	int			i;
-
-	PLUS
-	token_len = (token_end - token_start) + 1;
-	new_token = malloc(sizeof(t_tokens));
-	if (!new_token)
-		return ;
-	new_token->token = malloc(sizeof(char) * (token_len + 1));
-	if (!new_token->token)
-		return ;
-	i = -1;
-	while (++i < token_len)
-		new_token->token[i] = token_start[i];
-	new_token->token[i] = '\0';
-	new_token->next = NULL;
-	if ((*tokens) == NULL)
-		*tokens = new_token;
-	else
-		get_last_token(*tokens)->next = new_token;
-}
-
 int	is_part_of_token(char *ptr)
 {
-	if ((is_blank_character(*ptr) || is_operator(*ptr)) || is_quote_character(*ptr))
+	if ((is_blank_character(*ptr) || is_operator(*ptr))
+		|| is_quote_character(*ptr))
 		return (0);
 	return (1);
 }
@@ -122,12 +88,9 @@ void	tokenizer(char *line, t_tokens **tokens)
 		if (line[current_char] == '\0')
 		{
 			ONE
-//			if (is_part_of_token(&line[current_char - 1]))
-//			if (token_start != current_char && is_part_of_token(&line[current_char - 1]))
 			if (token_start != current_char && (is_part_of_word(&line[current_char - 1]) ||
 					is_operator(line[current_char - 1])))
-//			if (token_start != current_char)
-				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+			add_token_node(tokens, &line[token_start], &line[current_char - 1]);
 			current_char++;
 		}
 		// 2
@@ -184,9 +147,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 				}
 			}
 			else
-			{
 				current_char++;
-			}
 		}
 		// 5
 		// If the current character is an unquoted $,
@@ -209,10 +170,7 @@ void	tokenizer(char *line, t_tokens **tokens)
 		{
 			SIX
 			if (current_char && is_part_of_token(&line[current_char - 1])) // checks that we're not a the start of a line and that the previous char is not a blank
-			{
 				add_token_node(tokens, &line[token_start], &line[current_char - 1]);
-//				token_start = current_char;
-			}
 			token_start = current_char;
 			current_char++;
 		}

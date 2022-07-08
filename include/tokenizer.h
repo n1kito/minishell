@@ -62,9 +62,11 @@ typedef struct s_tokens
 #  define DOUBLE_QUOTE 34
 
 // tokenizer.c
-t_tokens	*get_last_token(t_tokens *tokens_list);
 void		tokenizer(char *line, t_tokens **tokens);
 // tokenizer_utils.c
-int			ft_strlen(char *string);
-
+int			ft_strlen(char *string); //TODO Remove this
+t_tokens	*get_last_token(t_tokens *tokens_list);
+void		add_token_node(t_tokens **tokens, char *token_start, char *token_end);
+// tokenizer_test_utils.c
+void		print_tokens(t_tokens *tokens);
 #endif

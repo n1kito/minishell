@@ -1,21 +1,41 @@
 #include "../../include/tokenizer.h"
 
-void	print_tokens(t_tokens *tokens)
+t_tokens	*get_last_token(t_tokens *tokens_list)
 {
 	t_tokens	*current;
 
-	COLOR_CROCHET_START
-	current = tokens;
-	while (current)
-	{
-		printf("%s", current->token);
-		if (current->next)
-			PIPE
+	current = tokens_list;
+	while (current && current->next)
 		current = current->next;
-	}
-	COLOR_CROCHET_END
+	return (current);
 }
 
+void	add_token_node(t_tokens **tokens, char *token_start, char *token_end)
+{
+	int			token_len;
+	t_tokens	*new_token;
+	int			i;
+
+	PLUS
+	token_len = (token_end - token_start) + 1;
+	new_token = malloc(sizeof(t_tokens));
+	if (!new_token)
+		return ;
+	new_token->token = malloc(sizeof(char) * (token_len + 1));
+	if (!new_token->token)
+		return ;
+	i = -1;
+	while (++i < token_len)
+		new_token->token[i] = token_start[i];
+	new_token->token[i] = '\0';
+	new_token->next = NULL;
+	if ((*tokens) == NULL)
+		*tokens = new_token;
+	else
+		get_last_token(*tokens)->next = new_token;
+}
+
+// TODO Remove this one, it's in the libft
 int ft_strlen(char *string)
 {
 	int i;
@@ -25,40 +45,3 @@ int ft_strlen(char *string)
 		i++;
 	return (i);
 }
-
-int	main(int argc, char **argv)
-{
-	t_tokens	*tokens;
-
-	tokens = NULL;
-	if (argc != 2)
-		printf("Error\n> %s needs a quoted string in argv[1].\n", argv[0]);
-	else
-	{
-		ARGUMENT
-		tokenizer(argv[1], &tokens);
-		NEWLINE
-		print_tokens(tokens);
-	}
-	return (0);
-}
-
-// TODO
-// Fix this case, why is it adding a space after the first token ????
-// > >>|aabcd +++>>>>>>>|
-// [>| |>>|||aabcd|+++|>>|>>|>>|>||]
-
-
-// tests
-// ./tokenizer "a"
-// ./tokenizer "a b c d e f gh ij kl mnop ejrkewjrkewjrkwejrwejkrew"
-// operator tests
-// a b c d e>f|>>g||h<<i<<<
-// [a|b|c|d|e|>|f|||>>|g|||||h|<<|i|<<|<]
-//
-// " >>> ||>ab bc|||>>>>|>>>>> > ||  a "
-// ./tokenizer " ||>ab bc|||>>>>|>   a " (copy paste is if it looks weird in CLION, it's because | + > is recognized as one symbol)
-// [||||>|ab|bc|||||||>>|>>|||>|a]
-//
-// quotes tests
-//
