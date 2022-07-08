@@ -1,3 +1,6 @@
+# These tests were written when the tokenizer did not include quote characters around quoted tokens.
+# A new version of this file exists with updated tests.
+
 abc "coucou" abc
 [abc|coucou|abc]
 
