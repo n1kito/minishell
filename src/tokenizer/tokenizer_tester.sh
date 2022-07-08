@@ -146,12 +146,20 @@ run_tests() {
           printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
           (( TEST_PASSED++ ))
           (( TEST_COUNT++ ))
-        else
+    else
           printf "\n ${RED}${KO}${NC}\t${RED}Tested:  ${NC} ${CODE}%s${NC} \n\t${RED}Expected:${NC} ${CODE}%s${NC}\n\t${RED}Returned:${NC} ${CODE}%s${NC}${RED}${NC}\n" "$TEST" "$EXPECTED_RESULT" "$RESULT" # IF RESULTS DON'T MATCH, PRINT 'KO' ND SHOW TEST, EXPECTED OUTPUT AND RESULT
           (( TEST_COUNT++ ))
-       fi
-       IFS= read -r TEST
-       (( i++ ))
+    fi
+    IFS= read -r TEST
+
+    # this statement inserts a new line every 9 tests
+    if [ $i != "0" ]; then
+      if [ "$(( $i % 8 ))" = "0" ]; then
+        echo
+      fi
+    fi
+    #
+    (( i++ ))
   done < "$input"
   echo
 }

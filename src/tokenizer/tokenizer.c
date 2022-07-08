@@ -175,8 +175,10 @@ void	tokenizer(char *line, t_tokens **tokens)
 				else
 				{
 					current_char += matching_quote_position;
-					token_start++;
-					add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+					// uncomment to not include quotes in token. I think we actually need them.
+//					token_start++;
+//					add_token_node(tokens, &line[token_start], &line[current_char - 1]);
+					add_token_node(tokens, &line[token_start], &line[current_char]);
 					current_char++;
 					token_start = current_char;
 				}
