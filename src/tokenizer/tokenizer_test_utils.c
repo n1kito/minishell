@@ -10,7 +10,7 @@ void	print_tokens(t_tokens *tokens)
 	{
 		printf("%s", current->token);
 		if (current->next)
-			PIPE
+			PIPE_PRINT
 		current = current->next;
 	}
 	COLOR_CROCHET_END

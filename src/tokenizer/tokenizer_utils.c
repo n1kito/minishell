@@ -10,7 +10,8 @@ t_tokens	*get_last_token(t_tokens *tokens_list)
 	return (current);
 }
 
-void	add_token_node(t_tokens **tokens, char *token_start, char *token_end)
+/* Adds the characters between token_start & token_end to the tokens struct. */
+void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 {
 	int			token_len;
 	t_tokens	*new_token;

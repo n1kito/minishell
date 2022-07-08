@@ -21,7 +21,7 @@
 #  define ARGUMENT printf(" %s\n", argv[1]);
 #  define COLOR_CROCHET_START printf("\033[0;35m[\033[0m");
 #  define COLOR_CROCHET_END printf("\033[0;35m]\033[0m\n");
-#  define PIPE printf("\033[0;35m|\033[0m");
+#  define PIPE_PRINT printf("\033[0;35m|\033[0m");
 # else
 #  define ONE
 #  define TWO
@@ -38,7 +38,7 @@
 #  define ARGUMENT
 #  define COLOR_CROCHET_START printf("[");
 #  define COLOR_CROCHET_END printf("]\n");
-#  define PIPE printf("|");
+#  define PIPE_PRINT printf("|");
 # endif
 
 // STRUCTURES
@@ -50,23 +50,23 @@ typedef struct s_tokens
 
 // DEFINES
 // Blank Characters
-#  define SPACE 32
-#  define TAB 9
+# define SPACE 32
+# define TAB 9
 // Operator Characters
-//#  define PIPE 124
-#  define LEFT_CHEVRON 60
-#  define RIGHT_CHEVRON 62
+# define PIPE 124
+# define L_CHEVRON 60
+# define R_CHEVRON 62
 // Quote Characters
-#  define BACKSLASH 92
-#  define SINGLE_QUOTE 39
-#  define DOUBLE_QUOTE 34
+//# define BACKSLASH 92
+# define SINGLE_QUOTE 39
+# define DOUBLE_QUOTE 34
 
 // tokenizer.c
 void		tokenizer(char *line, t_tokens **tokens);
 // tokenizer_utils.c
 int			ft_strlen(char *string); //TODO Remove this
 t_tokens	*get_last_token(t_tokens *tokens_list);
-void		add_token_node(t_tokens **tokens, char *token_start, char *token_end);
+void		extract_token(t_tokens **tokens, char *token_start, char *token_end);
 // tokenizer_test_utils.c
 void		print_tokens(t_tokens *tokens);
 #endif
