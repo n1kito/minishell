@@ -48,6 +48,14 @@ typedef struct s_tokens
 	struct s_tokens	*next;
 }	t_tokens;
 
+typedef struct s_tokenizer
+{
+	int				token_start;
+	int				position;
+	int				quote_match_found;
+	char			*line;
+}	t_tokenizer_helpers;
+
 // DEFINES
 // Blank Characters
 # define SPACE 32
@@ -62,11 +70,36 @@ typedef struct s_tokens
 # define DOUBLE_QUOTE 34
 
 // tokenizer.c
-void		tokenizer(char *line, t_tokens **tokens);
+void		tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t);
+
 // tokenizer_utils.c
-int			ft_strlen(char *string); //TODO Remove this
+void		init_tokenizer_helpers(t_tokenizer_helpers *t, char *line);
 t_tokens	*get_last_token(t_tokens *tokens_list);
 void		extract_token(t_tokens **tokens, char *token_start, char *token_end);
+int			ft_strlen(char *string); //TODO Remove this
+
+// tokenizer_analysers.c
+int			is_operator(char c);
+int			is_quote_character(char c);
+int			is_blank_char(char c);
+
+// tokenizer_analysers_2.c
+int			find_matching_quote(char *str);
+int			can_form_operator(char *token_start, char *second_operator);
+int			follows_token(char *line, int position, int quote_match_found);
+int			follows_word(char *line, int position, int quote_match_found);
+
+// tokenizer_handlers.c
+void		handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_blank_char(t_tokenizer_helpers *t, t_tokens **tokens);
+
+// tokenizer_handler_2.c
+void		start_expansion_token(t_tokenizer_helpers *t, t_tokens **tokens);
+void		start_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
+void		close_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
+
 // tokenizer_test_utils.c
 void		print_tokens(t_tokens *tokens);
+
 #endif

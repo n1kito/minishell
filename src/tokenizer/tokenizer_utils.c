@@ -1,5 +1,15 @@
 #include "../../include/tokenizer.h"
 
+/* Initialize the variable that are used in the tokenizer() function. */
+void	init_tokenizer_helpers(t_tokenizer_helpers *t, char *line)
+{
+	t->token_start = 0;
+	t->position = 0;
+	t->quote_match_found = 0;
+	t->line = line;
+}
+
+/* Returns a pointer to the last token of the tokens structure. */
 t_tokens	*get_last_token(t_tokens *tokens_list)
 {
 	t_tokens	*current;
@@ -11,13 +21,15 @@ t_tokens	*get_last_token(t_tokens *tokens_list)
 }
 
 /* Adds the characters between token_start & token_end to the tokens struct. */
+// TODO: Remove this comment
+// Possible to add PLUS keyword at start of function to see where and when
+// a new node is created. Check header.
 void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 {
 	int			token_len;
 	t_tokens	*new_token;
 	int			i;
 
-	PLUS
 	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
@@ -37,9 +49,9 @@ void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 }
 
 // TODO Remove this one, it's in the libft
-int ft_strlen(char *string)
+int	ft_strlen(char *string)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (string[i])
