@@ -42,21 +42,22 @@ It makes sense to use the main `env` linked list but with an additional boolean 
 It looks like 2 booleans would help, all default variables would be `env_var = 1`, all exported variables would be `exported = 1`. This way we can identify each one to print them accordingly.
 
 **How `export` and `unset` work from my tests**:
-- `export` with no arguments prints variables list in alphabetical order; first all default variables, then user-added ones.
+- `export` with no arguments prints variables list in alphabetical order.
   - Special characters come at the end though I only have one in my list.
   - [ ] But not the last variable... Why ? (on MAC)
-- I dont't understand the order in which variables are printed with `env`, check with Victor. Though we will parse them in the order in which they appear in the `*env[]` variable so maybe we don't have to worry about it.
+- I don't understand the order in which variables are printed with `env`, check with Victor. Though we will parse them in the order in which they appear in the `*env[]` variable so maybe we don't have to worry about it.
 - If I export an empty string `export ""` I get an error: ``bash: export: `': not a valid identifier``
 
 ### To-do
 
 #### export
-- [ ] Update basic env structure with env_var and exported booleans.
+- [x] Update basic env structure with env_var and exported booleans.
   - All initially parsed variables would be "env_var = 1"
 - [ ] Code print function called by `export` with no options.
   - Output: `declare -x BASH_SILENCE_DEPRECATION_WARNING="1"`
     - I do not know what the `declare -x` stands for, looked but no luck.
   - If a variable has no value, the output format is: `declare -x lolilol`
+  - [ ] Decide on how to sort list for printing.
 - [ ] Check if the name is a correct variable name.
   - The name of a variable can contain only letters (a to z or A to Z), numbers ( 0 to 9) or the underscore character ( _).  
   -  `pou*t=lol` prints `bash: pou*t=lol: command not found` and returns `127`
@@ -67,6 +68,7 @@ It looks like 2 booleans would help, all default variables would be `env_var = 1
   -  I don't know if I have to deal with this by hand or if this is part of the parser.
 - [ ] Handle export called with empty string (returns error)
   - `export ""`
+    - bash: export: `': not a valid identifier
 
 #### unset
 - [ ] Code function to remove variable from linked list with `unset`.
