@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/07/06 16:00:07 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/07/13 16:49:53 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ void	env_write(t_env *env, char **envp)
 	int	k;
 
 	i = 0;
-	j = 0;
-	k = 0;
-	printf("OK\n");
-	while (envp[i])
+	while (envp[i] && env)
 	{
+		j = 0;
+		k = 0;
 		while (envp[i][j] && envp[i][j - 1] != '=')
 			env->name[k++] = envp[i][j++];
 		env->name[k] = '\0';
@@ -49,11 +48,12 @@ void	env_write(t_env *env, char **envp)
 			env->variable[k++] = envp[i][j++];
 		env->variable[k] = '\0';
 		env = env->next;
-		j = 0;
-		k = 0;
 		i++;
 	}
 }
+
+// This function initializes the 2 strings used to store the name and the var
+// It allocates sufficient memory for them to accomodate the strings
 
 void	var_env_malloc_init(t_env *env, char **envp)
 {
@@ -62,20 +62,20 @@ void	var_env_malloc_init(t_env *env, char **envp)
 	int	len;
 
 	i = 0;
-	med = 1;
-	len = 0;
 	while (env)
 	{
+		med = 0;
+		len = 0;
 		while (envp[i][len])
 			len++;
-		while (envp[i][med - 1] != '=')
+		while (envp[i][med] != '=')
 			med++;
 		env->name = malloc(sizeof(char) * med + 1);
 		if (!env->name)
-			return (NULL);
+			return ;
 		env->variable = malloc(sizeof(char) * len - med + 1);
 		if (!env->variable)
-			return (NULL);
+			return ;
 		env = env->next;
 		i++;
 	}
@@ -87,18 +87,11 @@ void	var_env_malloc_init(t_env *env, char **envp)
 t_env	*list_init(int depth)
 {
 	t_env	*new;
-	int		len;
 
 	if (depth <= 0)
 		return (NULL);
 	new = malloc(sizeof(t_env *));
 	if (!new)
-		return (NULL);
-	new->name = malloc(sizeof(char) * + 1);
-	if (!new->name)
-		return (NULL);
-	new->variable = malloc(sizeof(char) * + 1);
-	if (!new->variable)
 		return (NULL);
 	new->next = list_init(depth - 1);
 	return (new);
@@ -117,7 +110,6 @@ t_env	*get_env(char **envp)
 	env = list_init(len);
 	var_env_malloc_init(env, envp);
 	env_write(env, envp);
-	printf("OK\n");
 	return (env);
 }
 
