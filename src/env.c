@@ -55,22 +55,49 @@ void	env_write(t_env *env, char **envp)
 	}
 }
 
+void	var_env_malloc_init(t_env *env, char **envp)
+{
+	int	i;
+	int	med;
+	int	len;
+
+	i = 0;
+	med = 1;
+	len = 0;
+	while (env)
+	{
+		while (envp[i][len])
+			len++;
+		while (envp[i][med - 1] != '=')
+			med++;
+		env->name = malloc(sizeof(char) * med + 1);
+		if (!env->name)
+			return (NULL);
+		env->variable = malloc(sizeof(char) * len - med + 1);
+		if (!env->variable)
+			return (NULL);
+		env = env->next;
+		i++;
+	}
+}
+
 // This function initializes the linked list
 // This list will be used to store the environment
 
 t_env	*list_init(int depth)
 {
 	t_env	*new;
+	int		len;
 
 	if (depth <= 0)
 		return (NULL);
 	new = malloc(sizeof(t_env *));
 	if (!new)
 		return (NULL);
-	new->name = malloc(sizeof(char *));
+	new->name = malloc(sizeof(char) * + 1);
 	if (!new->name)
 		return (NULL);
-	new->variable = malloc(sizeof(char *));
+	new->variable = malloc(sizeof(char) * + 1);
 	if (!new->variable)
 		return (NULL);
 	new->next = list_init(depth - 1);
@@ -88,6 +115,7 @@ t_env	*get_env(char **envp)
 
 	len = env_len(envp);
 	env = list_init(len);
+	var_env_malloc_init(env, envp);
 	env_write(env, envp);
 	printf("OK\n");
 	return (env);

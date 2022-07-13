@@ -22,6 +22,8 @@ void	read_prompt(void)
 
 	sa.sa_sigaction = &signal_handler;
 	sa.sa_flags = SA_RESTART;
+	sigaction();
+	sigaction();
 	while (1)
 	{
 		line = readline("🔥🔥🔥MINISHELL🔥🔥🔥 : ");
