@@ -50,6 +50,12 @@ It looks like 2 booleans would help, all default variables would be `env_var = 1
 
 ### To-do
 
+- [ ] Wondering how we're going to code the parser because it will have consequences on `export` and `unset`.
+  - For example, it would be great if, when we parse, we store variable updates in a specific structure that has:
+    - `char*` to `NAME`
+    - `char*` to `VALUE`
+    - `mode` (add, append or delete)
+
 #### export
 - [x] Update basic env structure with env_var and exported booleans.
   - All initially parsed variables would be "env_var = 1"
