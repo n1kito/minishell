@@ -53,11 +53,14 @@ It looks like 2 booleans would help, all default variables would be `env_var = 1
 #### export
 - [x] Update basic env structure with env_var and exported booleans.
   - All initially parsed variables would be "env_var = 1"
-- [ ] Code print function called by `export` with no options.
+- [x] Code print function called by `export` with no options.
   - Output: `declare -x BASH_SILENCE_DEPRECATION_WARNING="1"`
     - I do not know what the `declare -x` stands for, looked but no luck.
   - If a variable has no value, the output format is: `declare -x lolilol`
-  - [ ] Decide on how to sort list for printing.
+  - [x] Decide on how to sort list for printing.
+    - I decided to create a table to store pointer to each node of the env linked list.
+    - Then I can easily sort the table without affecting the actual environment list.
+    - Sorting table is freed after printing.
 - [ ] Check if the name is a correct variable name.
   - The name of a variable can contain only letters (a to z or A to Z), numbers ( 0 to 9) or the underscore character ( _).  
   -  `pou*t=lol` prints `bash: pou*t=lol: command not found` and returns `127`
