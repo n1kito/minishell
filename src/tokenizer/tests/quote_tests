@@ -5,7 +5,7 @@ abc "coucou" abc
 ["]
 
 ""
-[]
+[""]
 
     "   "
 ["   "]
@@ -29,7 +29,7 @@ hello"hello'''''$HOP"goodbye
 [hello|"hello'''''$HOP"|goodbye]
 
 hello"hello'''''$HOPgoodbye
-[hello"hello|'|$HOPgoodbye]
+[hello"hello|''|''|'|$HOPgoodbye]
 
 '' lol ''
 [''|lol|'']

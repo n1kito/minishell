@@ -69,13 +69,14 @@ typedef struct s_tokenizer
 # define SINGLE_QUOTE 39
 # define DOUBLE_QUOTE 34
 
-// tokenizer.c
+// tokenizer.c && tokenizer_for_debugging.c
 void		tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t);
+void		extract_token(t_tokens **tokens, char *token_start, char *token_end);
+//to do: move extract_token to tokenizer_utils.c
 
 // tokenizer_utils.c
 void		init_tokenizer_helpers(t_tokenizer_helpers *t, char *line);
 t_tokens	*get_last_token(t_tokens *tokens_list);
-void		extract_token(t_tokens **tokens, char *token_start, char *token_end);
 int			ft_strlen(char *string); //TODO Remove this
 
 // tokenizer_analysers.c
