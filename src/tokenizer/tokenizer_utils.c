@@ -30,6 +30,7 @@ void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 	t_tokens	*new_token;
 	int			i;
 
+	PLUS
 	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)

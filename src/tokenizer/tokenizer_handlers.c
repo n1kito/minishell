@@ -22,11 +22,11 @@ void	handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens)
 				&t->line[t->position - 1]);
 			t->token_start = t->position;
 		}
-		if (t->quote_match_found == 1)
-		{
-			t->position += 2;
-			t->token_start = t->position;
-		}
+//		if (t->quote_match_found == 1)
+//		{
+//			t->position += 2;
+//			t->token_start = t->position;
+//		}
 		else
 		{
 			t->position += t->quote_match_found;
