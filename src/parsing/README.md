@@ -33,20 +33,20 @@ It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, o
     - As specified there (??), exactly one field can result (or the result is unspecified), and there are additional requirements on pathname expansion.
 3. `[Redirection from here-document]`
    - Quote removal shall be applied to the word to determine the delimiter.
-4. `[Case statement termination]`
+4. `[Case statement termination]` (**NOT HANDLED**)
    - When the `TOKEN` is exactly the reserved word `esac`, the token identifier for `esac` shall result. Otherwise, the token `WORD` shall be returned.
-   - **No need to handle this.** (I think)
-5. `[NAME in for]`
+5. `[NAME in for]` (**NOT HANDLED**)
    - When the `TOKEN` meets the requirements for a name, the token identifier `NAME` shall result. Otherwise, the token `WORD` shall be returned.
    - Name requirements: In the shell command language, a word consisting solely of underscores, digits, and alphabetics from the portable character set. The first character of a name is not a digit.
    - **We don't handle for statements.**
-6. `[Third word of for and case]`
+6. `[Third word of for and case]` (**NOT HANDLED**)
    - We don't handle this.
-7. `[Assigment preceding command name]`
-   a. [When the first word]
+7. `[Assigment preceding command name]`  
+   `a.` [When the first word]
       - If the `TOKEN` does not contain the character `=`, `Rule 1` is applied.
-      - Otherwise, `Rule 7b` is applied.
-   b. [Not the first word]
+      - Otherwise, `Rule 7b` is applied.  
+   
+   `b.` [Not the first word]
       - If the `TOKEN` contains an unquoted `=` character that is not part of an embedded parameter expansion, command substitution, or arithmetic expansion construct:
         - If the `TOKEN` begins with `=`, then `Rule 1` is applied.
         - If all the characters in the `TOKEN` preceding the first such `=` form a valid [name](https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/V1_chap03.html#tag_03_235), the token `ASSIGNMENT_WORD` shall be returned.
@@ -57,7 +57,7 @@ It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, o
    - When the `TOKEN` is exactly a reserved word (we don't care for those), the token identifier for that reserved word shall result.
    - Otherwise, then the `TOKEN` meets the requirements for a name, the token identifier `NAME` shall result.
    - Otherwise, `Rule 7` applies.
-9. [Body of function]
+9. `[Body of function]`
    - We don't handle functions.
    - Word expansion and assignment shall never occur, even when required by the rules above, when this rule is being parsed.
    - Each `TOKEN` that might either be expanded or have assignment applied to it shall instead be returned as a single `WORD` consisting only of characters that are exactly the token described in [Token Recognition](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03).
