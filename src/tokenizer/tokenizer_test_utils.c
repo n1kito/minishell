@@ -35,6 +35,7 @@ int	main(int argc, char **argv)
 		tokenizer(argv[1], &tokens, &t);
 		NEWLINE
 		print_tokens(tokens);
-	}
+	} 
+	parser(tokens);
 	return (0);
 }
