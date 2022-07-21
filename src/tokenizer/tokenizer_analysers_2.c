@@ -32,8 +32,9 @@ int	can_form_operator(char *token_start, char *second_operator)
 	return (0);
 }
 
-/* Checks that the position checked is not the start of the line and whether
- * the previous character is part of a token or not. */
+/* Checks that the current position does not directly follow the latest
+ * extracted token, that it is not the start of the line and whether
+ * the previous character is actually part of a token or not. */
 int	follows_open_token(t_tokenizer_helpers *t)
 {
 	if (t->last_token_end == t->position - 1)
