@@ -3,9 +3,12 @@
 /* Called when EOL character is found in line */
 void	handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens)
 {
-	if (follows_token(t->line, t->position, t->quote_match_found))
+	if (follows_open_token(t))
+	{
 		extract_token(tokens, &t->line[t->token_start],
 			&t->line[t->position - 1]);
+		t->last_token_end = t->position - 1;
+	}
 	t->position++;
 }
 
@@ -16,7 +19,7 @@ void	handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens)
 	t->quote_match_found = find_matching_quote(&t->line[t->position]);
 	if (t->quote_match_found > 0)
 	{
-		if (follows_token(t->line, t->position, t->quote_match_found))
+		if (follows_open_token(t))
 		{
 			extract_token(tokens, &t->line[t->token_start],
 				&t->line[t->position - 1]);
@@ -25,6 +28,7 @@ void	handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens)
 		t->position += t->quote_match_found;
 		extract_token(tokens, &t->line[t->token_start],
 			&t->line[t->position]);
+		t->last_token_end = t->position;
 		t->position++;
 		t->token_start = t->position;
 	}
@@ -35,9 +39,12 @@ void	handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens)
 /* Called when blank char is found. Extracts preceding token if necessary. */
 void	handle_blank_char(t_tokenizer_helpers *t, t_tokens **tokens)
 {
-	if (follows_token(t->line, t->position, t->quote_match_found))
+	if (follows_open_token(t))
+	{
 		extract_token(tokens, &t->line[t->token_start],
 			&t->line[t->position - 1]);
+		t->last_token_end = t->position - 1;
+	}
 	t->position++;
 	t->token_start = t->position;
 }

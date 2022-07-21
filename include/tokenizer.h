@@ -53,6 +53,7 @@ typedef struct s_tokenizer
 	int				token_start;
 	int				position;
 	int				quote_match_found;
+	int 			last_token_end;
 	char			*line;
 }	t_tokenizer_helpers;
 
@@ -87,7 +88,7 @@ int			is_blank_char(char c);
 // tokenizer_analysers_2.c
 int			find_matching_quote(char *str);
 int			can_form_operator(char *token_start, char *second_operator);
-int			follows_token(char *line, int position, int quote_match_found);
+int			follows_open_token(t_tokenizer_helpers *t);
 int			follows_word(char *line, int position, int quote_match_found);
 
 // tokenizer_handlers.c

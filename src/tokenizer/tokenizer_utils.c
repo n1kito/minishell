@@ -6,6 +6,7 @@ void	init_tokenizer_helpers(t_tokenizer_helpers *t, char *line)
 	t->token_start = 0;
 	t->position = 0;
 	t->quote_match_found = 0;
+	t->last_token_end = -1;
 	t->line = line;
 }
 

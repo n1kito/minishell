@@ -34,12 +34,14 @@ int	can_form_operator(char *token_start, char *second_operator)
 
 /* Checks that the position checked is not the start of the line and whether
  * the previous character is part of a token or not. */
-int	follows_token(char *line, int position, int quote_match_found)
+int	follows_open_token(t_tokenizer_helpers *t)
 {
-	if (position == 0
-		|| ((is_blank_char(line[position - 1]))
-			|| (is_quote_character(line[position - 1])
-				&& quote_match_found != -1)))
+	if (t->last_token_end == t->position - 1)
+		return (0);
+	if (t->position == 0
+		|| ((is_blank_char(t->line[t->position - 1]))
+			|| (is_quote_character(t->line[t->position - 1])
+				&& t->quote_match_found != -1)))
 		return (0);
 	return (1);
 }
