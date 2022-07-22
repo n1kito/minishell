@@ -82,11 +82,15 @@ Shell reads and executes commands in the following way:
 1. Reads its input from a file or terminal.
 2. Breaks this input into words and operators, obeying the shell quoting rules.
    - Alias expansion is performed here.
-3. parses the token in to _simple_ and _compound_ commands.
+3. Parses the token in to _simple_ and _compound_ commands.
 4. Perfoms the various shell expansions, breaking expanded tokens into lists of filenames and commands and arguments.
 5. Performs any necessary redirections and removes the redirection operators and their operands from the argument list.
 6. Executes the command.
 7. Optionally waits for the command to complete and collects its exit status.
+
+## Token Recognition
+
+[See README](src/tokenizer/README.md)
 
 ## Simple Command Expansion
 
