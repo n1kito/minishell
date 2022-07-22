@@ -49,8 +49,12 @@ void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 	new_token->token[i] = '\0';
 	new_token->token_type = -1;
 	new_token->next = NULL;
+	new_token->previous = NULL;
 	if ((*tokens) == NULL)
 		*tokens = new_token;
 	else
+	{
+		new_token->previous = get_last_token(*tokens);
 		get_last_token(*tokens)->next = new_token;
+	}
 }

@@ -47,6 +47,7 @@ typedef struct s_tokens
 	char			*token;
 	int				token_type;
 	struct s_tokens	*next;
+	struct s_tokens	*previous;
 }	t_tokens;
 
 typedef struct s_tokenizer

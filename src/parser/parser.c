@@ -1,5 +1,6 @@
 #include "../../include/parser.h"
 
+/* Goes through tokens and attributes the correct type for each. */
 void	parser(t_tokens **tokens)
 {
 		t_tokens	*current;
@@ -9,7 +10,7 @@ void	parser(t_tokens **tokens)
 		{
 				if (!is_operator_token(current))
 						if (!is_io_number_token(current))
-								is_simple_token(current);
+								classify_as_simple_token(current);
 				current = current->next;
 		}
 }
@@ -20,13 +21,14 @@ void	classify_as_simple_token(t_tokens *token)
 			token->token_type = 0;
 	}
 
+/* Checks if current token is only numbers and if previous and next token is a simple operator.*/
 int	is_io_number_token(t_tokens *token)
 {
 	if (is_only_digits(token->token))
 	{
 		if ((ft_strlen(token->previous->token) == 1
 				&& ((token->previous->token[0] == '<')
-					|| token->previous->token[0] == '>'))  
+					|| token->previous->token[0] == '>'))
 			|| (ft_strlen(token->next->token) == 1
 				&& ((token->next->token[0] == '<')
 					|| token->next->token[0] == '>')))
@@ -38,6 +40,31 @@ int	is_io_number_token(t_tokens *token)
 	return (0);
 }
 
+/* TODO: Remove before pushing, it's in the libft. Not in header. */
+int	ft_isdigit(int checkme)
+{
+	if (checkme >= 48 && checkme <= 57)
+		return (1);
+	else
+		return (0);
+}
+
+/* Checks that all characters of the string are digits. */
+int	is_only_digits(char *token)
+{
+	int	i;
+
+	i = 0;
+	while (token && token[i])
+	{
+		if (!ft_isdigit(token[i]))
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+/* Checks if current token is one of the operators and gives it the appropriate code. */
 int	is_operator_token(t_tokens *token)
 {
 		if (!is_operator(token->token[0]))
@@ -61,6 +88,7 @@ int	is_operator_token(t_tokens *token)
 		return (1);
 }
 
+/* Prints the type of each token */
 void	print_parsed_tokens(t_tokens *tokens)
 {
 		t_tokens	*current;
