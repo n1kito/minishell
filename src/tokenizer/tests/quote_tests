@@ -33,3 +33,12 @@ hello"hello'''''$HOPgoodbye
 
 '' lol ''
 [''|lol|'']
+
+< 'pp'
+[<|'pp']
+
+< "pp"
+[<|"pp"]
+
+;< "pp"
+[;|<|"pp"]

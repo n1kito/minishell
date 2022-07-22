@@ -47,6 +47,7 @@ void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 	while (++i < token_len)
 		new_token->token[i] = token_start[i];
 	new_token->token[i] = '\0';
+	new_token->token_type = -1;
 	new_token->next = NULL;
 	if ((*tokens) == NULL)
 		*tokens = new_token;

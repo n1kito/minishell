@@ -7,6 +7,7 @@
 # include "tokenizer.h"
 
 // PARSING TOKEN TYPES
+# define TOKEN 0
 # define WORD 1
 # define ASSIGNMENT_WORD 2
 # define NAME 3
@@ -19,5 +20,9 @@
 
 void	parser(t_tokens **tokens);
 int		is_operator_token(t_tokens *tokens);
+int		is_io_number_token(t_tokens *token);
+void	print_parsed_tokens(t_tokens *tokens);
+
+   
 
 #endif
