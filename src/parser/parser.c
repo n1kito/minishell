@@ -15,10 +15,11 @@ void	parser(t_tokens **tokens)
 		}
 }
 
+/* Gives the type TOKEN to token passed as parameter. */
 void	classify_as_simple_token(t_tokens *token)
 	{
 		if (token)
-			token->token_type = 0;
+			token->token_type = PIPE;
 	}
 
 /* Checks if current token is only numbers and if previous and next token is a simple operator.*/
