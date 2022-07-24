@@ -6,13 +6,16 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/07/21 14:22:44 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/07/24 22:09:34 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
+#include <unistd.h>
 
-int	cd(char **command, t_env *env)
+int	cd(char *path, t_env *env)
 {
+	int	ret;
 
+	ret = chdir(path);
 }
