@@ -22,7 +22,7 @@ test:
 	@./tokenizer_tester.sh
 
 clean:
-	@rm ${NAME}
-	@echo "${YELLOW}Deleted ${NAME} executable.${NC}"
+	@rm tokenizer parser
+	@echo "${YELLOW}Deleted executables.${NC}"
 
 .PHONY: all tokenizer parser test clean
