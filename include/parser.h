@@ -1,11 +1,6 @@
 #ifndef PARSER_H
 # define PARSER_H
 
-// INCLUDES
-# include <stdio.h>
-# include <stdlib.h>
-# include "tokenizer.h"
-
 // PARSING TOKEN TYPES
 # define TOKEN 0
 # define WORD 1
@@ -13,10 +8,10 @@
 # define NAME 3
 # define IO_NUMBER 4
 # define REDIRECT_FROM 5
-# define REDIRECT_TO 5
-# define APPEND 6
-# define HERE_DOC 7
-# define PIPE 8
+# define REDIRECT_TO 6
+# define APPEND 7
+# define HERE_DOC 8
+# define PIPE_TOKEN 9
 
 void	parser(t_tokens **tokens);
 int		is_operator_token(t_tokens *tokens);

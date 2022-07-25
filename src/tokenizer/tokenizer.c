@@ -1,4 +1,5 @@
-#include "../../include/tokenizer.h"
+/* #include "../../include/tokenizer.h" */
+#include "../../include/minishell.h"
 
 /* The tokenizer() function strictly follows the shell guidelines.
 See README for more information. */

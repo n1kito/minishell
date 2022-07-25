@@ -1,4 +1,4 @@
-#include "../../include/parser.h"
+#include "../../include/minishell.h"
 
 /* Goes through tokens and attributes the correct type for each. */
 void	parser(t_tokens **tokens)
@@ -19,7 +19,7 @@ void	parser(t_tokens **tokens)
 void	classify_as_simple_token(t_tokens *token)
 	{
 		if (token)
-			token->token_type = PIPE;
+			token->token_type = TOKEN;
 	}
 
 /* Checks if current token is only numbers and if previous and next token is a simple operator.*/
@@ -84,7 +84,7 @@ int	is_operator_token(t_tokens *token)
 				else if (token->token[0] == R_CHEVRON)
 						token->token_type = REDIRECT_TO;
 				else
-						token->token_type = PIPE;
+						token->token_type = PIPE_TOKEN;
 		}
 		return (1);
 }
@@ -98,21 +98,25 @@ void	print_parsed_tokens(t_tokens *tokens)
 		COLOR_CROCHET_START
 		while (current)
 		{
-			if (current->token_type = 1)
+			if (current->token_type == 0)
+				printf("TOKEN");
+			else if (current->token_type == 1)
 				printf("WORD");
-			else if (current->token_type = 2)
+			else if (current->token_type == 2)
 				printf("ASSIGNMENT_WORD");
-			else if (current->token_type = 3)
+			else if (current->token_type == 3)
 				printf("NAME");
-			else if (current->token_type = 4)
+			else if (current->token_type == 4)
 				printf("IO_NUMBER");
-			else if (current->token_type = 5)
+			else if (current->token_type == 5)
 				printf("REDIRECT_FROM");
-			else if (current->token_type = 6)
+			else if (current->token_type == 6)
 				printf("REDIRECT_TO");
-			else if (current->token_type = 7)
+			else if (current->token_type == 7)
+				printf("APPEND");
+			else if (current->token_type == 8)
 				printf("HERE_DOC");
-			else if (current->token_type = 8)
+			else if (current->token_type == 9)
 				printf("PIPE");
 			else
 				printf("UNKNOWN");

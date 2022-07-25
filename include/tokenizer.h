@@ -1,10 +1,6 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-// INCLUDES
-#include <stdio.h>
-#include <stdlib.h>
-
 # ifdef VISUAL
 #  define ONE printf("[1]");
 #  define TWO printf("[2]");

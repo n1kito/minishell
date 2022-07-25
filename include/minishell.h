@@ -1,14 +1,10 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/27 16:02:51 by mjallada          #+#    #+#             */
-/*   Updated: 2022/06/27 16:02:57 by mjallada         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
+#ifndef MINISHELL_H
+# define MINISHELL_H 
 
-#include <stdlib.h>
+// INCLUDES
+# include <stdlib.h>
+# include <stdio.h>
+# include "tokenizer.h"
+# include "parser.h"
 
+#endif

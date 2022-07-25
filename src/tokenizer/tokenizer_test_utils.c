@@ -1,4 +1,5 @@
 #include "../../include/tokenizer.h"
+#include "../../include/minishell.h"
 
 /* Prints the tokens in a visual manner ✨. */
 void	print_tokens(t_tokens *tokens)
@@ -36,7 +37,7 @@ int	main(int argc, char **argv)
 		NEWLINE
 		print_tokens(tokens);
 	} 
-	parser(tokens);
-	print_parsed_token(tokens);
+	parser(&tokens);
+	print_parsed_tokens(tokens);
 	return (0);
 }

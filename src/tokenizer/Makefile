@@ -6,7 +6,8 @@ GENERAL_FILES	=	tokenizer_analysers.c\
 					tokenizer_handlers.c\
 					tokenizer_handlers_2.c\
 					tokenizer_test_utils.c\
-					tokenizer_utils.c
+					tokenizer_utils.c\
+					../parser/parser.c
 
 YELLOW			:= \033[0;93m
 END_COLOR		:= \033[0;39m
@@ -20,6 +21,8 @@ test:
 visual:
 	@gcc -Wall -Wextra -Werror -D VISUAL ${DEBUG_FILE} ${GENERAL_FILES} -I../../include -o ${NAME}
 
+parser:
+	@gcc -Wall -Wextra -Werror ${MAIN_FILE} ${GENERAL_FILES} -I../../include -o parser
 clean:
 	@rm ${NAME}
 	@echo "${YELLOW}Deleted ${NAME} executable.${NC}"
