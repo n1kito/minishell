@@ -13,9 +13,9 @@
 # define HERE_DOC 8
 # define PIPE_TOKEN 9
 
+int		is_io_number_token(t_tokens *token);
 void	parser(t_tokens **tokens);
 int		is_operator_token(t_tokens *tokens);
-int		is_io_number_token(t_tokens *token);
 int		is_only_digits(char *token);
 void	print_parsed_tokens(t_tokens *tokens);
 void	classify_as_simple_token(t_tokens *token);
