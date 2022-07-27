@@ -20,6 +20,8 @@ These rules are used to determine what a `token` is. (See the `tokenizer` README
 How each `TOKEN` is recognized and interpreted depends on context.  
 It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, or a reserved word (we don't handle those), depending of the context.  
 
+## What's next ?
+
 At this stage, we've identified whether a token is an `OPERATOR` (and identified the actual operator), an `IO_NUMBER`, or *something else*.
 
 We will use the *shell grammar rules* below to analyse context and identify what each of the remaining tokens is.
