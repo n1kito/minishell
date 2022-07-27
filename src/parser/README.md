@@ -20,6 +20,10 @@ These rules are used to determine what a `token` is. (See the `tokenizer` README
 How each `TOKEN` is recognized and interpreted depends on context.  
 It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, or a reserved word (we don't handle those), depending of the context.  
 
+At this stage, we've identified whether a token is an `OPERATOR` (and identified the actual operator), an `IO_NUMBER`, or *something else*.
+
+We will use the *shell grammar rules* below to analyse context and identify what each of the remaining tokens is.
+
 ## Shell grammar rules
 
 1. `[Command Name]`
@@ -66,8 +70,8 @@ It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, o
 
 - [ ] Re-read the grammar rules so they're more clear.
 - [ ] J'arrive pas bien à savoir si on doit gerer genre `2>1` etc...
+   - OUI. C'est les tokens `IO_NUMBER`. 
 - [ ] Confirm when a variable should be expanded to its value.
     - [ ] After tokenizer ?
     - [ ] Before parsing ?
     - They're kind of the same but not really.
-
