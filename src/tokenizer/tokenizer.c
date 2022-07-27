@@ -31,6 +31,7 @@ void	tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t)
 }
 
 /* Adds the characters between token_start & token_end to the tokens struct. */
+// TODO Move token initialization to a separate function.
 void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 {
 	int			token_len;
@@ -51,6 +52,7 @@ void	extract_token(t_tokens **tokens, char *token_start, char *token_end)
 	new_token->token_type = -1;
 	new_token->next = NULL;
 	new_token->previous = NULL;
+	new_token->assignment_name_end = NULL;
 	if ((*tokens) == NULL)
 		*tokens = new_token;
 	else

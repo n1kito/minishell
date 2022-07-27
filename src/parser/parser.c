@@ -10,17 +10,10 @@ void	parser(t_tokens **tokens)
 		{
 				if (!is_operator_token(current))
 						if (!is_io_number_token(current))
-								classify_as_simple_token(current);
+								identify_token_type(current);
 				current = current->next;
 		}
 }
-
-/* Gives the type TOKEN to token passed as parameter. */
-void	classify_as_simple_token(t_tokens *token)
-	{
-		if (token)
-			token->token_type = TOKEN;
-	}
 
 /* Checks if current token is only numbers and if previous and next token is a simple operator.*/
 int	is_io_number_token(t_tokens *token)

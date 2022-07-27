@@ -44,6 +44,7 @@ typedef struct s_tokens
 	int				token_type;
 	struct s_tokens	*next;
 	struct s_tokens	*previous;
+	int				assignment_name_len;
 }	t_tokens;
 
 typedef struct s_tokenizer
