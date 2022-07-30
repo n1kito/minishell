@@ -45,7 +45,7 @@ int	has_valid_assignment_name(t_tokens *token_ptr)
 }
 
 /* Receives token and follows shell grammar rules to assign the correct
- * token type */
+ * token type. */
 void	identify_token_type(t_tokens *token)
 {
 	t_tokens	*current;	
