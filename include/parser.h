@@ -24,4 +24,6 @@ void	print_parsed_tokens(t_tokens *tokens);
 // parser_identify_tokens.c
 void	identify_token_type(t_tokens *token);
 
+// to remove before pushing it's in the libft
+int		ft_isdigit(int checkme);
 #endif
