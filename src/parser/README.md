@@ -29,25 +29,32 @@ We will use the *shell grammar rules* below to analyse context and identify what
 ## Shell grammar rules
 
 1. `[Command Name]`
+   - [ ] OK
     - When the `TOKEN` is exactly a reserved word, the token identifier for that reserved word shall result.
     - Otherwise, the token `WORD` shall be returned.
     - Also, if the parser is in any state where only a reserved word could be the next correct token, proceed as above.
     - > Rule 1 is not directly referenced in the grammar, but is referred to by other rules, or applies globally.
 2. `[Redirection to or from filename]`
+   - [ ] OK
     - The expansions specified in [Redirection](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_07) shall occur.
       - [ ] I have no idea what this means I can't find the correct section.
     - As specified there (??), exactly one field can result (or the result is unspecified), and there are additional requirements on pathname expansion.
 3. `[Redirection from here-document]`
+   - [ ] OK
    - Quote removal shall be applied to the word to determine the delimiter.
 4. `[Case statement termination]` (**NOT HANDLED**)
+   - [ ] OK
    - When the `TOKEN` is exactly the reserved word `esac`, the token identifier for `esac` shall result. Otherwise, the token `WORD` shall be returned.
 5. `[NAME in for]` (**NOT HANDLED**)
+   - [ ] OK
    - When the `TOKEN` meets the requirements for a name, the token identifier `NAME` shall result. Otherwise, the token `WORD` shall be returned.
    - Name requirements: In the shell command language, a word consisting solely of underscores, digits, and alphabetics from the portable character set. The first character of a name is not a digit.
    - **We don't handle for statements.**
 6. `[Third word of for and case]` (**NOT HANDLED**)
+   - [ ] OK
    - We don't handle this.
 7. `[Assigment preceding command name]`  
+   - [ ] OK
    `a.` [When the first word]
       - If the `TOKEN` does not contain the character `=`, `Rule 1` is applied.
       - Otherwise, `Rule 7b` is applied.  
@@ -60,10 +67,12 @@ We will use the *shell grammar rules* below to analyse context and identify what
       - Otherwise, rule 1 shall be applied.
     Assignment to the name within a returned `ASSIGNMENT_WORD` token shall occur as specified in [Simple Commands](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01).
 8. `[NAME in function]`
+   - [ ] OK
    - When the `TOKEN` is exactly a reserved word (we don't care for those), the token identifier for that reserved word shall result.
    - Otherwise, then the `TOKEN` meets the requirements for a name, the token identifier `NAME` shall result.
    - Otherwise, `Rule 7` applies.
 9. `[Body of function]`
+   - [ ] OK
    - We don't handle functions.
    - Word expansion and assignment shall never occur, even when required by the rules above, when this rule is being parsed.
    - Each `TOKEN` that might either be expanded or have assignment applied to it shall instead be returned as a single `WORD` consisting only of characters that are exactly the token described in [Token Recognition](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03).
