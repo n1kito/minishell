@@ -14,13 +14,13 @@ YELLOW			:= \033[0;93m
 END_COLOR		:= \033[0;39m
 
 tokenizer:
-	@gcc -Wall -Wextra -Werror ${MAIN_FILES} ${TOKENIZER_MAIN} -I${INCLUDE_FOLDER} -o tokenizer
+	@gcc -g -Wall -Wextra -Werror ${MAIN_FILES} ${TOKENIZER_MAIN} -I${INCLUDE_FOLDER} -o tokenizer
 
 parser:
-	@gcc -Wall -Wextra -Werror ${MAIN_FILES} ${PARSER_MAIN} -I${INCLUDE_FOLDER} -o parser
+	@gcc -g -Wall -Wextra -Werror ${MAIN_FILES} ${PARSER_MAIN} -I${INCLUDE_FOLDER} -o parser
 
 test:
-	@./tokenizer_tester.sh
+	@./minishell_tester.sh
 
 clean:
 	@rm tokenizer parser

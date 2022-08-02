@@ -20,10 +20,10 @@ int	is_io_number_token(t_tokens *token)
 {
 	if (is_only_digits(token->token))
 	{
-		if ((ft_strlen(token->previous->token) == 1
+		if (((token->previous && ft_strlen(token->previous->token) == 1)
 				&& ((token->previous->token[0] == '<')
 					|| token->previous->token[0] == '>'))
-			|| (ft_strlen(token->next->token) == 1
+			|| ((token->next && ft_strlen(token->next->token) == 1)
 				&& ((token->next->token[0] == '<')
 					|| token->next->token[0] == '>')))
 			{

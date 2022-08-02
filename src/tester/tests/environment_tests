@@ -36,3 +36,9 @@ $ $ $
 
 $MAMI   $NOVA   $
 [$MAMI|$NOVA|$]
+
+$TEST=HELLO
+[$TEST=HELLO]
+
+TEST=HELLO
+[TEST=HELLO]
