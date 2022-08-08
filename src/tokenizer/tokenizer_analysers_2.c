@@ -20,19 +20,19 @@ int	find_matching_quote(char *str)
 
 /* Checks that the token being is no bigger than 2 characters, then checks if
  * both characters are the same chevron character. */
-/*
-int	can_form_operator(char *token_start, char *second_operator)
+int	can_form_operator(char *token_start, char *current_char)
 {
 	char	*first_operator;
 
+	if (*current_char != L_CHEVRON && *current_char != R_CHEVRON)
+		return (0);
 	first_operator = token_start;
-	if ((second_operator - first_operator == 1)
+	if ((current_char - first_operator == 1)
 		&& ((*first_operator == L_CHEVRON || *first_operator == R_CHEVRON)
-			&& *first_operator == *second_operator))
+			&& *first_operator == *current_char))
 		return (1);
 	return (0);
 }
-*/
 
 int	ft_isdigit(int checkme)
 {
@@ -42,6 +42,9 @@ int	ft_isdigit(int checkme)
 		return (0);
 }
 
+// TODO: Cette version de la fonction permet de gerer (a peu pres) les redirections a chiffres genre 2> ou 3>>,
+// mais tout le monde dit qu'il faut pas le gerer. Du coup je suis tente de ne pas le gerer non plus.
+/*
 int	can_form_operator(char *token_start, char *current_char)
 {
 	int		token_len;
@@ -69,6 +72,7 @@ int	can_form_operator(char *token_start, char *current_char)
 	}
 	return (0);
 }
+*/
 
 /* Checks that the current position does not directly follow the latest
  * extracted token, that it is not the start of the line and whether
