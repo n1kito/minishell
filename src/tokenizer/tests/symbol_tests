@@ -1,0 +1,17 @@
+\a\b\c\d
+[\a\b\c\d]
+
+hello;comment >>;ca va ?
+[hello;comment|>>|;ca|va|?]
+
+a!\b \n ; \t|<> <&<<-
+[a!\b|\n|;|\t|||<|>|<|&|<<|-]
+
+;;;>><
+[;;;|>>|<]
+
+*12;>|13;
+[*12;|>|||13;]
+
+\t\n\ stack
+[\t\n\|stack]

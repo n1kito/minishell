@@ -1,0 +1,35 @@
+# These tests were written when the tokenizer did not include quote characters around quoted tokens.
+# A new version of this file exists with updated tests.
+
+abc "coucou" abc
+[abc|coucou|abc]
+
+   "
+["]
+
+""
+[]
+
+    "   "
+[   ]
+
+  "test >> | >"
+[test >> | >]
+
+  hello"comment"ca"va"?
+[hello|comment|ca|va|?]
+
+   hello"comment ca va?
+[hello"comment|ca|va?]
+
+ cou'cou' "pouet '"
+[cou|cou|pouet ']
+
+abc 'coucou>>|||||||||""pouet'abc
+[abc|coucou>>|||||||||""pouet|abc]
+
+hello"hello'''''$HOP"goodbye
+[hello|hello'''''$HOP|goodbye]
+
+hello"hello'''''$HOPgoodbye
+[hello"hello|'|$HOPgoodbye]
