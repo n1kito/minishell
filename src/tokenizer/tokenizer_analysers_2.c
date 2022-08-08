@@ -20,6 +20,7 @@ int	find_matching_quote(char *str)
 
 /* Checks that the token being is no bigger than 2 characters, then checks if
  * both characters are the same chevron character. */
+/*
 int	can_form_operator(char *token_start, char *second_operator)
 {
 	char	*first_operator;
@@ -29,6 +30,43 @@ int	can_form_operator(char *token_start, char *second_operator)
 		&& ((*first_operator == L_CHEVRON || *first_operator == R_CHEVRON)
 			&& *first_operator == *second_operator))
 		return (1);
+	return (0);
+}
+*/
+
+int	ft_isdigit(int checkme)
+{
+	if (checkme >= 48 && checkme <= 57)
+		return (1);
+	else
+		return (0);
+}
+
+int	can_form_operator(char *token_start, char *current_char)
+{
+	int		token_len;
+	int		i;
+
+	token_len = current_char - token_start + 1;
+	if (ft_isdigit(*current_char))
+	{
+		i = 0;
+		while (i < token_len)
+			if (!ft_isdigit(token_start[i++]))
+				return (0);
+		return (1);
+	}
+	if (*current_char == L_CHEVRON || *current_char == R_CHEVRON)
+	{
+		if (token_len == 1)
+			return (1);
+		if (ft_isdigit(*(current_char - 1)))
+			return (1);
+		if (*(current_char - 1) == *current_char)
+			if (token_len == 2
+				|| (token_len > 2 && ft_isdigit(*(current_char - 2))))
+				return (1);
+	}
 	return (0);
 }
 

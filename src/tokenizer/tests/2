@@ -32,13 +32,13 @@ ab>>> >|>   <>
 [2>|pouet.txt]
 
 2> pouet.txt
-[2>|pouet.txt]
+[2|pouet.txt]
 
 2>>pouet.txt
 [2>>|pouet.txt]
 
 2>> pouet.txt
-[2>>|pouet.txt]
+[2|pouet.txt]
 
 452> pouet.txt
 [452>|pouet.txt]

@@ -5,6 +5,8 @@ int	is_operator(char c)
 {
 	if (c && (c == L_CHEVRON || c == R_CHEVRON || c == PIPE))
 		return (1);
+//	else if (c >= 48 && c <= 57) // replace with ft_isdigit
+//		return (1);
 	return (0);
 }
 

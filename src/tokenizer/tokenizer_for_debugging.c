@@ -14,8 +14,7 @@ void	tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t)
 			ONE
 			handle_end_of_line(t, tokens);
 		}
-		else if (is_operator(line[t->position - 1])
-				 && can_form_operator(&line[t->token_start], &line[t->position]))
+		else if (can_form_operator(&line[t->token_start], &line[t->position]))
 		{
 			TWO
 			t->position++;

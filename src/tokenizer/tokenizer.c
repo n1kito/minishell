@@ -8,8 +8,7 @@ void	tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t)
 	{
 		if (line[t->position] == '\0')
 			handle_end_of_line(t, tokens);
-		else if (is_operator(line[t->position - 1])
-			&& can_form_operator(&line[t->token_start], &line[t->position]))
+		else if (can_form_operator(&line[t->token_start], &line[t->position]))
 			t->position++;
 		else if (is_operator(line[t->position - 1])
 			&& !can_form_operator(&line[t->token_start], &line[t->position])
