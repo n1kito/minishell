@@ -46,6 +46,10 @@ int	has_valid_assignment_name(t_tokens *token_ptr)
 
 /* Receives token and follows shell grammar rules to assign the correct
  * token type. */
+// 1. [COMMAND_NAME]
+// Only called by other rules. First checks if it is a [WORD]. Then I think if it is the first [WORD] in the "pipe section" and respects naming rules, it should be typed [COMMAND_NAME].
+// 2. [REDIRECTION TO or FROM FILENAME]
+// 
 void	identify_token_type(t_tokens *token)
 {
 	t_tokens	*current;	
@@ -58,7 +62,7 @@ void	identify_token_type(t_tokens *token)
 			if (has_valid_assignment_name(current))
 				current->token_type = ASSIGNMENT_WORD;
 		}
-		else
-			current->token_type = WORD;
 	}
+	else
+		current->token_type = WORD;
 }

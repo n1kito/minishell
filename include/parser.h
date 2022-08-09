@@ -13,6 +13,7 @@
 # define HERE_DOC 8
 # define PIPE_TOKEN 9
 # define COMMAND_NAME 10
+# define DELIMITER 11
 
 // parser.c
 int		is_io_number_token(t_tokens *token);

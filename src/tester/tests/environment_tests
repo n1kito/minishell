@@ -42,3 +42,6 @@ $TEST=HELLO
 
 TEST=HELLO
 [TEST=HELLO]
+
+"TEST"=test
+["TEST"=test]
