@@ -6,13 +6,14 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/07/31 01:16:27 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/10 19:43:14 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtin.h"
 
-int	echo_option_check(char *str)
+static int	echo_option_check(char *str)
 {
 	int	i;
 
@@ -52,11 +53,5 @@ int	echo(char **arg)
 	}
 	if (!check)
 		printf("\n");
-	return (0);
-}
-
-int	main(int argc, char **argv)
-{
-	echo(argv);
 	return (0);
 }

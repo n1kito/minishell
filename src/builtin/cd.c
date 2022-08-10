@@ -6,11 +6,12 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/02 05:54:02 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/10 19:48:15 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "minishell.h"
+#include "builtin.h"
 #include <unistd.h>
 #include <limits.h>
 
@@ -78,7 +79,7 @@ int	cd(char *path, t_env *env)
 {
 	int		ret;
 	char	buffer[PATH_MAX + 1];
-	
+
 	ret = chdir(path);
 	if (ret == 0)
 		ft_update_pwd(env, buffer);

@@ -6,13 +6,14 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/07/21 18:14:21 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/10 19:40:58 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtin.h"
 
-t_env	*unset_first(t_env *env)
+static t_env	*unset_first(t_env *env)
 {
 	t_env	*temp;
 
