@@ -2,16 +2,19 @@ hello $test
 [hello|$test]
 
 hello$test
-[hello|$test]
+[hello$test]
 
 $hello test
 [$hello|test]
 
   hello$test hello
-[hello|$test|hello]
+[hello$test|hello]
 
 hello $token1$token2$token3
-[hello|$token1|$token2|$token3]
+[hello|$token1$token2$token3]
+
+$token1$token2|$token3
+[$token1$token2|||$token3]
 
   $hello>>>
 [$hello|>>|>]
@@ -20,10 +23,10 @@ hello $token1$token2$token3
 [>>|$TOKEN]
 
 a b c "$TOKEN ''>>>||" $TOKEN$token<><<
-[a|b|c|"$TOKEN ''>>>||"|$TOKEN|$token|<|>|<<]
+[a|b|c|"$TOKEN ''>>>||"|$TOKEN$token|<|>|<<]
 
 a b c fdfd$coucou>>> d""'lol'' $coucou|test
-[a|b|c|fdfd|$coucou|>>|>|d|""|'lol'|'|$coucou|||test]
+[a|b|c|fdfd$coucou|>>|>|d""'lol''|$coucou|||test]
 
 $
 [$]
@@ -32,7 +35,19 @@ $ $ $
 [$|$|$]
 
 \$TESTeur
-[\|$TESTeur]
+[\$TESTeur]
 
 $MAMI   $NOVA   $
 [$MAMI|$NOVA|$]
+
+$TEST=HELLO
+[$TEST=HELLO]
+
+TEST=HELLO
+[TEST=HELLO]
+
+"TEST"=test
+["TEST"=test]
+
+"""TEST"""=test
+["""TEST"""=test]

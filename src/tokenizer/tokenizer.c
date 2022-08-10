@@ -15,17 +15,19 @@ void	tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t)
 			&& t->last_token_end != t->position - 1)
 			close_operator_token(t, tokens);
 		else if (is_quote_character(line[t->position]))
-			handle_quotes(t, tokens);
+			handle_quotes(t);
 		else if (line[t->position] == '$')
 			start_expansion_token(t, tokens);
 		else if (is_operator(line[t->position]))
 			start_operator_token(t, tokens);
 		else if (is_blank_char(line[t->position]))
 			handle_blank_char(t, tokens);
-		else if (follows_word(line, t->position, t->quote_match_found))
+		else if (follows_word(line, t->position))
 			t->position++;
 		else
+		{
 			t->token_start = t->position++;
+		}
 	}
 }
 

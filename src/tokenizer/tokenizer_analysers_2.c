@@ -15,7 +15,7 @@ int	find_matching_quote(char *str)
 			return (position);
 		position++;
 	}
-	return (-1);
+	return (0);
 }
 
 /* Checks that the token being is no bigger than 2 characters, then checks if
@@ -42,38 +42,6 @@ int	ft_isdigit(int checkme)
 		return (0);
 }
 
-// TODO: Cette version de la fonction permet de gerer (a peu pres) les redirections a chiffres genre 2> ou 3>>,
-// mais tout le monde dit qu'il faut pas le gerer. Du coup je suis tente de ne pas le gerer non plus.
-/*
-int	can_form_operator(char *token_start, char *current_char)
-{
-	int		token_len;
-	int		i;
-
-	token_len = current_char - token_start + 1;
-	if (ft_isdigit(*current_char))
-	{
-		i = 0;
-		while (i < token_len)
-			if (!ft_isdigit(token_start[i++]))
-				return (0);
-		return (1);
-	}
-	if (*current_char == L_CHEVRON || *current_char == R_CHEVRON)
-	{
-		if (token_len == 1)
-			return (1);
-		if (ft_isdigit(*(current_char - 1)))
-			return (1);
-		if (*(current_char - 1) == *current_char)
-			if (token_len == 2
-				|| (token_len > 2 && ft_isdigit(*(current_char - 2))))
-				return (1);
-	}
-	return (0);
-}
-*/
-
 /* Checks that the current position does not directly follow the latest
  * extracted token, that it is not the start of the line and whether
  * the previous character is actually part of a token or not. */
@@ -82,23 +50,19 @@ int	follows_open_token(t_tokenizer_helpers *t)
 	if (t->last_token_end == t->position - 1)
 		return (0);
 	if (t->position == 0
-		|| ((is_blank_char(t->line[t->position - 1]))
-			|| (is_quote_character(t->line[t->position - 1])
-				&& t->quote_match_found != -1)))
+		|| is_blank_char(t->line[t->position - 1]))
 		return (0);
 	return (1);
 }
 
 /* Checks that the position checked is not the start of the line and whether
  * the previous character is part of a word (meaning regular text) or not. */
-int	follows_word(char *line, int position, int quote_match_found)
+int	follows_word(char *line, int position)
 {
 	if (position == 0)
 		return (0);
-	else if (((is_blank_char(line[position - 1]))
-			|| is_operator(line[position - 1])
-			|| (is_quote_character(line[position - 1])
-				&& quote_match_found != -1)))
+	else if (is_blank_char(line[position - 1])
+		|| is_operator(line[position - 1]))
 		return (0);
 	return (1);
 }

@@ -89,11 +89,11 @@ int			is_blank_char(char c);
 int			find_matching_quote(char *str);
 int			can_form_operator(char *token_start, char *current_char);
 int			follows_open_token(t_tokenizer_helpers *t);
-int			follows_word(char *line, int position, int quote_match_found);
+int			follows_word(char *line, int position);
 
 // tokenizer_handlers.c
 void		handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens);
-void		handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_quotes(t_tokenizer_helpers *t);
 void		handle_blank_char(t_tokenizer_helpers *t, t_tokens **tokens);
 
 // tokenizer_handler_2.c

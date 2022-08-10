@@ -14,26 +14,12 @@ void	handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens)
 
 /* Called when quote character is found. Will look for matching quote char
  * and divide tokens accordingly. */
-void	handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens)
+void	handle_quotes(t_tokenizer_helpers *t)
 {
 	t->quote_match_found = find_matching_quote(&t->line[t->position]);
-	if (t->quote_match_found > 0)
-	{
-		if (follows_open_token(t))
-		{
-			extract_token(tokens, &t->line[t->token_start],
-				&t->line[t->position - 1]);
-			t->token_start = t->position;
-		}
+	if (t->quote_match_found)
 		t->position += t->quote_match_found;
-		extract_token(tokens, &t->line[t->token_start],
-			&t->line[t->position]);
-		t->last_token_end = t->position;
-		t->position++;
-		t->token_start = t->position;
-	}
-	else
-		t->position++;
+	t->position++;
 }
 
 /* Called when blank char is found. Extracts preceding token if necessary. */
