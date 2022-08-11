@@ -53,7 +53,7 @@ typedef struct s_tokenizer
 	int				token_start;
 	int				position;
 	int				quote_match_found;
-	int 			last_token_end;
+	int				last_token_end;
 	char			*line;
 }	t_tokenizer_helpers;
 
@@ -72,7 +72,8 @@ typedef struct s_tokenizer
 
 // tokenizer.c && tokenizer_for_debugging.c
 void		tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t);
-void		extract_token(t_tokens **tokens, char *token_start, char *token_end);
+void		extract_token(t_tokens **tokens,
+				char *token_start, char *token_end);
 //to do: move extract_token to tokenizer_utils.c
 
 // tokenizer_utils.c
@@ -87,17 +88,17 @@ int			is_blank_char(char c);
 
 // tokenizer_analysers_2.c
 int			find_matching_quote(char *str);
-int			can_form_operator(char *token_start, char *second_operator);
+int			can_form_operator(char *token_start, char *current_char);
 int			follows_open_token(t_tokenizer_helpers *t);
-int			follows_word(char *line, int position, int quote_match_found);
+int			follows_word(char *line, int position);
 
 // tokenizer_handlers.c
 void		handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens);
-void		handle_quotes(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_quotes(t_tokenizer_helpers *t);
 void		handle_blank_char(t_tokenizer_helpers *t, t_tokens **tokens);
 
 // tokenizer_handler_2.c
-void		start_expansion_token(t_tokenizer_helpers *t, t_tokens **tokens);
+void		start_expansion_token(t_tokenizer_helpers *t);
 void		start_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
 void		close_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
 

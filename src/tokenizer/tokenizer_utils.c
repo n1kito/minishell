@@ -1,6 +1,6 @@
 #include "../../include/tokenizer.h"
 
-/* Initialize the variable that are used in the tokenizer() function. */
+/* Initialize the variables that are used in the tokenizer() function. */
 void	init_tokenizer_helpers(t_tokenizer_helpers *t, char *line)
 {
 	t->token_start = 0;

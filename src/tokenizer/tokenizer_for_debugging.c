@@ -14,8 +14,7 @@ void	tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t)
 			ONE
 			handle_end_of_line(t, tokens);
 		}
-		else if (is_operator(line[t->position - 1])
-				 && can_form_operator(&line[t->token_start], &line[t->position]))
+		else if (can_form_operator(&line[t->token_start], &line[t->position]))
 		{
 			TWO
 			t->position++;
@@ -30,7 +29,7 @@ void	tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t)
 		else if (is_quote_character(line[t->position]))
 		{
 			FOUR
-			handle_quotes(t, tokens);
+			handle_quotes(t);
 		}
 		else if (line[t->position] == '$')
 		{
@@ -47,7 +46,7 @@ void	tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t)
 			SEVEN
 			handle_blank_char(t, tokens);
 		}
-		else if (follows_word(line, t->position, t->quote_match_found))
+		else if (follows_word(line, t->position))
 		{
 			EIGHT
 			t->position++;
