@@ -27,3 +27,39 @@ ab>>> >|>   <>
 
  >>> ||>ab bc|||>>>>|>>>>> > ||  a
 [>>|>|||||>|ab|bc|||||||>>|>>|||>>|>>|>|>|||||a]
+
+2>pouet.txt
+[2|>|pouet.txt]
+
+2> pouet.txt
+[2|>|pouet.txt]
+
+2>>pouet.txt
+[2|>>|pouet.txt]
+
+2>> pouet.txt
+[2|>>|pouet.txt]
+
+452> pouet.txt
+[452|>|pouet.txt]
+
+1234>>5432
+[1234|>>|5432]
+
+1234 2>>54321
+[1234|2|>>|54321]
+
+test >>2| 2|pouet
+[test|>>|2|||2|||pouet]
+
+abc >>>||>2>>def
+[abc|>>|>|||||>|2|>>|def]
+
+1234>2345>>2345>54321
+[1234|>|2345|>>|2345|>|54321]
+
+pouet2>>pouet.txt
+[pouet2|>>|pouet.txt]
+
+pouet2>pouet.txt
+[pouet2|>|pouet.txt]
