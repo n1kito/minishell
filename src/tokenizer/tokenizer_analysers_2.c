@@ -18,8 +18,8 @@ int	find_matching_quote(char *str)
 	return (0);
 }
 
-/* Checks that the token being is no bigger than 2 characters, then checks if
- * both characters are the same chevron character. */
+/* Checks that the current token is nobigger than 2 characters,
+ * then checks if both characters are the same chevron character. */
 int	can_form_operator(char *token_start, char *current_char)
 {
 	char	*first_operator;
@@ -34,6 +34,7 @@ int	can_form_operator(char *token_start, char *current_char)
 	return (0);
 }
 
+// TODO Remove, it's in tthe libft
 int	ft_isdigit(int checkme)
 {
 	if (checkme >= 48 && checkme <= 57)

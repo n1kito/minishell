@@ -1,10 +1,7 @@
 #include "../../include/tokenizer.h"
 
 /* Called when '$' character is found.*/
-// TODO identify start of expansion token here
-// Think about how to identify the end of the token name too.
-// I think it's either when encoutering a blank, another expansion, or an operator...
-void	start_expansion_token(t_tokenizer_helpers *t, t_tokens **tokens)
+void	start_expansion_token(t_tokenizer_helpers *t)
 {
 	t->position++;
 }

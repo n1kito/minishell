@@ -1,6 +1,6 @@
 #include "../../include/tokenizer.h"
 
-/* Called when EOL character is found in line */
+/* Called when EOL character is found in line. */
 void	handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens)
 {
 	if (follows_open_token(t))
@@ -12,8 +12,9 @@ void	handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens)
 	t->position++;
 }
 
-/* Called when quote character is found. Will look for matching quote char
- * and divide tokens accordingly. */
+/* Called when quote character is found.
+ * Will look for matching quote char and extend token to it if found.
+ * Else it will just move forward one char.*/
 void	handle_quotes(t_tokenizer_helpers *t)
 {
 	t->quote_match_found = find_matching_quote(&t->line[t->position]);
