@@ -102,6 +102,9 @@ void		start_expansion_token(t_tokenizer_helpers *t);
 void		start_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
 void		close_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
 
+// quotes_and_expansions.c
+void		handle_quotes_and_expansions(t_tokens **tokens);
+
 // tokenizer_test_utils.c
 void		print_tokens(t_tokens *tokens);
 
