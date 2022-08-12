@@ -99,8 +99,21 @@ There is an **error** if:
    - A `HERE_DOC` token is not followed by a `DELIMITER` token.
    - A `REDIRECT_TO`, `REDIRECT_FROM` or `APPEND` token is not followed by either an `IO_NUMBER` or a `FILENAME` token.
 
+## Quotes handling & variable replacement
+
+**Quotes**
+- When a `'` (single quotes) is found
+   - We look for a matching one.
+      - If one is found, we delete them without treating anything inside.
+      - If not, we move to the next char.
+- When a `"` (double quote)
+   - We look for a matching one.
+      - If found, we delete them but expand any variable found inside. Single quotes are not touched.
+      - If not, we move on the next char.
 
 # to-do
 
 - [ ] Take care of syntax checker.
    - Do I populate some useful variables at this stage, like the number of pipes found in the command line ?
+       - I think this should be done after, in another analyser function so it's more clear. Maybe even in the function that stores necessary arguments in arrays to be used by execve.
+- [ ] Do the quote and variable replacements.
