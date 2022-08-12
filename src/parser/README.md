@@ -24,9 +24,10 @@ It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, o
 
 At this stage, we've identified whether a token is an `OPERATOR` (and identified the actual operator), an `IO_NUMBER`, or *something else*.
 
-We will use the *shell grammar rules* below to analyse context and identify what each of the remaining tokens is.
+~~We will now use the *shell grammar rules* below to analyse context and identify what each of the remaining tokens is.~~
 
-<details><summary><i>(+ click to see Shell Grammar Rules)</i><summary>
+<details>
+<summary> <i>(+ click to see Shell Grammar Rules)</i> </summary>
 
 ## Shell grammar rules
 
@@ -79,21 +80,24 @@ We will use the *shell grammar rules* below to analyse context and identify what
    - Word expansion and assignment shall never occur, even when required by the rules above, when this rule is being parsed.
    - Each `TOKEN` that might either be expanded or have assignment applied to it shall instead be returned as a single `WORD` consisting only of characters that are exactly the token described in [Token Recognition](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03).
 
+
 </details>
 
-Actually, we will not, because they treat a bunch of cases that do not concern us for this project and that complicates everything.
+Actually, **we will not**, because they treat a bunch of cases that do not concern us for this project and that complicates everything.
 
-Instead, for each node, if it has been found that it is neither an `operator` or an `io_number` (I use this step to identify filenames as well), I will check the following:
-   - If the token being checked is not the first token and the previous token is of type `HERE_DOC`, current token is assigned `DELIMITER` type.
-   - Else if token being checked is either the first in line OR the previous token is of type `PIPE`, `IO_NUMBER`, `DELIMITER` or `FILE_NAME`, then token is assigned `COMMAND_NAME` type. 
-   - Else if token being checked is ot type `TOKEN` (meaning has not been previously asssigned), then it is assigned `WORD` type.
+Instead, for each node, if it has been found that it is neither an `operator` or an `io_number` (I used this step to identify filenames as well), we will do the following:
+   1. If the token being checked is not the first token and the previous token is of type `HERE_DOC`, current token is assigned `DELIMITER` type.
+   2. Else if token being checked is either the first in line OR the previous token is of type `PIPE`, `IO_NUMBER`, `DELIMITER` or `FILE_NAME`, then token is assigned `COMMAND_NAME` type. 
+   3. Else if token being checked is ot type `TOKEN` (meaning has not been previously asssigned), then it is assigned `WORD` type.
 
 ## Syntax Checking
 
-Here are the syntax rules we will implement in our `syntax_checker` function:
-   - If `PIPE` is either the first token or is before or after another pipe.
-   - If a `HERE_DOC` is not followed by a `DELIMITER`.
-   - If a `REDIRECT_TO`, `REDIRECT_FROM` or `APPEND` is not followed by either an `IO_NUMBER` or a `FILENAME`.
+Here are the syntax rules we will implement in our `syntax_checker` function.
+
+There is an **error** if:
+   - A `PIPE` token is either the first token or is before or after another pipe.
+   - A `HERE_DOC` token is not followed by a `DELIMITER` token.
+   - A `REDIRECT_TO`, `REDIRECT_FROM` or `APPEND` token is not followed by either an `IO_NUMBER` or a `FILENAME` token.
 
 
 # to-do
