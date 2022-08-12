@@ -5,7 +5,8 @@ MAIN_FILES		=	../tokenizer/tokenizer.c\
 					../tokenizer/tokenizer_handlers_2.c\
 					../tokenizer/tokenizer_utils.c\
 					../parser/parser.c\
-					../parser/parser_identify_tokens.c
+					../parser/parser_identify_tokens.c\
+					../parser/parser_syntax_checker.c
 TOKENIZER_MAIN	=	tester_tokenizer.c
 PARSER_MAIN		=	tester_parser.c
 INCLUDE_FOLDER	=	../../include

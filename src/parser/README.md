@@ -95,7 +95,7 @@ Instead, for each node, if it has been found that it is neither an `operator` or
 Here are the syntax rules we will implement in our `syntax_checker` function.
 
 There is an **error** if:
-   - A `PIPE` token is either the first token or is before or after another pipe.
+   - A `PIPE` token is either the first token, the last token, or is before or after another pipe.
    - A `HERE_DOC` token is not followed by a `DELIMITER` token.
    - A `REDIRECT_TO`, `REDIRECT_FROM` or `APPEND` token is not followed by either an `IO_NUMBER` or a `FILENAME` token.
 

@@ -185,7 +185,7 @@ make --no-print-directory parser
 
 EXECUTABLE="parser"
 run_tests "Parsing tests" "parser_tests"
-
+run_tests "Syntax error tests" "syntax_error_tests"
 echo
 
 ################################################################################

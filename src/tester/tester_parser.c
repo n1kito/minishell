@@ -59,7 +59,10 @@ int	main(int argc, char **argv)
 		tokenizer(argv[1], &tokens, &t);
 		NEWLINE
 		parser(&tokens);
-		print_parsed_tokens(tokens);
+		if (syntax_checker(tokens))
+			print_parsed_tokens(tokens);
+		else
+			printf("Syntax error.\n");
 	} 
 	return (0);
 }

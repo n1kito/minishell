@@ -1,0 +1,35 @@
+mot >><|2>2 2>><<
+Syntax error.
+
+|||||
+Syntax error.
+
+|
+Syntax error.
+
+>
+Syntax error.
+
+>>
+Syntax error.
+
+echo >> | wc
+Syntax error.
+
+command word | command |
+Syntax error.
+
+command word >
+Syntax error.
+
+command word >>
+Syntax error.
+
+command word << |
+Syntax error.
+
+>>>
+Syntax error.
+
+2>|	
+Syntax error.
