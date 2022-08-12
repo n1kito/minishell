@@ -113,7 +113,7 @@ There is an **error** if:
 
 # to-do
 
-- [ ] Take care of syntax checker.
+- [x] Take care of syntax checker.
    - Do I populate some useful variables at this stage, like the number of pipes found in the command line ?
        - I think this should be done after, in another analyser function so it's more clear. Maybe even in the function that stores necessary arguments in arrays to be used by execve.
 - [ ] Do the quote and variable replacements.
