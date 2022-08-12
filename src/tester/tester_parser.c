@@ -15,21 +15,23 @@ void	print_parsed_tokens(t_tokens *tokens)
 				                        else if (current->token_type == 1)
 				                                printf("WORD");
 				                        else if (current->token_type == 2)
-				                                printf("ASSIGNMENT_WORD");
+				                                printf("COMMAND");
 				                        else if (current->token_type == 3)
-				                                printf("NAME");
-				                        else if (current->token_type == 4)
-				                                printf("IO_NUMBER");
-				                        else if (current->token_type == 5)
-				                                printf("REDIRECT_FROM");
-				                        else if (current->token_type == 6)
-				                                printf("REDIRECT_TO");
-				                        else if (current->token_type == 7)
-				                                printf("APPEND");
-				                        else if (current->token_type == 8)
-				                                printf("HERE_DOC");
-				                        else if (current->token_type == 9)
 				                                printf("PIPE");
+				                        else if (current->token_type == 4)
+				                                printf("REDIRECT_FROM");
+				                        else if (current->token_type == 5)
+				                                printf("REDIRECT_TO");
+				                        else if (current->token_type == 6)
+				                                printf("APPEND");
+				                        else if (current->token_type == 7)
+				                                printf("FILE_NAME");
+				                        else if (current->token_type == 8)
+				                                printf("IO_NUMBER");
+				                        else if (current->token_type == 9)
+				                                printf("HERE_DOC");
+				                        else if (current->token_type == 10)
+				                                printf("DELIMITER");
 				                        else
 				                                printf("UNKNOWN");
 				                        if (current->next)

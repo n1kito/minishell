@@ -1,5 +1,6 @@
 #include "../../include/minishell.h"
 
+
 /* Goes through tokens and attributes the correct type for each. */
 void	parser(t_tokens **tokens)
 {
@@ -18,29 +19,25 @@ void	parser(t_tokens **tokens)
 /* Checks if current token is only numbers and if previous and next token is a simple operator.*/
 int	is_io_number_token(t_tokens *token)
 {
-	if (is_only_digits(token->token))
-	{
-/*
-		if (((token->previous && ft_strlen(token->previous->token) == 1)
-				&& ((token->previous->token[0] == '<')
-					|| token->previous->token[0] == '>'))
-			|| ((token->next && ft_strlen(token->next->token) == 1)
-				&& ((token->next->token[0] == '<')
-					|| token->next->token[0] == '>')))
-*/
-		if (token->previous
+	if (token->previous
 				&& (token->previous->token[0] == '>'
 					|| ((ft_strlen(token->previous->token) == 1 && token->previous->token[0] == '<'))))
-			{
+	{
+		if (is_only_digits(token->token))
+		{
 				token->token_type = IO_NUMBER;
 				return (1);
-			}
+		}
+		else
+		{
+			token->token_type = FILE_NAME; 
+		}
 	}
 	return (0);
 }
 
 /* TODO: Remove before pushing, it's in the libft. Not in header. */
-int	ft_isdigit(int checkme)
+int	ft_isdigit2(int checkme)
 {
 	if (checkme >= 48 && checkme <= 57)
 		return (1);
@@ -56,7 +53,7 @@ int	is_only_digits(char *token)
 	i = 0;
 	while (token && token[i])
 	{
-		if (!ft_isdigit(token[i]))
+		if (!ft_isdigit2(token[i]))
 			return (0);
 		i++;
 	}

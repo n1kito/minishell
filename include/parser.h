@@ -2,18 +2,17 @@
 # define PARSER_H
 
 // PARSING TOKEN TYPES
-# define TOKEN 0
-# define WORD 1
-# define ASSIGNMENT_WORD 2
-# define NAME 3
-# define IO_NUMBER 4
-# define REDIRECT_FROM 5
-# define REDIRECT_TO 6
-# define APPEND 7
-# define HERE_DOC 8
-# define PIPE_TOKEN 9
-# define COMMAND_NAME 10
-# define DELIMITER 11
+# define TOKEN 0 // default type assigned to all new tokenss
+# define WORD 1 // pas encore pige la difference entre word et name mais bon
+# define COMMAND_NAME 2
+# define PIPE_TOKEN 3
+# define REDIRECT_FROM 4
+# define REDIRECT_TO 5
+# define APPEND 6
+# define FILE_NAME 7
+# define IO_NUMBER 8
+# define HERE_DOC 9
+# define DELIMITER 10
 
 // parser.c
 int		is_io_number_token(t_tokens *token);

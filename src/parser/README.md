@@ -26,6 +26,8 @@ At this stage, we've identified whether a token is an `OPERATOR` (and identified
 
 We will use the *shell grammar rules* below to analyse context and identify what each of the remaining tokens is.
 
+<details><summary><i>(+ click to see Shell Grammar Rules)</i><summary>
+
 ## Shell grammar rules
 
 1. `[Command Name]`
@@ -77,12 +79,24 @@ We will use the *shell grammar rules* below to analyse context and identify what
    - Word expansion and assignment shall never occur, even when required by the rules above, when this rule is being parsed.
    - Each `TOKEN` that might either be expanded or have assignment applied to it shall instead be returned as a single `WORD` consisting only of characters that are exactly the token described in [Token Recognition](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03).
 
+</details>
+
+Actually, we will not, because they treat a bunch of cases that do not concern us for this project and that complicates everything.
+
+Instead, for each node, if it has been found that it is neither an `operator` or an `io_number` (I use this step to identify filenames as well), I will check the following:
+   - If the token being checked is not the first token and the previous token is of type `HERE_DOC`, current token is assigned `DELIMITER` type.
+   - Else if token being checked is either the first in line OR the previous token is of type `PIPE`, `IO_NUMBER`, `DELIMITER` or `FILE_NAME`, then token is assigned `COMMAND_NAME` type. 
+   - Else if token being checked is ot type `TOKEN` (meaning has not been previously asssigned), then it is assigned `WORD` type.
+
+## Syntax Checking
+
+Here are the syntax rules we will implement in our `syntax_checker` function:
+   - If `PIPE` is either the first token or is before or after another pipe.
+   - If a `HERE_DOC` is not followed by a `DELIMITER`.
+   - If a `REDIRECT_TO`, `REDIRECT_FROM` or `APPEND` is not followed by either an `IO_NUMBER` or a `FILENAME`.
+
+
 # to-do
 
-- [ ] Re-read the grammar rules so they're more clear.
-- [ ] J'arrive pas bien à savoir si on doit gerer genre `2>1` etc...
-   - OUI. C'est les tokens `IO_NUMBER`. 
-- [ ] Confirm when a variable should be expanded to its value.
-    - [ ] After tokenizer ?
-    - [ ] Before parsing ?
-    - They're kind of the same but not really.
+- [ ] Take care of syntax checker.
+   - Do I populate some useful variables at this stage, like the number of pipes found in the command line ?
