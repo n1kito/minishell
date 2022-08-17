@@ -31,6 +31,8 @@ void	print_parsed_tokens(t_tokens *tokens)
 				                                printf("HERE_DOC");
 				                        else if (current->token_type == 10)
 				                                printf("DELIMITER");
+										else if (current->token_type == 11)
+												printf("INVISIBLE");
 				                        else
 				                                printf("UNKNOWN");
 				                        if (current->next)
@@ -47,7 +49,21 @@ int	main(int argc, char **argv)
 {
 	t_tokens			*tokens;
 	t_tokenizer_helpers	t;
+	t_env				*env;
+	t_env				variable1;
+	t_env				variable2;
+	char				name1[5]="USER";
+	char				name2[6]="SHELL";
+	char				value1[7]="nikito";
+	char				value2[5]="bash";
 
+	env = &variable1;
+	variable1.name = name1;
+	variable1.variable = value1;
+	variable1.next = &variable2;
+	variable2.name = name2;
+	variable2.variable = value2;
+	variable2.next = NULL;
 	init_tokenizer_helpers(&t, argv[1]);
 	tokens = NULL;
 	if (argc != 2)
@@ -58,6 +74,7 @@ int	main(int argc, char **argv)
 		tokenizer(argv[1], &tokens, &t);
 		NEWLINE
 		parser(&tokens);
+		expander(&tokens, env);
 		if (syntax_checker(tokens))
 			print_parsed_tokens(tokens);
 		else
