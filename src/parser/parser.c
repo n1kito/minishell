@@ -1,36 +1,37 @@
 #include "../../include/minishell.h"
 
-
 /* Goes through tokens and attributes the correct type for each. */
 void	parser(t_tokens **tokens)
 {
-		t_tokens	*current;
+	t_tokens	*current;
 
-		current = *tokens;
-		while ((current))
-		{
-				if (!is_operator_token(current))
-						if (!is_io_number_token(current))
-								identify_token_type(current);
-				current = current->next;
-		}
+	current = *tokens;
+	while ((current))
+	{
+		if (!is_operator_token(current))
+			if (!is_io_number_token(current))
+				identify_token_type(current);
+		current = current->next;
+	}
 }
 
-/* Checks if current token is only numbers and if previous and next token is a simple operator.*/
+/* Checks if current token is only numbers
+ * and if previous and next token is a simple operator.*/
 int	is_io_number_token(t_tokens *token)
 {
 	if (token->previous
-				&& (token->previous->token[0] == '>'
-					|| ((ft_strlen(token->previous->token) == 1 && token->previous->token[0] == '<'))))
+		&& (token->previous->token[0] == '>'
+			|| ((ft_strlen(token->previous->token) == 1
+					&& token->previous->token[0] == '<'))))
 	{
 		if (is_only_digits(token->token))
 		{
-				token->token_type = IO_NUMBER;
-				return (1);
+			token->token_type = IO_NUMBER;
+			return (1);
 		}
 		else
 		{
-			token->token_type = FILE_NAME; 
+			token->token_type = FILE_NAME;
 		}
 	}
 	return (0);
@@ -60,27 +61,27 @@ int	is_only_digits(char *token)
 	return (1);
 }
 
-/* Checks if current token is one of the operators and gives it the appropriate code. */
+/* Checks if current token is one of the operators
+ * and gives it the appropriate code. */
 int	is_operator_token(t_tokens *token)
 {
-		if (!is_operator(token->token[0]))
-						return (0);
-		if (ft_strlen(token->token) == 2)
-		{
-				if (token->token[0] == L_CHEVRON)
-						token->token_type = HERE_DOC;
-				else
-						token->token_type = APPEND;
-		}
+	if (!is_operator(token->token[0]))
+		return (0);
+	if (ft_strlen(token->token) == 2)
+	{
+		if (token->token[0] == L_CHEVRON)
+			token->token_type = HERE_DOC;
 		else
-		{
-				if (token->token[0] == L_CHEVRON)
-						token->token_type = REDIRECT_FROM;
-				else if (token->token[0] == R_CHEVRON)
-						token->token_type = REDIRECT_TO;
-				else
-						token->token_type = PIPE_TOKEN;
-		}
-		return (1);
+			token->token_type = APPEND;
+	}
+	else
+	{
+		if (token->token[0] == L_CHEVRON)
+			token->token_type = REDIRECT_FROM;
+		else if (token->token[0] == R_CHEVRON)
+			token->token_type = REDIRECT_TO;
+		else
+			token->token_type = PIPE_TOKEN;
+	}
+	return (1);
 }
-

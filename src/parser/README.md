@@ -117,3 +117,13 @@ There is an **error** if:
    - Do I populate some useful variables at this stage, like the number of pipes found in the command line ?
        - I think this should be done after, in another analyser function so it's more clear. Maybe even in the function that stores necessary arguments in arrays to be used by execve.
 - [ ] Do the quote and variable replacements.
+- [ ] If I execute `$pouet coucou$pouet` and `$pouet` does not exist, it will output `coucou is not a command`, meaning apparently if the token is empty after expansion and quote treatment, it is deleted.
+   - Actually NO, if the token is empty after quote treatment, like `"" coucou`, it will say `command not found` like I tried to run an empty command.
+   - And if I combine them like `""$pouet`, I get the empty `command not found` thing. Like the quotes still return something and a single empty replacement just acts like there is no token at all.
+   - So I think that the easiest is if token is only $expansion and end value is NULL, delete it and move forward.
+   - Else, even if NULL, it is considered like a token.
+   - I'm pretty much right, from the bash documentation on word splitting: > Explicit null arguments ("""" or "''") are retained. Unquoted implicit null arguments, resulting from the expansion of parameters that have no value, are removed. If a parameter with no value is expanded within double quotes, a null argument results and is retained.
+      - Truc trop bizarre, en plus des cas ci-dessus, si je fais `echo lol | | wc`, j'ai une erreur de parsing car deux PIPES se suivent. Mais si je fais `echo lol | $pouet | wc`, j'ai pas d'erreur et le truc s'execute (mais le WC sort `0 0 0`), alors que bah theoriquement le token a ete supprime donc what is the fuck.
+          - Pour regler ca je pense que quand j'ai un token qui n'avait que des extensions de variables vides, je le supprime pas mais je mets un booleen `is_invisible` et donc en gros quand je parse j'ai pas d'erreur mais je fais comme si il existait pas. Mais a voir parce que ca va me pourrir tout ce que j'ai deja fait dan le parsing.
+      - Ou alors, quand je classe les tokens je mets juste `WORD` au lieu de differencier `WORD` et `COMMAND`. Et c'est ensuite quand je fais les expands bah si un des words a vire bah il a vire et le pointeur de la commande pointera soit sur le prochain mot soit sur NULL et ne lancera pas `execve`.
+      - Il me semble que ca fonctionne un peu comme ca puisque si je fais `echo coucou | $pouet $pouet $pouet grep comment | wc` ca marche tranquillou comme si de rien n'etait.

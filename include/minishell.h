@@ -4,7 +4,7 @@
 // INCLUDES
 # include <stdlib.h>
 # include <stdio.h>
+# include "environment.h"
 # include "tokenizer.h"
 # include "parser.h"
-# include "environment.h"
 #endif

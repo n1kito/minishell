@@ -7,9 +7,10 @@ MAIN_FILES		=	../tokenizer/tokenizer.c\
 					../parser/parser.c\
 					../parser/parser_identify_tokens.c\
 					../parser/parser_syntax_checker.c\
-					../parser/parser_quotes_expansions.c
+					../parser/parser_quotes_and_expansions.c
 TOKENIZER_MAIN	=	tester_tokenizer.c
 PARSER_MAIN		=	tester_parser.c
+EXPAND_MAIN		=   tester_quote_expansion.c
 INCLUDE_FOLDER	=	../../include
 
 YELLOW			:= \033[0;93m
@@ -20,6 +21,9 @@ tokenizer:
 
 parser:
 	@gcc -g -Wall -Wextra -Werror ${MAIN_FILES} ${PARSER_MAIN} -I${INCLUDE_FOLDER} -o parser
+
+expander:
+	@gcc -g -Wall -Wextra -Werror ${MAIN_FILES} ${EXPAND_MAIN} -I${INCLUDE_FOLDER} -o expander
 
 test:
 	@./minishell_tester.sh

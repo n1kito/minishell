@@ -1,0 +1,38 @@
+$USER
+[nikito]
+
+$USER$USER
+[nikitonikito]
+
+$USER$SHELL$USER
+[nikitobashnikito]
+
+pouet$USERpouet$SHELLpouet
+[pouet]
+
+coucou'$USER' dans$SHELL coucou
+[coucou$USER|dansbash|coucou]
+
+coucou"$USER" "'$USER'" $SHELLpouet
+[coucounikito|'nikito'|]
+
+"'$USER'"
+['nikito']
+
+''$USER$SHELL''
+[nikitobash]
+
+$USERa$SHELL
+[bash]
+
+'"$USER"'
+["$USER"]
+
+'"$USER"'is"$USER"in"$SHELL"'$HELLO'
+["$USER"isnikitoinbash$HELLO]
+
+"$USER"'$HELLO'
+[nikito$HELLO]
+
+"bonjour"$USER'"in$SHELL"
+Error: Open quote.

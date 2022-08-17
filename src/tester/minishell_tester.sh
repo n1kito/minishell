@@ -186,6 +186,11 @@ make --no-print-directory parser
 EXECUTABLE="parser"
 run_tests "Parsing tests" "parser_tests"
 run_tests "Syntax error tests" "syntax_error_tests"
+
+rm expander
+make --no-print-directory expander
+EXECUTABLE="expander"
+run_tests "Expansion and quote removal tests" "expansion_tests"
 echo
 
 ################################################################################

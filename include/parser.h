@@ -27,6 +27,9 @@ void	identify_token_type(t_tokens *token);
 // parser_syntax_checker.c
 int		syntax_checker(t_tokens *tokens);
 
+// parser_quotes_and_expansions.c
+int		expand_tokens(t_tokens **tokens, t_env *env);
+
 // to remove before pushing it's in the libft
 int		ft_isdigit(int checkme);
 #endif

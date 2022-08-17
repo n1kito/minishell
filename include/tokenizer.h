@@ -42,11 +42,9 @@ typedef struct s_tokens
 {
 	char			*token;
 	int				token_type;
+	int				token_had_quotes; // TODO IMPLEMENT THIS. Useful for heredoc because a delimiter that had quotes does not expand the content of the HEREDOC for some reason. Also, an empty token that did not have quote automatically means that it is the result of expansions that led to nothing and therefore that the token has to be treated as invisible.
 	struct s_tokens	*next;
 	struct s_tokens	*previous;
-	int				assignment_name_len;
-	char			*assignment_name;
-	char			*assignment_value;
 }	t_tokens;
 
 typedef struct s_tokenizer
@@ -57,6 +55,17 @@ typedef struct s_tokenizer
 	int				last_token_end;
 	char			*line;
 }	t_tokenizer_helpers;
+
+typedef struct s_expand
+{
+	int				start;
+	int				name_start;
+	int				name_len;
+	int				name_end;
+	char			*name;
+	char			*value;
+	struct s_expand	*next;
+}	t_expand;
 
 // DEFINES
 // Blank Characters
