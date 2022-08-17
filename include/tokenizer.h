@@ -38,11 +38,15 @@
 # endif
 
 // STRUCTURES
+// token_had_quotes: set to 1 when matching quotes are found in a token.
+// Useful for HEREDOC because a delimiter that initially had quotes does not expand the content of the HEREDOC.
+// Also, an empty token that did not have any quotes automatically means that it resulted from expansions that
+// led to nothing and therefore should be treated as invisible.
 typedef struct s_tokens
 {
 	char			*token;
 	int				token_type;
-	int				token_had_quotes; // TODO IMPLEMENT THIS. Useful for heredoc because a delimiter that had quotes does not expand the content of the HEREDOC for some reason. Also, an empty token that did not have quote automatically means that it is the result of expansions that led to nothing and therefore that the token has to be treated as invisible.
+	int				token_had_quotes;
 	struct s_tokens	*next;
 	struct s_tokens	*previous;
 }	t_tokens;

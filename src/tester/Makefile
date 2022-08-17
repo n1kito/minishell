@@ -7,7 +7,9 @@ MAIN_FILES		=	../tokenizer/tokenizer.c\
 					../parser/parser.c\
 					../parser/parser_identify_tokens.c\
 					../parser/parser_syntax_checker.c\
-					../parser/parser_quotes_and_expansions.c
+					../parser/expander.c\
+					../parser/expander_analysers.c\
+					../parser/expander_utils.c
 TOKENIZER_MAIN	=	tester_tokenizer.c
 PARSER_MAIN		=	tester_parser.c
 EXPAND_MAIN		=   tester_quote_expansion.c

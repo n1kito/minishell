@@ -36,3 +36,24 @@ $USERa$SHELL
 
 "bonjour"$USER'"in$SHELL"
 Error: Open quote.
+
+"$USER
+Error: Open quote.
+
+"'word" " $USER
+Error: Open quote.
+
+"
+Error: Open quote.
+
+'
+Error: Open quote.
+
+'''
+Error: Open quote.
+
+'' '' '''
+Error: Open quote.
+
+$USER$USERo $USER"$USER"'$USER' $USERo
+[nikito|nikitonikito$USER|]
