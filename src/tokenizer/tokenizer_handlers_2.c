@@ -1,4 +1,4 @@
-#include "../../include/tokenizer.h"
+#include "minishell.h"
 
 /* Called when '$' character is found.*/
 void	start_expansion_token(t_tokenizer_helpers *t)
@@ -7,12 +7,16 @@ void	start_expansion_token(t_tokenizer_helpers *t)
 }
 
 /* Called on operator character. Extracts preceding token if necessary. */
-void	start_operator_token(t_tokenizer_helpers *t, t_tokens **tokens)
+void	start_operator_token(t_tokenizer_helpers *t, t_master *master)
 {
 	if (follows_open_token(t))
 	{
-		extract_token(tokens, &t->line[t->token_start],
-			&t->line[t->position - 1]);
+		if(!extract_token(master, &t->line[t->token_start],
+			&t->line[t->position - 1]))
+		{
+			master->malloc_success = 0;
+			return ;
+		}
 		t->last_token_end = t->position - 1;
 	}
 	t->token_start = t->position;
@@ -20,9 +24,14 @@ void	start_operator_token(t_tokenizer_helpers *t, t_tokens **tokens)
 }
 
 /* Called when the current operator token can no longer be appended to. */
-void	close_operator_token(t_tokenizer_helpers *t, t_tokens **tokens)
+void	close_operator_token(t_tokenizer_helpers *t, t_master *master)
 {
-	extract_token(tokens, &t->line[t->token_start], &t->line[t->position - 1]);
+	if (!extract_token(master,
+		&t->line[t->token_start], &t->line[t->position - 1]))
+	{
+		master->malloc_success = 0;
+		return ;
+	}
 	if (t->position)
 		t->last_token_end = t->position - 1;
 	t->token_start = t->position;

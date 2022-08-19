@@ -1,73 +1,38 @@
 #include "../../include/minishell.h"
 
-/* Removes quote pairs from current token. */
-void	remove_quotes(t_tokens **token_node, int first_quote, int second_quote)
+/* Goes through tokens, checks that there are no single quotes.
+ * If there are not, identifies variables to expand and expands them.
+ * Then removes all removable quotes. */
+int	expander(t_tokens **tokens, t_env *env)
 {
-	char	*concatenate_me;
-	char	*tmp_token;
-	char	*token;
+	t_tokens	*current;
+	t_expand	*expansions;
 
-	token = (*token_node)->token;
-	concatenate_me = token + first_quote + second_quote + 1;
-	token[first_quote + second_quote] = '\0';
-	tmp_token = str_join(token, concatenate_me);
-	token = tmp_token;
-	concatenate_me = token + first_quote + 1;
-	token[first_quote] = '\0';
-	tmp_token = str_join(token, concatenate_me);
-	token = tmp_token;
-	(*token_node)->token = token;
-}
-
-/* Logs new node in expansion structure to track expansions, their positions and
- * values (if found in env). Note that they are added LIFO. */
-void	add_exp_node(t_expand **expansions, char *token, int i, t_env *env)
-{
-	t_expand	*new_expand;
-
-	new_expand = malloc(sizeof(t_expand));
-	if (!new_expand)
-		return ;
-	new_expand->start = i;
-	new_expand->name_start = i + 1;
-	new_expand->name_len = expansion_name_len(token + i);
-	new_expand->name_end = i + new_expand->name_len;
-	new_expand->name = token + new_expand->name_start;
-	new_expand->value = search_env(env, new_expand->name,
-			new_expand->name_len);
-	new_expand->next = NULL;
-	if (*expansions == NULL)
-		*expansions = new_expand;
-	else
+	expansions = NULL;
+	current = *tokens;
+	while (current)
 	{
-		new_expand->next = *expansions;
-		*expansions = new_expand;
+		if (!has_solitary_quote(current->token))
+			return (0);
+		if (current->token_type != DELIMITER)
+		{
+			if (!log_expansions(current->token, env, &expansions))
+				return (0);
+			if (expansions)
+				if (!expand_token(current, expansions)
+					|| !free_expansions(&expansions))
+					return (0);
+		}
+		if (!process_and_remove_quotes(current))
+			return (0);
+		check_for_invisible_token(current);
+		current = current->next;
 	}
-}
-
-/* Expands all expansions, back to front. */
-void	expand_token(t_tokens *current, t_expand *expansions)
-{
-	char		*tmp_token;
-	char		*new_token;
-	t_expand	*exp;
-
-	exp = expansions;
-	while (exp)
-	{
-		tmp_token = str_join(exp->value, &current->token[exp->name_end + 1]);
-		current->token[exp->start] = '\0';
-		new_token = str_join(current->token, tmp_token);
-		free(tmp_token);
-		tmp_token = current->token;
-		current->token = new_token;
-		free(tmp_token);
-		exp = exp->next;
-	}
+	return (1);
 }
 
 /* Goes through token and removes pairs of quotes. */
-void	process_and_remove_quotes(t_tokens *token_node)
+int	process_and_remove_quotes(t_tokens *token_node)
 {
 	int		i;
 	int		matching_quote_pos;
@@ -82,42 +47,73 @@ void	process_and_remove_quotes(t_tokens *token_node)
 			if (token_node->token_had_quotes == 0)
 				token_node->token_had_quotes = 1;
 			matching_quote_pos = find_matching_quote(token_node->token + i);
-			remove_quotes(&token_node, i, matching_quote_pos);
+			if (!remove_quotes(&token_node, i, matching_quote_pos))
+				return (0);
 			i += matching_quote_pos - 1;
 		}
 		else
 			i++;
 	}
+	return (1);
 }
 
-/* Goes through tokens, checks that there are no single quotes.
- * If there are not, identifies variables to expand and expands them.
- * Then removes all removable quotes. */
-int	expander(t_tokens **tokens, t_env *env)
+/* Removes quote pairs from current token. */
+int	remove_quotes(t_tokens **token_node, int first_quote, int second_quote)
 {
-	t_tokens	*current;
-	t_expand	*expansions;
+	char	*concatenate_me;
+	char	*tmp_token;
+	char	*token;
 
-	expansions = NULL;
-	current = *tokens;
-	while (current)
+	token = (*token_node)->token;
+	concatenate_me = token + first_quote + second_quote + 1;
+	token[first_quote + second_quote] = '\0';
+	tmp_token = str_join(token, concatenate_me);
+	if (!tmp_token)
+		return (0);
+	token = tmp_token;
+	concatenate_me = token + first_quote + 1;
+	token[first_quote] = '\0';
+	tmp_token = str_join(token, concatenate_me);
+	if (!tmp_token)
+		return (0);
+	token = tmp_token;
+	(*token_node)->token = token;
+	return (1);
+}
+
+/* Expands all expansions, back to front. */
+int	expand_token(t_tokens *current, t_expand *expansions)
+{
+	char		*tmp_token;
+	char		*new_token;
+	t_expand	*exp;
+
+	exp = expansions;
+	while (exp)
 	{
-		if (!has_single_quote(current->token))
+		tmp_token = str_join(exp->value, &current->token[exp->name_end + 1]);
+		if (!tmp_token)
 			return (0);
-		if (current->token_type != DELIMITER)
-		{
-			log_expansions(current->token, env, &expansions);
-			if (expansions)
-			{
-				expand_token(current, expansions);
-				free_expansions(&expansions);
-			}
-		}
-		process_and_remove_quotes(current);
-		if (current->token_type == WORD
-			&& current->token[0] == '\0' && !current->token_had_quotes)
-			current->token_type = INVISIBLE;
-		current = current->next;
+		current->token[exp->start] = '\0';
+		new_token = str_join(current->token, tmp_token);
+		if (!new_token)
+			return (0);
+		free(tmp_token);
+		tmp_token = current->token;
+		current->token = new_token;
+		free(tmp_token);
+		exp = exp->next;
 	}
 	return (1);
+}
+
+/* If the token passed as parameter is of type WORD, is empty
+ * and did not initially have empty quotes in it, it will be 
+ * typed as INVISIBLE. */
+void	check_for_invisible_token(t_tokens *token)
+{
+	if (token->token_type == WORD
+		&& token->token[0] == '\0'
+		&& !token->token_had_quotes)
+		token->token_type = INVISIBLE;
 }

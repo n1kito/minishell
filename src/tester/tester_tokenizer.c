@@ -1,4 +1,3 @@
-#include "../../include/tokenizer.h"
 #include "../../include/minishell.h"
 
 /* Prints the tokens in a visual manner ✨. */

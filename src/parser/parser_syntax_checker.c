@@ -2,6 +2,7 @@
 
 /* Checks that tokens form a coherent command line. */
 // TODO Should I check the content of the command / filename names ?
+// 		> Je crois paaaas.
 // TODO Should I also check the FDs of the IO_NUMBERS ? > INT_MAX c'est ok ?
 // 		Je dirais que oui puisqu'on peut set les FDs sur unlimited.
 int	syntax_checker(t_tokens *tokens)

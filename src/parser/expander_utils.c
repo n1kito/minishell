@@ -65,7 +65,7 @@ int	count_expands(t_expand *expansions)
 }
 
 /* Free the structure used to log expansions. */
-void	free_expansions(t_expand **expansions)
+int	free_expansions(t_expand **expansions)
 {
 	t_expand		*current;
 	t_expand		*next;
@@ -78,4 +78,5 @@ void	free_expansions(t_expand **expansions)
 		current = next;
 	}
 	*expansions = NULL;
+	return (1);
 }

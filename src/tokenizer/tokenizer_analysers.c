@@ -1,4 +1,4 @@
-#include "../../include/tokenizer.h"
+#include "minishell.h"
 
 /* Checks if character is a chevron or a pipe. */
 int	is_operator(char c)

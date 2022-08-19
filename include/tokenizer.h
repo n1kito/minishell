@@ -1,6 +1,7 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
+// TODO remove this before pushing. Only using for testers and visualiser.
 # ifdef VISUAL
 #  define ONE printf("[1]");
 #  define TWO printf("[2]");
@@ -38,10 +39,14 @@
 # endif
 
 // STRUCTURES
+
 // token_had_quotes: set to 1 when matching quotes are found in a token.
-// Useful for HEREDOC because a delimiter that initially had quotes does not expand the content of the HEREDOC.
-// Also, an empty token that did not have any quotes automatically means that it resulted from expansions that
-// led to nothing and therefore should be treated as invisible.
+// Useful for HEREDOC because a delimiter that initially had quotes
+// does not expand the content of the HEREDOC.
+// Also, an empty token that did not have any quotes automatically means
+// that it resulted from expansions that led to nothing and therefore
+// should be treated as invisible.
+// TODO : Move all structure to minishell.h ?
 typedef struct s_tokens
 {
 	char			*token;
@@ -71,6 +76,15 @@ typedef struct s_expand
 	struct s_expand	*next;
 }	t_expand;
 
+typedef struct s_master
+{
+	t_tokens			*tokens;
+	t_tokenizer_helpers	helpers;
+	t_expand			expand_utils;
+	t_env				*env;
+	int					malloc_success;
+}	t_master;
+
 // DEFINES
 // Blank Characters
 # define SPACE 32
@@ -85,8 +99,8 @@ typedef struct s_expand
 # define DOUBLE_QUOTE 34
 
 // tokenizer.c && tokenizer_for_debugging.c
-void		tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t);
-void		extract_token(t_tokens **tokens,
+int			tokenizer(char *line, t_master *master, t_tokenizer_helpers *t);
+int			extract_token(t_master *master,
 				char *token_start, char *token_end);
 //to do: move extract_token to tokenizer_utils.c
 
@@ -107,14 +121,14 @@ int			follows_open_token(t_tokenizer_helpers *t);
 int			follows_word(char *line, int position);
 
 // tokenizer_handlers.c
-void		handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_end_of_line(t_tokenizer_helpers *t, t_master *master);
 void		handle_quotes(t_tokenizer_helpers *t);
-void		handle_blank_char(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_blank_char(t_tokenizer_helpers *t, t_master *master);
 
 // tokenizer_handler_2.c
 void		start_expansion_token(t_tokenizer_helpers *t);
-void		start_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
-void		close_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
+void		start_operator_token(t_tokenizer_helpers *t, t_master *master);
+void		close_operator_token(t_tokenizer_helpers *t, t_master *master);
 
 // tokenizer_test_utils.c
 void		print_tokens(t_tokens *tokens);

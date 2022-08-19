@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/05 10:05:59 by mjallada          #+#    #+#              #
-#    Updated: 2022/06/27 14:08:37 by mjallada         ###   ########.fr        #
+#    Updated: 2022/08/18 10:10:05 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ SRC_DIR			:= src
 BIN_DIR			:= bin
 
 LIB_DIR			:= libft
-LIB			:= $(shell echo $(LIB_DIR) | cut -c 4-)
+LIB				:= $(shell echo $(LIB_DIR) | cut -c 4-)
 
 # **************************************************************************** #
 # COLORS
@@ -40,13 +40,27 @@ END_COLOR		:= \033[0;39m
 # **************************************************************************** #
 # SOURCES
 
-SRC_FILES		:= main
+SRC_FILES		:= 	main\
+					tokenizer/tokenizer\
+					tokenizer/tokenizer_analysers\
+					tokenizer/tokenizer_analysers_2\
+					tokenizer/tokenizer_handlers\
+					tokenizer/tokenizer_handlers_2\
+					tokenizer/tokenizer_utils\
+					parser/expander\
+					parser/expander_analysers\
+					parser/expander_utils\
+					parser/parser\
+					parser/parser_identify_tokens\
+					parser/parser_syntax_checker
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
 # RULES
 
-all: header norm $(NAME)
+all: header $(NAME)
+# I can't include norm check for now because it does not work.
+#all: header norm $(NAME)
 
 $(NAME): $(OBJ_FILES)
 	@make --no-print-directory -C libft
@@ -58,7 +72,7 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
-	@mkdir $(BIN_DIR)
+	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser
 	@echo "$(IPURPLE)Created $(BIN_DIR)/ directory.$(END_COLOR)"
 
 clean:
@@ -82,8 +96,9 @@ space:
 	@echo
 
 norm:
-	@echo -n "😼 Norm check..."
-	@norminette | if grep -qc Error: ; then echo "\r🙀 $(RED)Norm errors. 💀$(END_COLOR)     "; else echo "\r😻 Norm $(BGREEN)OK$(END_COLOR)      "; fi
+	@echo "😼 Norm check..."
+	@norminette src/*/*.c include/*.h | if grep -qc Error: ; then echo "\r🙀 $(RED)Norm errors. 💀$(END_COLOR)     "; else echo "\r😻 Norm $(BGREEN)OK$(END_COLOR)      "; fi
+# i need to fix this, norminette does not finish in time for grep and it gives me a Broken pipe error.
 	@echo
 
 -include $(OBJ_FILES:%.o=%.d)

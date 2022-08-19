@@ -48,3 +48,12 @@ echo coucou | $POUET >2|wc
 
 >$POUET echo lol
 [REDIRECT_TO|FILE_NAME|WORD|WORD]
+
+<< $lol pouet | echo
+[HERE_DOC|DELIMITER|WORD|PIPE|WORD]
+
+<< $lol'' pouet | echo $lol
+[HERE_DOC|DELIMITER|WORD|PIPE|WORD|INVISIBLE]
+
+<<$lol'' pouet | echo $lol''
+[HERE_DOC|DELIMITER|WORD|PIPE|WORD|WORD]

@@ -1,12 +1,14 @@
+#include "../../include/minishell.h"
 #include "../../include/tokenizer.h"
 
 /* Called when EOL character is found in line. */
-void	handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens)
+void	handle_end_of_line(t_tokenizer_helpers *t, t_master	*master)
 {
 	if (follows_open_token(t))
 	{
-		extract_token(tokens, &t->line[t->token_start],
-			&t->line[t->position - 1]);
+		if (!extract_token(master, &t->line[t->token_start],
+			&t->line[t->position - 1]))
+			return ;
 		t->last_token_end = t->position - 1;
 	}
 	t->position++;
@@ -24,12 +26,13 @@ void	handle_quotes(t_tokenizer_helpers *t)
 }
 
 /* Called when blank char is found. Extracts preceding token if necessary. */
-void	handle_blank_char(t_tokenizer_helpers *t, t_tokens **tokens)
+void	handle_blank_char(t_tokenizer_helpers *t, t_master *master)
 {
 	if (follows_open_token(t))
 	{
-		extract_token(tokens, &t->line[t->token_start],
-			&t->line[t->position - 1]);
+		if (!extract_token(master, &t->line[t->token_start],
+			&t->line[t->position - 1]))
+			return ;
 		t->last_token_end = t->position - 1;
 	}
 	t->position++;
