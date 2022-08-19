@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/04 09:49:28 by mjallada          #+#    #+#              #
-#    Updated: 2022/08/19 12:02:48 by mjallada         ###   ########.fr        #
+#    Updated: 2022/08/19 16:11:36 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -89,9 +89,11 @@ OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 # **************************************************************************** #
 # RULES
 
-all: space header $(NAME)
+#all: space header $(NAME)
+all: space $(NAME)
 
 $(NAME): $(OBJ_FILES)
+	@@echo "\n++ building $(NAME)"
 	@$(AR) $(NAME) $(OBJ_FILES)
 	@echo "\n++ $(GREEN)$(NAME) compiled :)$(END_COLOR)"
 

@@ -1,4 +1,4 @@
-#                                                         :::      ::::::::    #
+                                                        :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
@@ -39,6 +39,7 @@ END_COLOR		:= \033[0;39m
 # SOURCES
 
 SRC_FILES		:= 	main\
+					minishell_utils\
 					tokenizer/tokenizer\
 					tokenizer/tokenizer_analysers\
 					tokenizer/tokenizer_analysers_2\

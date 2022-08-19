@@ -21,8 +21,7 @@ void	print_tokens(t_tokens *tokens)
  * code, before using the tokenizer. */
 int	main(int argc, char **argv)
 {
-	t_tokens			*tokens;
-	t_tokenizer_helpers	t;
+	t_master			master;
 	t_env				*env;
 	t_env				variable1;
 	t_env				variable2;
@@ -38,18 +37,18 @@ int	main(int argc, char **argv)
 	variable2.name = name2;
 	variable2.variable = value2;
 	variable2.next = NULL;
-	init_tokenizer_helpers(&t, argv[1]);
-	tokens = NULL;
+	init_master_structure(&master, env);
+	init_tokenizer_helpers(&master.helpers, argv[1]);
 	if (argc != 2)
 		printf("Error\n> %s needs a quoted string in argv[1].\n", argv[0]);
 	else
 	{
 		ARGUMENT
-		tokenizer(argv[1], &tokens, &t);
-		parser(&tokens);
+		tokenizer(argv[1], &master, &master.helpers);
+		parser(&master.tokens);
 		NEWLINE
-		if (expander(&tokens, env))
-			print_tokens(tokens);
+		if (expander(&master.tokens, master.env))
+			print_tokens(master.tokens);
 		else
 			printf("Error: Open quote.\n");
 	} 

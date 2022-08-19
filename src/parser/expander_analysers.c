@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 /* Search for variable name in env.
  * Returns variable value if found, NULL if not. */
@@ -41,13 +41,9 @@ int	log_expansions(char *token, t_env *env, t_expand **expansions)
 				return (0);
 		}
 		else if (token[i] == DOUBLE_QUOTE && !is_single_quoting)
-		{
 			toggle_quoting(&is_double_quoting);
-		}
 		else if (token[i] == SINGLE_QUOTE && !is_double_quoting)
-		{
 			toggle_quoting(&is_single_quoting);
-		}
 		i++;
 	}
 	return (1);
@@ -95,7 +91,7 @@ int	has_solitary_quote(char *token)
 			if (matching_quote)
 				i += matching_quote + 1;
 			else
-				return (err_msg("Error: open quote", 0));
+				return (err_msg("open quote", 0));
 		}
 		else
 			i++;

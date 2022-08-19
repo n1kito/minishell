@@ -120,7 +120,7 @@ run_tests() {
   while IFS= read -r TEST
   do
     IFS= read -r EXPECTED_RESULT
-    RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "$TEST")
+    RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "$TEST" 2>/dev/null)
     if [ "$RESULT" = "$EXPECTED_RESULT" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
           printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
           (( TEST_PASSED++ ))

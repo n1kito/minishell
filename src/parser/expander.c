@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 /* Goes through tokens, checks that there are no single quotes.
  * If there are not, identifies variables to expand and expands them.
@@ -70,12 +70,14 @@ int	remove_quotes(t_tokens **token_node, int first_quote, int second_quote)
 	tmp_token = str_join(token, concatenate_me);
 	if (!tmp_token)
 		return (err_msg("malloc() failed [remove_quotes()][1]", 0));
+	free(token);
 	token = tmp_token;
 	concatenate_me = token + first_quote + 1;
 	token[first_quote] = '\0';
 	tmp_token = str_join(token, concatenate_me);
 	if (!tmp_token)
 		return (err_msg("malloc() failed [remove_quotes()][2]", 0));
+	free(token);
 	token = tmp_token;
 	(*token_node)->token = token;
 	return (1);

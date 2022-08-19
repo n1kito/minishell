@@ -23,6 +23,9 @@ typedef struct s_master
 
 // main.c
 
-int	err_msg(char *error, int error_code);
+// minishell_utils.c
+int		err_msg(char *error, int error_code);
+void	init_master_structure(t_master *master, t_env *env);
+int		free_master(t_master *master, int return_value);
 
 #endif

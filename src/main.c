@@ -6,19 +6,11 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/19 12:35:05 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/19 16:17:51 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	err_msg(char *error, int error_code)
-{
-	//if (find a way to know if an error has already been printed)
-		//ft_printf_fd(2, "Error\n");
-	ft_printf_fd(2, "%s\n", error);
-	return (error_code);
-}
 
 /* I imagine this to be the function called for each line read by the prompt. */
 // TODO: after execution, the token structure should be freed. Others don't malloc so they
@@ -34,30 +26,6 @@ int	execute_command(char *command_line, t_master *master)
 		|| !syntax_checker(master->tokens))
 			return (0);
 	return (1);
-}
-
-int	free_master(t_master *master, int return_value)
-{
-	t_tokens	*current;
-	t_tokens	*next_token;
-
-	current = master->tokens;
-	while (current)
-	{
-		next_token = current->next;
-		free(current->token);
-		free(current);
-		current = next_token;
-	}
-	return (return_value);
-}
-
-void	init_master_structure(t_master *master, t_env *env)
-{
-	master->tokens = NULL;
-	master->env = env;
-	//init_env_structure(&master->env); // doing this by hand in the  main for now. Need to include env building function here.
-	master->malloc_success = 1;
 }
 
 //int	main(int argc, char **argv, char **env)
