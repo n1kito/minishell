@@ -6,11 +6,19 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/19 09:55:58 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/19 12:35:05 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	err_msg(char *error, int error_code)
+{
+	//if (find a way to know if an error has already been printed)
+		//ft_printf_fd(2, "Error\n");
+	ft_printf_fd(2, "%s\n", error);
+	return (error_code);
+}
 
 /* I imagine this to be the function called for each line read by the prompt. */
 // TODO: after execution, the token structure should be freed. Others don't malloc so they
@@ -36,10 +44,9 @@ int	free_master(t_master *master, int return_value)
 	current = master->tokens;
 	while (current)
 	{
-		if (current->token)
-			free(current->token);
 		next_token = current->next;
-		free (current);
+		free(current->token);
+		free(current);
 		current = next_token;
 	}
 	return (return_value);
@@ -50,7 +57,7 @@ void	init_master_structure(t_master *master, t_env *env)
 	master->tokens = NULL;
 	master->env = env;
 	//init_env_structure(&master->env); // doing this by hand in the  main for now. Need to include env building function here.
-	master->malloc_success = 0;
+	master->malloc_success = 1;
 }
 
 //int	main(int argc, char **argv, char **env)
@@ -82,8 +89,8 @@ int	main(int argc, char **argv)
 	init_master_structure(&master, env);
 	if (!execute_command(argv[1], &master))
 	{
-		printf("COULD NOT EXECUTE COMMAND\n");
 		return (free_master(&master, 1));
 	}
-	return (0);
+	printf("Everything went OK.\n");
+	return (free_master(&master, 0));
 }

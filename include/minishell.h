@@ -16,8 +16,13 @@ typedef struct s_master
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include "libft.h"
 # include "environment.h"
 # include "tokenizer.h"
 # include "parser.h"
+
+// main.c
+
+int	err_msg(char *error, int error_code);
 
 #endif

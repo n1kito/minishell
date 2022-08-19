@@ -107,7 +107,6 @@ int			extract_token(t_master *master,
 // tokenizer_utils.c
 void		init_tokenizer_helpers(t_tokenizer_helpers *t, char *line);
 t_tokens	*get_last_token(t_tokens *tokens_list);
-int			ft_strlen(char *string); //TODO Remove this
 
 // tokenizer_analysers.c
 int			is_operator(char c);

@@ -17,17 +17,17 @@ int	syntax_checker(t_tokens *tokens)
 				|| !current->next
 				|| current->previous->token_type == PIPE_TOKEN
 				|| current->next->token_type == PIPE_TOKEN))
-			return (0);
+			return (err_msg("parse error: check the pipes", 0));
 		else if (current->token_type == HERE_DOC
-			&& current->next->token_type != DELIMITER)
-			return (0);
+			&& (!current->next || current->next->token_type != DELIMITER))
+			return (err_msg("parse error: HERE_DOC needs delimiter", 0));
 		else if ((current->token_type == REDIRECT_TO
 				|| current->token_type == REDIRECT_FROM
 				|| current->token_type == APPEND)
 			&& (!current->next
 				|| (current->next->token_type != FILE_NAME
 					&& current->next->token_type != IO_NUMBER)))
-			return (0);
+			return (err_msg("parse error: redirection needs file or fd", 0));
 		current = current->next;
 	}
 	return (1);

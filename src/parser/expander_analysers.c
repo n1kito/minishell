@@ -61,7 +61,7 @@ int	add_exp_node(t_expand **expansions, char *token, int i, t_env *env)
 
 	new_expand = malloc(sizeof(t_expand));
 	if (!new_expand)
-		return (0);
+		return (err_msg("malloc failed [add_exp_node()]", 0));
 	new_expand->start = i;
 	new_expand->name_start = i + 1;
 	new_expand->name_len = expansion_name_len(token + i);
@@ -95,7 +95,7 @@ int	has_solitary_quote(char *token)
 			if (matching_quote)
 				i += matching_quote + 1;
 			else
-				return (0);
+				return (err_msg("Error: open quote", 0));
 		}
 		else
 			i++;

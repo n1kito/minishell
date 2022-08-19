@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/04 09:49:28 by mjallada          #+#    #+#              #
-#    Updated: 2022/06/24 08:56:48 by mjallada         ###   ########.fr        #
+#    Updated: 2022/08/19 12:02:48 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 AR 				:= ar rc
 
-INC_DIR			:= inc
+INC_DIR			:= include
 SRC_DIR			:= src
 BIN_DIR			:= bin
 

@@ -17,11 +17,11 @@ int	expander(t_tokens **tokens, t_env *env)
 		if (current->token_type != DELIMITER)
 		{
 			if (!log_expansions(current->token, env, &expansions))
-				return (0);
+				return (err_msg("Failed to log expansions [expander()]", 0));
 			if (expansions)
 				if (!expand_token(current, expansions)
 					|| !free_expansions(&expansions))
-					return (0);
+					return (err_msg("Failed to expand [expander()]", 0));
 		}
 		if (!process_and_remove_quotes(current))
 			return (0);
@@ -69,13 +69,13 @@ int	remove_quotes(t_tokens **token_node, int first_quote, int second_quote)
 	token[first_quote + second_quote] = '\0';
 	tmp_token = str_join(token, concatenate_me);
 	if (!tmp_token)
-		return (0);
+		return (err_msg("malloc() failed [remove_quotes()][1]", 0));
 	token = tmp_token;
 	concatenate_me = token + first_quote + 1;
 	token[first_quote] = '\0';
 	tmp_token = str_join(token, concatenate_me);
 	if (!tmp_token)
-		return (0);
+		return (err_msg("malloc() failed [remove_quotes()][2]", 0));
 	token = tmp_token;
 	(*token_node)->token = token;
 	return (1);

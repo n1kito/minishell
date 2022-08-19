@@ -20,14 +20,3 @@ t_tokens	*get_last_token(t_tokens *tokens_list)
 		current = current->next;
 	return (current);
 }
-
-// TODO Remove this one, it's in the libft
-int	ft_strlen(char *string)
-{
-	int	i;
-
-	i = 0;
-	while (string && string[i])
-		i++;
-	return (i);
-}

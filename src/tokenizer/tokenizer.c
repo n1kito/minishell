@@ -5,7 +5,7 @@ See README for more information. */
 // TODO try to change while condition with while(line[t->position])
 int	tokenizer(char *line, t_master *master, t_tokenizer_helpers *t)
 {
-	while (t->position <= ft_strlen(line) && master->malloc_success == 1)
+	while (t->position <= (int)ft_strlen(line) && master->malloc_success == 1)
 	{
 		if (line[t->position] == '\0')
 			handle_end_of_line(t, master);
@@ -49,11 +49,11 @@ int	extract_token(t_master *master, char *token_start, char *token_end)
 	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
-		return (--master->malloc_success);
+		return (err_msg("malloc failed [extract_token()][1]", --master->malloc_success));
 	init_token_values(new_token);
 	new_token->token = malloc(sizeof(char) * (token_len + 1));
 	if (!new_token->token)
-		return (--master->malloc_success);
+		return (err_msg("malloc failed [extract_token()][2]", --master->malloc_success));
 	i = -1;
 	while (++i < token_len)
 		new_token->token[i] = token_start[i];
