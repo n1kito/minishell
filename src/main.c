@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/19 16:17:51 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/21 16:55:05 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	execute_command(char *command_line, t_master *master)
 	init_tokenizer_helpers(&master->helpers, command_line);
 	if (!tokenizer(command_line, master, &master->helpers)
 		|| !parser(&master->tokens)
-		|| !expander(&master->tokens, master->env)
-		|| !syntax_checker(master->tokens))
+		|| !expander(master, master->env)
+		|| !syntax_checker(master))
 			return (0);
 	return (1);
 }

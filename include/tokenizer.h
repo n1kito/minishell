@@ -80,9 +80,10 @@ typedef struct s_master
 {
 	t_tokens			*tokens;
 	t_tokenizer_helpers	helpers;
-	t_expand			expand_utils;
+	t_expand			*expansions;
 	t_env				*env;
 	int					malloc_success;
+	int					printed_error_msg;
 }	t_master;
 
 // DEFINES

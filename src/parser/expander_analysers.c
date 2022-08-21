@@ -22,7 +22,7 @@ char	*search_env(t_env *env, char *name, int name_len)
 }
 
 /* Goes through token and logs expandable variables in a special structure. */
-int	log_expansions(char *token, t_env *env, t_expand **expansions)
+int	log_expansions(char *token, t_env *env, t_master *master)
 {
 	int			i;
 	int			is_single_quoting;
@@ -37,7 +37,7 @@ int	log_expansions(char *token, t_env *env, t_expand **expansions)
 			&& expansion_name_len(token + i)
 			&& !is_single_quoting)
 		{
-			if (!add_exp_node(expansions, token, i, env))
+			if (!add_exp_node(master, token, i, env))
 				return (0);
 		}
 		else if (token[i] == DOUBLE_QUOTE && !is_single_quoting)
@@ -51,13 +51,13 @@ int	log_expansions(char *token, t_env *env, t_expand **expansions)
 
 /* Logs new node in expansion structure to track expansions, their positions and
  * values (if found in env). Note that they are added LIFO. */
-int	add_exp_node(t_expand **expansions, char *token, int i, t_env *env)
+int	add_exp_node(t_master *master, char *token, int i, t_env *env)
 {
 	t_expand	*new_expand;
 
 	new_expand = malloc(sizeof(t_expand));
 	if (!new_expand)
-		return (err_msg("malloc failed [add_exp_node()]", 0));
+		return (err_msg("malloc failed [add_exp_node()]", 0, master));
 	new_expand->start = i;
 	new_expand->name_start = i + 1;
 	new_expand->name_len = expansion_name_len(token + i);
@@ -66,18 +66,18 @@ int	add_exp_node(t_expand **expansions, char *token, int i, t_env *env)
 	new_expand->value = search_env(env, new_expand->name,
 			new_expand->name_len);
 	new_expand->next = NULL;
-	if (*expansions == NULL)
-		*expansions = new_expand;
+	if (master->expansions == NULL)
+		master->expansions = new_expand;
 	else
 	{
-		new_expand->next = *expansions;
-		*expansions = new_expand;
+		new_expand->next = master->expansions;
+		master->expansions = new_expand;
 	}
 	return (1);
 }
 
 /* Checks that there is no quote without a matching quote. */
-int	has_solitary_quote(char *token)
+int	has_solitary_quote(char *token, t_master *master)
 {
 	int	i;
 	int	matching_quote;
@@ -91,7 +91,7 @@ int	has_solitary_quote(char *token)
 			if (matching_quote)
 				i += matching_quote + 1;
 			else
-				return (err_msg("open quote", 0));
+				return (err_msg("open quote", 0, master));
 		}
 		else
 			i++;
