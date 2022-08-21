@@ -73,8 +73,8 @@ int	main(int argc, char **argv)
 		tokenizer(argv[1], &master, &master.helpers);
 		NEWLINE
 		parser(&master.tokens);
-		expander(&master.tokens, master.env);
-		if (syntax_checker(master.tokens))
+		expander(&master, master.env);
+		if (syntax_checker(&master))
 			print_parsed_tokens(master.tokens);
 		else
 			printf("Syntax error.\n");

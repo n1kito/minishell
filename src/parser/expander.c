@@ -22,6 +22,7 @@ int	expander(t_master *master, t_env *env)
 					return (err_msg("failed to expand [expander()]",
 							0, master));
 		}
+		free_expansions(&master->expansions);
 		if (!process_and_remove_quotes(current, master))
 			return (0);
 		check_for_invisible_token(current);
@@ -70,7 +71,7 @@ int	remove_quotes(t_tokens **token_node, int quote1, int quote2, t_master *m)
 	free((*token_node)->token);
 	(*token_node)->token = tmp_token;
 	concatenate_me = (*token_node)->token + quote1 + 1;
-	((*token_node)->token)[quote1] = '\0';
+	(*token_node)->token[quote1] = '\0';
 	tmp_token = str_join((*token_node)->token, concatenate_me);
 	if (!tmp_token)
 		return (err_msg("malloc() failed [remove_quotes()][2]", 0, m));
