@@ -82,7 +82,7 @@ typedef struct s_master
 	t_tokenizer_helpers	helpers;
 	t_expand			*expansions;
 	t_env				*env;
-	int					malloc_success;
+	int					malloc_ok;
 	int					printed_error_msg;
 }	t_master;
 

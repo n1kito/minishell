@@ -4,8 +4,8 @@
 int	err_msg(char *error, int error_code, t_master *master)
 {
 	if (master->printed_error_msg++ == 0)
-		ft_printf_fd(2, "Error\n");
-	ft_printf_fd(2, "%s\n", error);
+		ft_printf_fd(2, "\033[1;31mError\033[0;39m\n");
+	ft_printf_fd(2, "> %s\n", error);
 	return (error_code);
 }
 
@@ -16,7 +16,7 @@ void	init_master_structure(t_master *master, t_env *env)
 	master->env = env;
 	master->expansions = NULL;
 	//init_env_structure(&master->env); // doing this by hand in the  main for now. Need to include env building function here.
-	master->malloc_success = 1;
+	master->malloc_ok = 1;
 	master->printed_error_msg = 0;
 }
 

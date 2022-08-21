@@ -15,10 +15,12 @@ int	expander(t_master *master, t_env *env)
 		if (current->token_type != DELIMITER)
 		{
 			if (!log_expansions(current->token, env, master))
-				return (err_msg("failed to log expansions [expander()]", 0, master));
+				return (err_msg("failed to log expansions [expander()]",
+						0, master));
 			if (master->expansions)
 				if (!expand_token(current, master->expansions))
-					return (err_msg("failed to expand [expander()]", 0, master));
+					return (err_msg("failed to expand [expander()]",
+							0, master));
 		}
 		if (!process_and_remove_quotes(current, master))
 			return (0);
@@ -55,23 +57,23 @@ int	process_and_remove_quotes(t_tokens *token_node, t_master *master)
 }
 
 /* Removes quote pairs from current token. */
-int	remove_quotes(t_tokens **token_node, int first_quote, int second_quote, t_master *master)
+int	remove_quotes(t_tokens **token_node, int quote1, int quote2, t_master *m)
 {
 	char	*concatenate_me;
 	char	*tmp_token;
 
-	concatenate_me = (*token_node)->token + first_quote + second_quote + 1;
-	(*token_node)->token[first_quote + second_quote] = '\0';
+	concatenate_me = (*token_node)->token + quote1 + quote2 + 1;
+	(*token_node)->token[quote1 + quote2] = '\0';
 	tmp_token = str_join((*token_node)->token, concatenate_me);
 	if (!tmp_token)
-		return (err_msg("malloc() failed [remove_quotes()][1]", 0, master));
+		return (err_msg("malloc() failed [remove_quotes()][1]", 0, m));
 	free((*token_node)->token);
 	(*token_node)->token = tmp_token;
-	concatenate_me = (*token_node)->token + first_quote + 1;
-	((*token_node)->token)[first_quote] = '\0';
+	concatenate_me = (*token_node)->token + quote1 + 1;
+	((*token_node)->token)[quote1] = '\0';
 	tmp_token = str_join((*token_node)->token, concatenate_me);
 	if (!tmp_token)
-		return (err_msg("malloc() failed [remove_quotes()][2]", 0, master));
+		return (err_msg("malloc() failed [remove_quotes()][2]", 0, m));
 	free((*token_node)->token);
 	(*token_node)->token = tmp_token;
 	return (1);

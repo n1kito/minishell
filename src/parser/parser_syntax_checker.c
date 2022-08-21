@@ -27,7 +27,8 @@ int	syntax_checker(t_master *master)
 			&& (!current->next
 				|| (current->next->token_type != FILE_NAME
 					&& current->next->token_type != IO_NUMBER)))
-			return (err_msg("parsing: redirection needs file or fd", 0, master));
+			return (err_msg("parsing: redirection needs file or fd",
+					0, master));
 		current = current->next;
 	}
 	return (1);

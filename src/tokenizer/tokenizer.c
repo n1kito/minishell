@@ -5,7 +5,7 @@ See README for more information. */
 // TODO try to change while condition with while(line[t->position])
 int	tokenizer(char *line, t_master *master, t_tokenizer_helpers *t)
 {
-	while (t->position <= (int)ft_strlen(line) && master->malloc_success == 1)
+	while (t->position <= (int)ft_strlen(line) && master->malloc_ok == 1)
 	{
 		if (line[t->position] == '\0')
 			handle_end_of_line(t, master);
@@ -28,7 +28,7 @@ int	tokenizer(char *line, t_master *master, t_tokenizer_helpers *t)
 		else
 			t->token_start = t->position++;
 	}
-	return (master->malloc_success);
+	return (master->malloc_ok);
 }
 
 void	init_token_values(t_tokens *token)
@@ -49,7 +49,7 @@ int	extract_token(t_master *master, char *token_start, char *token_end)
 	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
-		return (err_msg("malloc failed [extract_token()][1]", --master->malloc_success, master));
+		return (err_msg("expand_token() [1]", --master->malloc_ok, master));
 	init_token_values(new_token);
 	if (master->tokens == NULL)
 		master->tokens = new_token;
@@ -60,7 +60,7 @@ int	extract_token(t_master *master, char *token_start, char *token_end)
 	}
 	new_token->token = malloc(sizeof(char) * (token_len + 1));
 	if (!new_token->token)
-		return (err_msg("malloc failed [extract_token()][2]", --master->malloc_success, master));
+		return (err_msg("expand_token() [2]", --master->malloc_ok, master));
 	i = -1;
 	while (++i < token_len)
 		new_token->token[i] = token_start[i];

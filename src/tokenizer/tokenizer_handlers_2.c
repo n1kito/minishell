@@ -14,7 +14,7 @@ void	start_operator_token(t_tokenizer_helpers *t, t_master *master)
 		if (!extract_token(master, &t->line[t->token_start],
 				&t->line[t->position - 1]))
 		{
-			master->malloc_success = 0;
+			master->malloc_ok = 0;
 			return ;
 		}
 		t->last_token_end = t->position - 1;
@@ -29,7 +29,7 @@ void	close_operator_token(t_tokenizer_helpers *t, t_master *master)
 	if (!extract_token(master,
 			&t->line[t->token_start], &t->line[t->position - 1]))
 	{
-		master->malloc_success = 0;
+		master->malloc_ok = 0;
 		return ;
 	}
 	if (t->position)
