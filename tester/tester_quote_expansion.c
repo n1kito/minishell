@@ -25,10 +25,13 @@ int	main(int argc, char **argv)
 	t_env				*env;
 	t_env				variable1;
 	t_env				variable2;
+	t_env				variable3;
 	char				name1[5]="USER";
 	char				name2[6]="SHELL";
+	char				name3[6]="QUOTE";
 	char				value1[7]="nikito";
 	char				value2[5]="bash";
+	char				value3[2]="'";
 
 	env = &variable1;
 	variable1.name = name1;
@@ -36,7 +39,10 @@ int	main(int argc, char **argv)
 	variable1.next = &variable2;
 	variable2.name = name2;
 	variable2.variable = value2;
-	variable2.next = NULL;
+	variable2.next = &variable3;
+	variable3.name = name3;
+	variable3.variable = value3;
+	variable3.next = NULL;
 	init_master_structure(&master, env);
 	init_tokenizer_helpers(&master.helpers, argv[1]);
 	if (argc != 2)

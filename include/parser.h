@@ -30,7 +30,8 @@ int		syntax_checker(t_master *master);
 
 // expander.c
 int		expander(t_master *master, t_env *env);
-int		remove_quotes(t_tokens **token_node, int first_quote, int second_quote, t_master *master);
+int		remove_quotes(t_tokens **token_node, int first_quote,
+			int second_quote, t_master *master);
 int		process_and_remove_quotes(t_tokens *token_node, t_master *master);
 int		expand_token(t_tokens *current, t_expand *expansions);
 void	check_for_invisible_token(t_tokens	*token);

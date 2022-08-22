@@ -13,7 +13,7 @@
 # VARIABLES
 
 NAME			:= minishell
-CC			:= cc
+CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 
 INC_DIR			:= include

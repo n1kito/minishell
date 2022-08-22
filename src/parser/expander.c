@@ -10,7 +10,7 @@ int	expander(t_master *master, t_env *env)
 	current = master->tokens;
 	while (current)
 	{
-		if (!has_solitary_quote(current->token, master))
+		if (has_solitary_quote(current->token, master))
 			return (0);
 		if (current->token_type != DELIMITER)
 		{

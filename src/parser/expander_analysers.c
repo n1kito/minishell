@@ -91,10 +91,10 @@ int	has_solitary_quote(char *token, t_master *master)
 			if (matching_quote)
 				i += matching_quote + 1;
 			else
-				return (err_msg("open quote", 0, master));
+				return (err_msg("open quote", 1, master));
 		}
 		else
 			i++;
 	}
-	return (1);
+	return (0);
 }
