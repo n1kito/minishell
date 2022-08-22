@@ -56,6 +56,7 @@ int	count_expands(t_expand *expansions)
 	t_expand	*current;
 
 	current = expansions;
+	count = 0;
 	while (current)
 	{
 		count++;
