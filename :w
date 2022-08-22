@@ -37,7 +37,7 @@ int	log_expansions(char *token, t_env *env, t_master *master)
 			&& token[i + 1]
 			&& !is_blank_char(token[i + 1])
 			&& !is_single_quoting
-			&& !(is_quote_character(token [i + 1]) && is_double_quoting))
+			&& !(is_quote_character(token [i + 1]) && (is_single_quoting || is_double_quoting)))
 		{
 			if (!add_exp_node(master, token, i, env))
 				return (0);
