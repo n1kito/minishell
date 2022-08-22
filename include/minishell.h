@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 16:02:51 by mjallada          #+#    #+#             */
-/*   Updated: 2022/07/05 18:56:53 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/22 21:55:24 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 typedef struct	s_env {
 	char			*name;
 	char			*variable;
+	int				is_env;
 	struct s_env	*next;
 }				t_env;
 

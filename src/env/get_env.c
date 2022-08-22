@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/07/13 16:49:53 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/22 23:45:58 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	var_env_malloc_init(t_env *env, char **envp)
 		env->variable = malloc(sizeof(char) * len - med + 1);
 		if (!env->variable)
 			return ;
+		env->is_env = 1;
 		env = env->next;
 		i++;
 	}
