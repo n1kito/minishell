@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/22 07:18:08 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/22 09:51:11 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ int	execute_command(char *command_line, t_master *master)
 	if (!tokenizer(command_line, master, &master->helpers)
 		|| !parser(&master->tokens)
 		|| !expander(master, master->env)
-		|| !syntax_checker(master))
+		|| !syntax_checker(master)
+		|| !convert_to_array(master))
 		// TODO Here we can add !convert_to_array(master) where we will convert our tokens and env to arrays before launching actual execution;
 			return (0);
 	// TODO add exec loop or function
@@ -31,8 +32,7 @@ int	execute_command(char *command_line, t_master *master)
 	return (1);
 }
 
-//int	main(int argc, char **argv, char **env)
-int	main(int argc, char **argv)
+int	main(int argc, char *argv[], char *envp[])
 {
 	t_master	master;
 
@@ -59,6 +59,7 @@ int	main(int argc, char **argv)
 	variable3.variable = value3;
 	variable3.next = NULL;
 
+	(void)envp;
 	init_master_structure(&master, env);
 	if (argc > 2) // TODO change to argc > 1 for the final program. This is just to test.
 		return (err_msg("./minishell only needs one argument", 0, &master));

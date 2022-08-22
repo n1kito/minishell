@@ -82,6 +82,13 @@ typedef struct s_master
 	t_tokenizer_helpers	helpers;
 	t_expand			*expansions;
 	t_env				*env;
+	//TODO include char pointers for command arrays
+	// I dont think I want to store redirections in an array, maybe just
+	// have a pointer to next command (token after pipe) so I can just go
+	// through them and apply redirections.
+	char				***command_array;
+	char				*env_array;
+	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
 	int					malloc_ok;
 	int					printed_error_msg;
 }	t_master;
