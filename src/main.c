@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/22 09:51:11 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/23 12:09:49 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	execute_command(char *command_line, t_master *master)
 	if (!tokenizer(command_line, master, &master->helpers)
 		|| !parser(&master->tokens)
 		|| !expander(master, master->env)
-		|| !syntax_checker(master)
-		|| !convert_to_array(master))
+		|| !syntax_checker(master))
 		// TODO Here we can add !convert_to_array(master) where we will convert our tokens and env to arrays before launching actual execution;
 			return (0);
 	// TODO add exec loop or function
