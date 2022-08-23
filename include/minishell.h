@@ -20,7 +20,7 @@ typedef struct s_master
 # include "environment.h"
 # include "tokenizer.h"
 # include "parser.h"
-
+# include "execution.h"
 // main.c
 
 // minishell_utils.c

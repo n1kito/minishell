@@ -52,7 +52,8 @@ SRC_FILES		:= 	main\
 					parser/expander_utils\
 					parser/parser\
 					parser/parser_identify_tokens\
-					parser/parser_syntax_checker
+					parser/parser_syntax_checker\
+					execution/execution_utils
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
@@ -72,7 +73,7 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
-	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser
+	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution
 	@echo "$(IPURPLE)Created $(BIN_DIR)/ directory.$(END_COLOR)"
 
 clean:
