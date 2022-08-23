@@ -18,6 +18,24 @@ void	init_master_structure(t_master *master, t_env *env)
 	//init_env_structure(&master->env); // doing this by hand in the  main for now. Need to include env building function here.
 	master->malloc_ok = 1;
 	master->printed_error_msg = 0;
+	master->command_array = NULL;
+	master->env_array = NULL;
+	master->next_command_start = NULL;
+}
+
+/* Frees memory allocated for storing the command arrays but not for the command themselves.
+ * These are freed separately when freeing the tokens linked list. */
+void	free_command_array(t_master *master)
+{
+	int	i;
+
+	i = 0;
+	while (master->command_array[i])
+	{
+		free(master->command_array[i++]);
+	}
+	free(master->command_array);
+	master->command_array = NULL;
 }
 
 /* Frees all malloced variables in the master structure. */
@@ -36,5 +54,6 @@ int	free_master(t_master *master, int return_value)
 		current = next_token;
 	}
 	free_expansions(&master->expansions);
+	free_command_array(master);
 	return (return_value);
 }
