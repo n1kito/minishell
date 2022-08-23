@@ -20,28 +20,44 @@ These rules are used to determine what a `token` is. (See the `tokenizer` README
 How each `TOKEN` is recognized and interpreted depends on context.  
 It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, or a reserved word (we don't handle those), depending of the context.  
 
+## What's next ?
+
+At this stage, we've identified whether a token is an `OPERATOR` (and identified the actual operator), an `IO_NUMBER`, or *something else*.
+
+~~We will now use the *shell grammar rules* below to analyse context and identify what each of the remaining tokens is.~~
+
+<details>
+<summary> <i>(+ click to see Shell Grammar Rules)</i> </summary>
+
 ## Shell grammar rules
 
 1. `[Command Name]`
+   - [ ] OK
     - When the `TOKEN` is exactly a reserved word, the token identifier for that reserved word shall result.
     - Otherwise, the token `WORD` shall be returned.
     - Also, if the parser is in any state where only a reserved word could be the next correct token, proceed as above.
     - > Rule 1 is not directly referenced in the grammar, but is referred to by other rules, or applies globally.
 2. `[Redirection to or from filename]`
+   - [ ] OK
     - The expansions specified in [Redirection](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_07) shall occur.
       - [ ] I have no idea what this means I can't find the correct section.
     - As specified there (??), exactly one field can result (or the result is unspecified), and there are additional requirements on pathname expansion.
 3. `[Redirection from here-document]`
+   - [ ] OK
    - Quote removal shall be applied to the word to determine the delimiter.
 4. `[Case statement termination]` (**NOT HANDLED**)
+   - [ ] OK
    - When the `TOKEN` is exactly the reserved word `esac`, the token identifier for `esac` shall result. Otherwise, the token `WORD` shall be returned.
 5. `[NAME in for]` (**NOT HANDLED**)
+   - [ ] OK
    - When the `TOKEN` meets the requirements for a name, the token identifier `NAME` shall result. Otherwise, the token `WORD` shall be returned.
    - Name requirements: In the shell command language, a word consisting solely of underscores, digits, and alphabetics from the portable character set. The first character of a name is not a digit.
    - **We don't handle for statements.**
 6. `[Third word of for and case]` (**NOT HANDLED**)
+   - [ ] OK
    - We don't handle this.
 7. `[Assigment preceding command name]`  
+   - [ ] OK
    `a.` [When the first word]
       - If the `TOKEN` does not contain the character `=`, `Rule 1` is applied.
       - Otherwise, `Rule 7b` is applied.  
@@ -54,20 +70,60 @@ It may be that the same `TOKEN` yields `WORD`, a `NAME`, an `ASSIGNMENT_WORD`, o
       - Otherwise, rule 1 shall be applied.
     Assignment to the name within a returned `ASSIGNMENT_WORD` token shall occur as specified in [Simple Commands](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_09_01).
 8. `[NAME in function]`
+   - [ ] OK
    - When the `TOKEN` is exactly a reserved word (we don't care for those), the token identifier for that reserved word shall result.
    - Otherwise, then the `TOKEN` meets the requirements for a name, the token identifier `NAME` shall result.
    - Otherwise, `Rule 7` applies.
 9. `[Body of function]`
+   - [ ] OK
    - We don't handle functions.
    - Word expansion and assignment shall never occur, even when required by the rules above, when this rule is being parsed.
    - Each `TOKEN` that might either be expanded or have assignment applied to it shall instead be returned as a single `WORD` consisting only of characters that are exactly the token described in [Token Recognition](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03).
 
+
+</details>
+
+Actually, **we will not**, because they treat a bunch of cases that do not concern us for this project and that complicates everything.
+
+Instead, for each node, if it has been found that it is neither an `operator` or an `io_number` (I used this step to identify filenames as well), we will do the following:
+   1. If the token being checked is not the first token and the previous token is of type `HERE_DOC`, current token is assigned `DELIMITER` type.
+   2. Else if token being checked is either the first in line OR the previous token is of type `PIPE`, `IO_NUMBER`, `DELIMITER` or `FILE_NAME`, then token is assigned `COMMAND_NAME` type. 
+   3. Else if token being checked is ot type `TOKEN` (meaning has not been previously asssigned), then it is assigned `WORD` type.
+
+## Syntax Checking
+
+Here are the syntax rules we will implement in our `syntax_checker` function.
+
+There is an **error** if:
+   - A `PIPE` token is either the first token, the last token, or is before or after another pipe.
+   - A `HERE_DOC` token is not followed by a `DELIMITER` token.
+   - A `REDIRECT_TO`, `REDIRECT_FROM` or `APPEND` token is not followed by either an `IO_NUMBER` or a `FILENAME` token.
+
+## Quotes handling & variable replacement
+
+**Quotes**
+- When a `'` (single quotes) is found
+   - We look for a matching one.
+      - If one is found, we delete them without treating anything inside.
+      - If not, we move to the next char.
+- When a `"` (double quote)
+   - We look for a matching one.
+      - If found, we delete them but expand any variable found inside. Single quotes are not touched.
+      - If not, we move on the next char.
+
 # to-do
 
-- [ ] Re-read the grammar rules so they're more clear.
-- [ ] J'arrive pas bien à savoir si on doit gerer genre `2>1` etc...
-- [ ] Confirm when a variable should be expanded to its value.
-    - [ ] After tokenizer ?
-    - [ ] Before parsing ?
-    - They're kind of the same but not really.
-
+- [x] Take care of syntax checker.
+   - Do I populate some useful variables at this stage, like the number of pipes found in the command line ?
+       - I think this should be done after, in another analyser function so it's more clear. Maybe even in the function that stores necessary arguments in arrays to be used by execve.
+- [ ] Do the quote and variable replacements.
+- [ ] If I execute `$pouet coucou$pouet` and `$pouet` does not exist, it will output `coucou is not a command`, meaning apparently if the token is empty after expansion and quote treatment, it is deleted.
+   - Actually NO, if the token is empty after quote treatment, like `"" coucou`, it will say `command not found` like I tried to run an empty command.
+   - And if I combine them like `""$pouet`, I get the empty `command not found` thing. Like the quotes still return something and a single empty replacement just acts like there is no token at all.
+   - So I think that the easiest is if token is only $expansion and end value is NULL, delete it and move forward.
+   - Else, even if NULL, it is considered like a token.
+   - I'm pretty much right, from the bash documentation on word splitting: > Explicit null arguments ("""" or "''") are retained. Unquoted implicit null arguments, resulting from the expansion of parameters that have no value, are removed. If a parameter with no value is expanded within double quotes, a null argument results and is retained.
+      - Truc trop bizarre, en plus des cas ci-dessus, si je fais `echo lol | | wc`, j'ai une erreur de parsing car deux PIPES se suivent. Mais si je fais `echo lol | $pouet | wc`, j'ai pas d'erreur et le truc s'execute (mais le WC sort `0 0 0`), alors que bah theoriquement le token a ete supprime donc what is the fuck.
+          - Pour regler ca je pense que quand j'ai un token qui n'avait que des extensions de variables vides, je le supprime pas mais je mets un booleen `is_invisible` et donc en gros quand je parse j'ai pas d'erreur mais je fais comme si il existait pas. Mais a voir parce que ca va me pourrir tout ce que j'ai deja fait dan le parsing.
+      - Ou alors, quand je classe les tokens je mets juste `WORD` au lieu de differencier `WORD` et `COMMAND`. Et c'est ensuite quand je fais les expands bah si un des words a vire bah il a vire et le pointeur de la commande pointera soit sur le prochain mot soit sur NULL et ne lancera pas `execve`.
+      - Il me semble que ca fonctionne un peu comme ca puisque si je fais `echo coucou | $pouet $pouet $pouet grep comment | wc` ca marche tranquillou comme si de rien n'etait.

@@ -52,6 +52,9 @@ hello"hello'''''$HOPgoodbye
 < "pp"
 [<|"pp"]
 
+;< "pp"
+[;|<|"pp"]
+
 < 'pp'
 [<|'pp']
 

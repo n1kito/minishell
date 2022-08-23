@@ -1,10 +1,7 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-// INCLUDES
-#include <stdio.h>
-#include <stdlib.h>
-
+// TODO remove this before pushing. Only using for testers and visualiser.
 # ifdef VISUAL
 #  define ONE printf("[1]");
 #  define TWO printf("[2]");
@@ -42,10 +39,21 @@
 # endif
 
 // STRUCTURES
+
+// token_had_quotes: set to 1 when matching quotes are found in a token.
+// Useful for HEREDOC because a delimiter that initially had quotes
+// does not expand the content of the HEREDOC.
+// Also, an empty token that did not have any quotes automatically means
+// that it resulted from expansions that led to nothing and therefore
+// should be treated as invisible.
+// TODO : Move all structure to minishell.h ?
 typedef struct s_tokens
 {
 	char			*token;
+	int				token_type;
+	int				token_had_quotes;
 	struct s_tokens	*next;
+	struct s_tokens	*previous;
 }	t_tokens;
 
 typedef struct s_tokenizer
@@ -56,6 +64,34 @@ typedef struct s_tokenizer
 	int				last_token_end;
 	char			*line;
 }	t_tokenizer_helpers;
+
+typedef struct s_expand
+{
+	int				start;
+	int				name_start;
+	int				name_len;
+	int				name_end;
+	char			*name;
+	char			*value;
+	struct s_expand	*next;
+}	t_expand;
+
+typedef struct s_master
+{
+	t_tokens			*tokens;
+	t_tokenizer_helpers	helpers;
+	t_expand			*expansions;
+	t_env				*env;
+	//TODO include char pointers for command arrays
+	// I dont think I want to store redirections in an array, maybe just
+	// have a pointer to next command (token after pipe) so I can just go
+	// through them and apply redirections.
+	char				***command_array;
+	char				*env_array;
+	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
+	int					malloc_ok;
+	int					printed_error_msg;
+}	t_master;
 
 // DEFINES
 // Blank Characters
@@ -71,15 +107,14 @@ typedef struct s_tokenizer
 # define DOUBLE_QUOTE 34
 
 // tokenizer.c && tokenizer_for_debugging.c
-void		tokenizer(char *line, t_tokens **tokens, t_tokenizer_helpers *t);
-void		extract_token(t_tokens **tokens,
+int			tokenizer(char *line, t_master *master, t_tokenizer_helpers *t);
+int			extract_token(t_master *master,
 				char *token_start, char *token_end);
 //to do: move extract_token to tokenizer_utils.c
 
 // tokenizer_utils.c
 void		init_tokenizer_helpers(t_tokenizer_helpers *t, char *line);
 t_tokens	*get_last_token(t_tokens *tokens_list);
-int			ft_strlen(char *string); //TODO Remove this
 
 // tokenizer_analysers.c
 int			is_operator(char c);
@@ -93,14 +128,14 @@ int			follows_open_token(t_tokenizer_helpers *t);
 int			follows_word(char *line, int position);
 
 // tokenizer_handlers.c
-void		handle_end_of_line(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_end_of_line(t_tokenizer_helpers *t, t_master *master);
 void		handle_quotes(t_tokenizer_helpers *t);
-void		handle_blank_char(t_tokenizer_helpers *t, t_tokens **tokens);
+void		handle_blank_char(t_tokenizer_helpers *t, t_master *master);
 
 // tokenizer_handler_2.c
 void		start_expansion_token(t_tokenizer_helpers *t);
-void		start_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
-void		close_operator_token(t_tokenizer_helpers *t, t_tokens **tokens);
+void		start_operator_token(t_tokenizer_helpers *t, t_master *master);
+void		close_operator_token(t_tokenizer_helpers *t, t_master *master);
 
 // tokenizer_test_utils.c
 void		print_tokens(t_tokens *tokens);

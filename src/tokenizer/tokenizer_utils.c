@@ -1,4 +1,4 @@
-#include "../../include/tokenizer.h"
+#include "minishell.h"
 
 /* Initialize the variables that are used in the tokenizer() function. */
 void	init_tokenizer_helpers(t_tokenizer_helpers *t, char *line)
@@ -19,15 +19,4 @@ t_tokens	*get_last_token(t_tokens *tokens_list)
 	while (current && current->next)
 		current = current->next;
 	return (current);
-}
-
-// TODO Remove this one, it's in the libft
-int	ft_strlen(char *string)
-{
-	int	i;
-
-	i = 0;
-	while (string[i])
-		i++;
-	return (i);
 }

@@ -1,4 +1,4 @@
-#include "../../include/tokenizer.h"
+#include "minishell.h"
 
 /* Takes a pointer to a string that starts with a quote character and returns
  * the position of the first occurrence of that same quote character. */

@@ -12,11 +12,15 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
-- [ ] Implementer le prompt
-	- [ ] Comprendre comment fonctionne l'historique
-- [ ] Lexer / Parser
-	- [ ] Discuter des structs necessaires au parsing
-	- [ ] Coder une fonction print qui permet d'imprimer tous les ASTs pour visualiser que le parsing se passe correctement.
+- [ ] Fix norminette problem in Makefile ! (not urgent)
+- [ ] Start writing a coherent main that uses tokenizer and parser.
+  - [ ] Test cases where token syntax is wrong.
+      - [ ] Does not leak.
+  - [ ] Test cases where quotes are not closed.
+      - [ ] Does not leak.
+  - [ ] Test cases where everything goes well.
+      - [ ] Does not leak.
+- [ ] Update tester to check this.
 
 ### Teamwork Guidelines
 

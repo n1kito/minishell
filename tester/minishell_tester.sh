@@ -2,14 +2,11 @@
 
 # Usage: ./tokenizer_tester
 # To add more tests, add them to the corresponding sections below.
-# BEWARE: This tester needs the tokenizer main and token printer because it uses
-# # the associated output format to check tokens.
 
 ################################################################################
 ##                             USEFUL VARIABLES                               ##
 ################################################################################
 
-EXECUTABLE="tokenizer"
 EXECUTABLE_PATH="."
 TEST_FILES_DIRECTORY="tests"
 
@@ -57,25 +54,7 @@ echo "     ░  ░      ░ ▒ ░░ ░░   ░ ▒░ ▒ ░░ ░▒  �
 echo "     ░      ░    ▒ ░   ░   ░ ░  ▒ ░░  ░  ░   ░  ░░ ░   ░     ░ ░     ░ ░   ";
 echo "            ░    ░           ░  ░        ░   ░  ░  ░   ░  ░    ░  ░    ░  ░";
 printf "                            \e[2m(tester by nikito 🔥)\e[22m"
-
-################################################################################
-##                                RUNNING MAKE                                  ##
-################################################################################
-
-echo
-echo
-echo
-printf "                      🌈 Running ${YELLOW}make${NC} on Tokenizer...\n"
-make --no-print-directory
-echo
-
-################################################################################
-##                                   TESTING                                  ##
-################################################################################
-
-printf "${YELLOW}                         ┌┬┐┌─┐┬┌─┌─┐┌┐┌┬┌─┐┌─┐┬─┐   ${NC}\n";
-printf "${YELLOW}                      **  │ │ │├┴┐├┤ ││││┌─┘├┤ ├┬┘ **${NC}\n";
-printf "${YELLOW}                          ┴ └─┘┴ ┴└─┘┘└┘┴└─┘└─┘┴└─   ${NC}\n";
+printf "\n\n\n"
 
 ################################################################################
 ##                             PRELIMINARY CHECKS                             ##
@@ -141,7 +120,7 @@ run_tests() {
   while IFS= read -r TEST
   do
     IFS= read -r EXPECTED_RESULT
-    RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "$TEST")
+    RESULT=$(${EXECUTABLE_PATH}/${EXECUTABLE} "$TEST" 2>/dev/null)
     if [ "$RESULT" = "$EXPECTED_RESULT" ]; then # COMPARES RESULT WITH CORRESPONDING EXPECTED RESULT
           printf " ${GREEN}[${i}.${NC}${BGREEN}OK${NC}${GREEN}]${NC} " # IF RESULT MATCHES EXPECTED_OUTPUT, PRINT 'OK'
           (( TEST_PASSED++ ))
@@ -165,19 +144,58 @@ run_tests() {
 }
 
 ################################################################################
-##                                RUNNING TESTS                               ##
+##                                  TOKENIZER                                 ##
 ################################################################################
 
+printf "${YELLOW}                         ┌┬┐┌─┐┬┌─┌─┐┌┐┌┬┌─┐┌─┐┬─┐   ${NC}\n";
+printf "${YELLOW}                      **  │ │ │├┴┐├┤ ││││┌─┘├┤ ├┬┘ **${NC}\n";
+printf "${YELLOW}                          ┴ └─┘┴ ┴└─┘┘└┘┴└─┘└─┘┴└─   ${NC}\n";
+
+# Running make
+
+printf "\n"
+printf "                      🌈 Running ${YELLOW}make${NC} on Tokenizer...\n"
+make --no-print-directory tokenizer
+
+# Running tests
+
+EXECUTABLE="tokenizer"
 run_tests "Word tokens" "word_tests"
 run_tests "Operator tokens" "operator_tests"
 run_tests "Quote tokens" "quote_tests"
 run_tests "Environment variable tokens" "environment_tests"
 run_tests "Symbols we don't need to handle" "symbol_tests"
-#run_tests "Error test" "symbols_tests"
 
+printf "\n\n";
+
+################################################################################
+##                                   PARSER                                   ##
+################################################################################
+printf "${YELLOW}                             ╔═╗╔═╗╦═╗╔═╗╔═╗╦═╗   ${NC}\n";
+printf "${YELLOW}                          ** ╠═╝╠═╣╠╦╝╚═╗║╣ ╠╦╝ **${NC}\n";
+printf "${YELLOW}                             ╩  ╩ ╩╩╚═╚═╝╚═╝╩╚═   ${NC}\n";
+
+# Running make
+
+printf "\n"
+printf "                        🌈 Running ${YELLOW}make${NC} on Parser...\n"
+make --no-print-directory parser
+
+# Running tests
+
+EXECUTABLE="parser"
+run_tests "Parsing tests" "parser_tests"
+run_tests "Syntax error tests" "syntax_error_tests"
+
+rm expander
+make --no-print-directory expander
+EXECUTABLE="expander"
+run_tests "Expansion and quote removal tests" "expansion_tests"
 echo
 
-# Prints test results
+################################################################################
+##                                PRINT RESULTS                               ##
+################################################################################
 
 printf " \e[4mTests passed\e[24m: "
 if [ ${TEST_PASSED} -eq ${TEST_COUNT} ]
