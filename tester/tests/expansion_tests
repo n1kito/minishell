@@ -57,3 +57,30 @@ Error: Open quote.
 
 $USER$USERo $USER"$USER"'$USER' $USERo
 [nikito|nikitonikito$USER|]
+
+$"USER"
+[USER]
+
+$'USER'
+[USER]
+
+$"USER" $USER
+[USER|nikito]
+
+$"$USER" $'USER' $'$USER' $"$USER"
+[nikito|USER|$USER|nikito]
+
+"$"$USER" $'USER' $'$USER' $"$USER""
+[$nikito $'USER' $'nikito' $nikito]
+
+$USER $"HELLO" $
+[nikito|HELLO|$]
+
+$ $ $
+[$|$|$]
+
+"$"$"$"
+[$$]
+
+'$"USER"'
+[$"USER"]

@@ -34,8 +34,10 @@ int	log_expansions(char *token, t_env *env, t_master *master)
 	while (token[i])
 	{
 		if (token[i] == '$'
-			&& expansion_name_len(token + i)
-			&& !is_single_quoting)
+			&& token[i + 1]
+			&& !is_blank_char(token[i + 1])
+			&& !is_single_quoting
+			&& !(is_quote_character(token [i + 1]) && is_double_quoting))
 		{
 			if (!add_exp_node(master, token, i, env))
 				return (0);
