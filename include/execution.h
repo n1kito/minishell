@@ -1,14 +1,15 @@
 #ifndef EXECUTION_H
 # define EXECUTION_H
 
-// execution_utils.c
+// execution.c
+int			execute_commands(t_master *master);
 
 // execution_array_exports.c
-int			convert_to_array(t_master *master);
-int			convert_commands_to_array(t_master *master);
-int			create_command_array(t_master *master, int cmd_count);
-int			create_command_subarrays(t_master *master, int cmd_count);
-void		populate_nth_command_array(t_master	*master, int command_index);
+int			prep_execution_resources(t_master *master);
+int			generate_command_structure(t_master *master);
+int			create_command_structures(t_master *master, int cmd_count);
+int			populate_command_structures(t_master *master, int cmd_count);
+void		populate_nth_command_structure(t_master	*master, int command_index);
 
 // execution_array_exports_utils.c
 t_tokens	*go_to_nth_segment(int i, t_tokens *token);

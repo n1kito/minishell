@@ -53,6 +53,7 @@ SRC_FILES		:= 	main\
 					parser/parser\
 					parser/parser_identify_tokens\
 					parser/parser_syntax_checker\
+					execution/execution\
 					execution/execution_utils\
 					execution/execution_array_exports\
 					execution/execution_array_exports_utils

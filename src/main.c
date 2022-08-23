@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/23 09:41:36 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/23 22:24:42 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,13 @@ int	execute_command(char *command_line, t_master *master)
 		|| !parser(&master->tokens)
 		|| !expander(master, master->env)
 		|| !syntax_checker(master)
-		|| !convert_to_array(master))
-		// TODO Here we can add !convert_to_array(master) where we will convert our tokens and env to arrays before launching actual execution;
+		|| !prep_execution_resources(master))
 			return (0);
 	// TODO add exec loop or function
-	// TODO The master structure should be freed and re-initialized after each execution, to avoid leaks and bad expansions.
+	// TODO The master structure should be freed after each execution, to avoid leaks and bad expansions.
+	// > Except for env I think, this one should be freed when closing or exiting only.
+	// > What I need to free between executions is anything to do with tokens (including expands) and commands.
+	// TODO Move command variables to separate structure ? 
 	return (1);
 }
 
@@ -63,7 +65,6 @@ int	main(int argc, char *argv[], char *envp[])
 	init_master_structure(&master, env);
 	if (argc > 2) // TODO change to argc > 1 for the final program. This is just to test.
 		return (err_msg("./minishell only needs one argument", 0, &master));
-	(void)argc;
 	if (!execute_command(argv[1], &master))
 	{
 		return (free_master(&master, 1));
@@ -71,14 +72,14 @@ int	main(int argc, char *argv[], char *envp[])
 	printf("\n\033[1;92mSuccess\033[0;39m\n\U00002713 Tokenizer\n\U00002713 Parser\n\U00002713 Expander\n\U00002713 Syntax checker\n\n"); // TODO this will be removed once execution is set up of course.
 	int j = 0;
 	printf("COMMANDS\n");
-	while (master.command_array[j])
+	while (master.commands[j])
 	{
 		printf("[%d] ", j + 1);
-		if (master.command_array[j][0])
+		if (master.commands[j]->cmd_array[0])
 		{
 			int k = 0;
-			while (master.command_array[j][k])
-				printf("%s ", master.command_array[j][k++]);
+			while (master.commands[j]->cmd_array[k])
+				printf("%s ", master.commands[j]->cmd_array[k++]);
 		}
 		else
 			printf("no command found");

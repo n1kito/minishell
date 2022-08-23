@@ -3,9 +3,9 @@
 /* Takes master structer and converts command lines
  * and environment structures to arrays to be used
  * during execution. */
-int	convert_to_array(t_master *master)
+int	prep_execution_resources(t_master *master)
 {
-	if (!convert_commands_to_array(master))
+	if (!generate_command_structure(master))
 /*		|| !convert_env_to_array(master))*/
 		return (0);
 	return (1);
@@ -15,34 +15,45 @@ int	convert_to_array(t_master *master)
  * Will only log the tokens marked WORD, and stop
  * each array when a pipe or the end of the list
  * is found. */
-int	convert_commands_to_array(t_master *master)
+int	generate_command_structure(t_master *master)
 {
 	int	command_count;
 
 	command_count = count_commands(master->tokens);
-	if (!create_command_array(master, command_count)
-		|| !create_command_subarrays(master, command_count))
+	if (!create_command_structures(master, command_count)
+		|| !populate_command_structures(master, command_count))
 		return (0);
 	return (1);
 }
 
 /* Allocates space for the command arrays and initializes them. */
-int	create_command_array(t_master *master, int cmd_count)
+int	create_command_structures(t_master *master, int cmd_count)
 {
 	int	i;
 
-	master->command_array = malloc(sizeof(char **) * (cmd_count + 1));
-	if (!master->command_array)
-		return (err_msg("malloc failed [init_command_array()]", 0, master));
+	master->commands = malloc(sizeof(t_command *) * (cmd_count + 1));
+	if (!master->commands)
+		return (err_msg("malloc failed [init_command_structures()][1]",
+				0, master));
 	i = 0;
-	while (i <= cmd_count)
-		master->command_array[i++] = NULL;
+	while (i < cmd_count)
+	{
+		master->commands[i] = NULL;
+		master->commands[i] = malloc(sizeof(t_command));
+		if (!master->commands[i])
+			return (err_msg("malloc failed [init_command_structures()][2]",
+					0, master));
+		master->commands[i]->cmd_array = NULL;
+		master->commands[i]->cmd_path = NULL;
+		i++;
+	}
+	master->commands[i] = NULL;
 	return (1);
 }
 
 /* Creates command subarrays for each command segment and populates
  * each one with the word tokens that make up the corresponding command. */
-int	create_command_subarrays(t_master *master, int cmd_count)
+int	populate_command_structures(t_master *master, int cmd_count)
 {
 	int	i;
 	int	word_count;
@@ -52,21 +63,22 @@ int	create_command_subarrays(t_master *master, int cmd_count)
 	while (i < cmd_count)
 	{
 		word_count = count_words_in_segment(master);
-		master->command_array[i] = malloc(sizeof(char *) * (word_count + 1));
-		if (!master->command_array[i])
-			return (err_msg("malloc failed [create_command_subarrays()]",
+		master->commands[i]->cmd_array = malloc(
+				sizeof(char *) * (word_count + 1));
+		if (!master->commands[i]->cmd_array)
+			return (err_msg("malloc failed [populate_command_structures()]",
 					0, master));
 		while (word_count >= 0)
-			master->command_array[i][word_count--] = '\0';
+			master->commands[i]->cmd_array[word_count--] = '\0';
 		if (word_count)
-			populate_nth_command_array(master, i);
+			populate_nth_command_structure(master, i);
 		i++;
 	}
 	return (1);
 }
 
 /* Populates the nth command array with nth command segment arguments. */
-void	populate_nth_command_array(t_master *master, int command_index)
+void	populate_nth_command_structure(t_master *master, int command_index)
 {
 	int			i;
 	t_tokens	*current;
@@ -76,7 +88,7 @@ void	populate_nth_command_array(t_master *master, int command_index)
 	while (current && current->token_type != PIPE_TOKEN)
 	{
 		if (current->token_type == WORD)
-			master->command_array[command_index][i++] = current->token;
+			master->commands[command_index]->cmd_array[i++] = current->token;
 		current = current->next;
 	}
 }

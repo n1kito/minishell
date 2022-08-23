@@ -50,6 +50,7 @@
 typedef struct s_tokens
 {
 	char			*token;
+	//TODO if token_type is IO_NUMBER I think I need to convert the token into an FD int ?
 	int				token_type;
 	int				token_had_quotes;
 	struct s_tokens	*next;
@@ -76,19 +77,23 @@ typedef struct s_expand
 	struct s_expand	*next;
 }	t_expand;
 
+typedef struct s_command
+{
+	char				**cmd_array;
+	char				*cmd_path;
+}	t_command;
+
 typedef struct s_master
 {
 	t_tokens			*tokens;
 	t_tokenizer_helpers	helpers;
 	t_expand			*expansions;
 	t_env				*env;
-	//TODO include char pointers for command arrays
-	// I dont think I want to store redirections in an array, maybe just
-	// have a pointer to next command (token after pipe) so I can just go
-	// through them and apply redirections.
-	char				***command_array;
-	char				*env_array;
+	t_command			**commands;
+//	char				***command_array;
+	char				**env_array;
 	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
+	int					latest_return_code; // don't know if I need this one but at least it's here.
 	int					malloc_ok;
 	int					printed_error_msg;
 }	t_master;
