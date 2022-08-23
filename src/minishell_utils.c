@@ -23,14 +23,15 @@ void	init_master_structure(t_master *master, t_env *env)
 	master->next_command_start = NULL;
 }
 
-/* Frees memory allocated for storing the command arrays but not for the command themselves.
+/* Frees memory allocated for storingthe command arrays but not for the command themselves.
  * These are freed separately when freeing the tokens linked list. */
 void	free_command_array(t_master *master)
 {
 	int	i;
 
 	i = 0;
-	while (master->command_array[i])
+	while (master->command_array
+			&& master->command_array[i])
 	{
 		free(master->command_array[i++]);
 	}
