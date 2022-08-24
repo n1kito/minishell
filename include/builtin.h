@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 19:30:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/10 19:47:32 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/24 15:49:41 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int		echo(char **arg);
 int		cd(char *path, t_env *env);
 int		unset(t_env *env, char *str);
 int		ft_export(t_env *env, char **variable);
+int		ft_exit(t_master *master);
 
 //utils pour les builtins
 char	*add_name(char *str, int i);

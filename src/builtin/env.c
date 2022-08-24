@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/10 19:39:48 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/24 13:37:31 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,13 @@ int	env(t_env *env)
 {
 	while (env)
 	{
-		if (env->name && env->variable)
-			printf("%s%s\n", env->name, env->variable);
+		if (env->is_env = 1)
+		{
+			printf("%s", env->name);
+			if (env->variable)
+				printf("%s", env->variable);
+			printf("\n");
+		}
 		env = env->next;
 	}
 	return (0);

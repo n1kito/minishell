@@ -6,8 +6,15 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/10 15:12:03 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/24 14:44:04 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "minishell.h"
+#include "builtin.h"
+#include <unistd.h>
 
+int	ft_exit(t_master *master)
+{
+	
+}

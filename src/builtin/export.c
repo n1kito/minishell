@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/10 19:44:14 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/24 20:11:41 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	add_to_env(t_env *env, char *str)
 		i++;
 	while (str[j])
 		j++;
-	new = malloc(sizeof(t_env *));
+	new = malloc(sizeof(t_env));
 	if (!new)
 		return ;
 	new->next = NULL;

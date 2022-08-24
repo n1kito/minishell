@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 16:02:51 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/22 21:55:24 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/24 15:50:18 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 # define MINISHELL_H
 
+# include <stdlib.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <readline/readline.h>
