@@ -91,6 +91,7 @@ typedef struct s_master
 	t_expand			*expansions;
 	t_command			**commands;
 	char				**paths;
+	int					**file_fds;
 //	char				***command_array;
 	t_env				*env;
 	char				**env_array;

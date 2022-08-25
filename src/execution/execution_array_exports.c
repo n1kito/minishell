@@ -5,7 +5,8 @@
  * during execution. */
 int	prep_execution_resources(t_master *master)
 {
-	if (!generate_command_structure(master))
+	if (!generate_command_structure(master)
+		|| !open_file_descriptors(master))
 		// set up fds and open necessary files -> how do we handle HEREDOCS ?
 		// set up master path array: what happends if we delete the PATH between two prompts 
 		// 		I think it should be redone everytime. Or we can update the path too
@@ -71,7 +72,7 @@ int	populate_command_structures(t_master *master, int cmd_count)
 			return (err_msg("malloc failed [populate_command_structures()]",
 					0, master));
 		while (word_count >= 0)
-			master->commands[i]->cmd_array[word_count--] = '\0';
+			master->commands[i]->cmd_array[word_count--] = NULL;
 		if (word_count)
 			populate_nth_command_structure(master, i);
 		i++;
