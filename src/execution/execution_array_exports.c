@@ -6,22 +6,24 @@
 int	prep_execution_resources(t_master *master)
 {
 	if (!generate_command_structure(master))
+		// set up fds and open necessary files -> how do we handle HEREDOCS ?
+		// set up master path array: what happends if we delete the PATH between two prompts 
+		// 		I think it should be redone everytime. Or we can update the path too
+		// set up the binary path in each command node
 /*		|| !convert_env_to_array(master))*/
 		return (0);
 	return (1);
 }
 
-/* Divides the tokens linked list into arrays.
+/* Logs commands in command structures.
  * Will only log the tokens marked WORD, and stop
  * each array when a pipe or the end of the list
  * is found. */
 int	generate_command_structure(t_master *master)
 {
-	int	command_count;
-
-	command_count = count_commands(master->tokens);
-	if (!create_command_structures(master, command_count)
-		|| !populate_command_structures(master, command_count))
+	master->cmd_count = count_commands(master->tokens);
+	if (!create_command_structures(master, master->cmd_count)
+		|| !populate_command_structures(master, master->cmd_count))
 		return (0);
 	return (1);
 }

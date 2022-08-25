@@ -85,12 +85,14 @@ typedef struct s_command
 
 typedef struct s_master
 {
+	int					cmd_count;
 	t_tokens			*tokens;
 	t_tokenizer_helpers	helpers;
 	t_expand			*expansions;
-	t_env				*env;
 	t_command			**commands;
+	char				**paths;
 //	char				***command_array;
+	t_env				*env;
 	char				**env_array;
 	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
 	int					latest_return_code; // don't know if I need this one but at least it's here.
