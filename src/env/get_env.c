@@ -6,63 +6,40 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/22 23:45:58 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/25 04:05:58 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "environment.h"
 
+// This function initializes the 2 pointers used to store the name and the var
+// It allocates sufficient memory for them to accomodate the strings
 // This function takes the linked list and writes the env variables in it
 // the first string called NAME takes the beggininning of the string until the =
 // the second string VARIABLE takes the rest of the string
-
-static void	env_write(t_env *env, char **envp)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
-	while (envp[i] && env)
-	{
-		j = 0;
-		k = 0;
-		while (envp[i][j] && envp[i][j - 1] != '=')
-			env->name[k++] = envp[i][j++];
-		env->name[k] = '\0';
-		k = 0;
-		while (envp[i][j])
-			env->variable[k++] = envp[i][j++];
-		env->variable[k] = '\0';
-		env = env->next;
-		i++;
-	}
-}
-// This function initializes the 2 pointers used to store the name and the var
-// It allocates sufficient memory for them to accomodate the strings
 
 static int	var_env_malloc_init(t_env *env, char **envp)
 {
 	int		i;
 	int		med;
 	int		len;
-	t_env	*start;
 
 	i = 0;
-	start = env;
 	while (env)
 	{
 		med = 0;
 		len = 0;
 		while (envp[i][len])
 			len++;
-		while (envp[i][med] != '=')
+		while (envp[i][med - 1] != '=' && envp[i][med])
 			med++;
 		env->name = malloc(sizeof(char) * med + 1);
 		env->variable = malloc(sizeof(char) * len - med + 1);
 		if (!env->variable || !env->name)
 			return (1);
-		env->is_env = 1;
+		ft_strlcpy(env->name, envp[i], med + 1);
+		ft_strlcpy(env->variable, envp[i][med], len - med + 1);
 		env = env->next;
 		i++;
 	}
@@ -86,19 +63,18 @@ static void	clean_env(t_master *master)
 			free(tmp->variable);
 		free(tmp)
 	}
+	master->env = NULL;
 }
 
 static t_env	*env_init(void)
 {
 	t_env	*new;
 
-	new = malloc(sizeof(t_env *));
+	new = (t_env *)malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
+	ft_bzero(new, sizeof(t_env));
 	new->is_env = 1;
-	new->name = NULL;
-	new->variable = NULL;;
-	new->next = NULL;
 	return (new);
 }
 
