@@ -6,10 +6,9 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 18:04:10 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 08:15:57 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/25 21:02:08 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 #include "environment.h"
@@ -40,7 +39,8 @@ static int	count_env(t_env *env)
 	i = 0;
 	while (env)
 	{
-		i++;
+		if (env->is_env)
+			i++;
 		env = env->next;
 	}
 	return (i);
@@ -63,7 +63,8 @@ int	env_for_exe(t_env *env, char **array)
 		return (1);
 	while (env)
 	{
-		array[i] = ft_strjoin(env->name, env->variable);
+		if (env->is_env)
+			array[i] = ft_strjoin(env->name, env->variable);
 		if (!array[i])
 		{
 			ft_destroy_env(array, i);
