@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 04:05:58 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/25 04:08:08 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,5 @@ int	get_env(char **envp, t_master *master)
 		clean_env(master);
 		return (ret);
 	}
-	env_write(master->env, envp);
 	return (ret);
 }
