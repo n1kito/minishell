@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/05 10:05:59 by mjallada          #+#    #+#              #
-#    Updated: 2022/07/01 12:39:31 by mjallada         ###   ########.fr        #
+#    Updated: 2022/08/25 07:40:15 by vrigaudy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,10 +15,10 @@
 
 NAME			:= minishell
 CC			:= cc
-CFLAGS			:= -Wall -Wextra -Werror
+CFLAGS			:= -Wall -Wextra -Werror -g
 
 INC_DIR			:= include
-SRC_DIR			:= src
+SRC_DIR			:= src/env
 BIN_DIR			:= bin
 
 LIB_DIR			:= libft
@@ -40,8 +40,8 @@ END_COLOR		:= \033[0;39m
 # **************************************************************************** #
 # SOURCES
 
-SRC_FILES		:= main prompt
-OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
+SRC_FILES		:= get_env.c env_for_exe.c
+OBJ_FILES		:=	$(SRC_FILES:%.c=$(BIN_DIR)/%.o)
 
 # **************************************************************************** #
 # RULES
@@ -49,13 +49,13 @@ OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 all: header norm $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	@make --no-print-directory -C libft
-	@$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB) -lreadline
-	@echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
+	make --no-print-directory -C libft
+	$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB) -lreadline
+	echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
-	@$(CC) -MD -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/$(INC_DIR) $< -o $@
-	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
+	$(CC) -MD -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/inc/ $< -o $@
+	printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
 	@mkdir $(BIN_DIR)

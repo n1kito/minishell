@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/24 20:11:41 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/25 03:02:41 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,14 @@ static void	check_if_in_env(t_env *env, char *str)
 int	ft_export(t_env *env, char **variable)
 {
 	int	i;
+	int	ret;
 
 	i = 0;
+	ret = 0;
 	while (variable[i])
 	{
 		check_if_in_env(env, variable[i]);
 		i++;
 	}
-	return (0);
+	return (ret);
 }

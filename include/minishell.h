@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 16:02:51 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/24 15:50:18 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/25 07:29:32 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 # define MINISHELL_H
 
-# include <stdlib.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <readline/readline.h>
@@ -27,10 +26,5 @@ typedef struct	s_env {
 	int				is_env;
 	struct s_env	*next;
 }				t_env;
-
-void	read_prompt(void);
-void	signal_handler(int sig, siginfo_t *siginfo, void *context);
-
-t_env	*get_env(char **envp);
 
 #endif

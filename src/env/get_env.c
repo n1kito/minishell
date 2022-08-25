@@ -6,12 +6,13 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 04:08:08 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/25 08:17:43 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "environment.h"
+#include "libft.h"
 
 // This function initializes the 2 pointers used to store the name and the var
 // It allocates sufficient memory for them to accomodate the strings
@@ -39,20 +40,20 @@ static int	var_env_malloc_init(t_env *env, char **envp)
 		if (!env->variable || !env->name)
 			return (1);
 		ft_strlcpy(env->name, envp[i], med + 1);
-		ft_strlcpy(env->variable, envp[i][med], len - med + 1);
+		ft_strlcpy(env->variable, &(envp[i][med]), len - med + 1);
 		env = env->next;
 		i++;
 	}
 	return (0);
 }
 
-static void	clean_env(t_master *master)
+static void	clean_env(t_env **env)
 {
 	t_env	*tmp;
 	t_env	*lst;
 
 	tmp = NULL;
-	lst = master->env;
+	lst = *env;
 	while (lst)
 	{
 		tmp = lst;
@@ -61,9 +62,9 @@ static void	clean_env(t_master *master)
 			free(tmp->name);
 		if (tmp->variable)
 			free(tmp->variable);
-		free(tmp)
+		free(tmp);
 	}
-	master->env = NULL;
+	*env = NULL;
 }
 
 static t_env	*env_init(void)
@@ -81,22 +82,25 @@ static t_env	*env_init(void)
 // This function initializes the linked list
 // This list will be used to store the environment
 
-static int	list_init(t_master *master, char **envp)
+static int	list_init(t_env **env, char **envp)
 {
 	int		i;
-	t_env	*tmp;
 	t_env	*lst;
+	t_env	*tmp;
 
 	i = 0;
+	lst = *env;
 	tmp = NULL;
-	lst = master->env;
 	while (envp[i])
 	{
 		tmp = env_init();
 		if (!tmp)
 			return (1);
 		if (!lst)
-			master->env = tmp;
+		{
+			*env = tmp;
+			lst = *env;
+		}
 		else
 		{
 			lst->next = tmp;
@@ -107,27 +111,37 @@ static int	list_init(t_master *master, char **envp)
 	return (0);
 }
 
-
 // This function takes the environment given as an argument
 // It then transforms it into a linked list with
 // It then returns a pointer to the first element of the list
 
-int	get_env(char **envp, t_master *master)
+int	get_env(char **envp, t_env **ptr_env)
 {
 	int		ret;
-	t_env	*env;
 
-	ret = list_init(master, envp);
+	ret = list_init(ptr_env, envp);
+	if (!ret)
+		ret = var_env_malloc_init(*ptr_env, envp);
 	if (ret)
-	{
-		clean_env(master);
-		return (ret);
-	}
-	ret = var_env_malloc_init(master->env, envp);
-	if (ret)
-	{
-		clean_env(master);
-		return (ret);
-	}
+		clean_env(ptr_env);
 	return (ret);
 }
+
+/*
+int	main(int argc, char **argv, char **envp)
+{
+	int		ret_env;
+	int		i;
+	t_env	*env;
+	char	**array = NULL;
+
+	i = 0;
+	env = NULL;
+	ret_env = 0;
+	(void)argc;
+	(void)argv;
+	ret_env = get_env(envp, &env);
+	ret_env = env_for_exe(env, array);
+	printf("%i\n", ret_env);
+}
+
