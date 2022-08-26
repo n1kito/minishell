@@ -5,7 +5,6 @@ MAIN_FILES		=	../src/tokenizer/tokenizer.c\
 					../src/tokenizer/tokenizer_handlers_2.c\
 					../src/tokenizer/tokenizer_utils.c\
 					../src/parser/parser.c\
-					../src/parser/parser_identify_tokens.c\
 					../src/parser/parser_syntax_checker.c\
 					../src/parser/expander.c\
 					../src/parser/expander_analysers.c\

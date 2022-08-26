@@ -51,7 +51,6 @@ SRC_FILES		:= 	main\
 					parser/expander_analysers\
 					parser/expander_utils\
 					parser/parser\
-					parser/parser_identify_tokens\
 					parser/parser_syntax_checker\
 					execution/execution\
 					execution/execution_utils\
