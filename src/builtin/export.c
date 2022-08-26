@@ -6,57 +6,69 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 03:02:41 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/26 03:17:04 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtin.h"
+#include "libft.h"
 
-static void	add_to_env(t_env *env, char *str)
+static void	update_env(t_env *env, char *str)
+{
+	size_t	i;
+
+	i = 0;
+	while (str[i] && str[i - 1] != '=')
+		i++;
+	while (ft_strncmp(str, env->name, ft_strlen(env->name)) != 0 \
+			|| ft_strlen(env->name) != i)
+		env = env->next;
+	if (env->variable)
+	{
+		free(env->variable);
+		env->variable = NULL;
+	}
+	while (str[i] && str[i - 1] != '=')
+		i++;
+	if (str[i])
+	{
+		env->variable = ft_strdup(&str[i]);
+		env->is_env = 1;
+	}
+}
+
+static void	add_elem_to_env(t_env *env, char *str)
 {
 	int		i;
-	int		j;
 	t_env	*new;
 
 	i = 0;
-	j = 0;
-	new = NULL;
 	while (env->next)
 		env = env->next;
 	while (str[i] && str[i - 1] != '=')
 		i++;
-	while (str[j])
-		j++;
-	new = malloc(sizeof(t_env));
+	new = ft_calloc(sizeof(t_env), 1);
 	if (!new)
 		return ;
-	new->next = NULL;
+	if (str[i])
+		new->is_env = 1;
+	new->name = malloc(sizeof(char) * (i + 1));
+	if (!new->name)
+		return ;
+	if (str[i])
+	{
+		new->variable = ft_strdup(&str[i]);
+		if (!new->variable)
+			return ;
+	}
+	ft_strlcat(new->name, str, i + 1);
 	env->next = new;
-	new->name = add_name(str, i);
-	if (new->name)
-		new->variable = add_variable(str, i, j);
 }
 
-static void	update_env(t_env *env, char *str)
+static int	check_if_in_env(t_env *env, char *str)
 {
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (str[i] && str[i - 1] != '=')
-		i++;
-	while (str[j])
-		j++;
-	if (env->variable)
-		free(env->variable);
-	env->variable = add_variable(str, i, j);
-}
-
-static void	check_if_in_env(t_env *env, char *str)
-{
-	int		i;
+	size_t	i;
 	t_env	*save;
 	t_env	*check;
 
@@ -67,17 +79,32 @@ static void	check_if_in_env(t_env *env, char *str)
 		i++;
 	while (env)
 	{
-		if (ft_strncmp(str, env->name, i) == 0 && ft_strlen(env->name) == i)
-			check = env;
+		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0 \
+			&& ft_strlen(env->name) == i)
+			return (1);
 		env = env->next;
 	}
-	if (check)
-		update_env(check, str);
-	else
-		add_to_env(save, str);
+	return (0);
 }
 
-int	ft_export(t_env *env, char **variable)
+int	arg_is_ok_for_env(char const *str)
+{
+	int	i;
+
+	i = 0;
+	if (!ft_isalpha(str[i]) && str[i] != '_')
+		return (1);
+	i++;
+	while (str[i] && str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	ft_export(t_env **env, char **variable)
 {
 	int	i;
 	int	ret;
@@ -86,7 +113,20 @@ int	ft_export(t_env *env, char **variable)
 	ret = 0;
 	while (variable[i])
 	{
-		check_if_in_env(env, variable[i]);
+		if (arg_is_ok_for_env(variable[i]) == 0)
+		{
+			if (check_if_in_env(*env, variable[i]))
+				update_env(*env, variable[i]);
+			else
+				add_elem_to_env(*env, variable[i]);
+		}
+		else
+		{
+			write (2, "Export: Error:", 19);
+			write (2, variable[i], ft_strlen(variable[i]));
+			write (2, " not a valid identifier\n", 26);
+			ret = 1;
+		}
 		i++;
 	}
 	return (ret);

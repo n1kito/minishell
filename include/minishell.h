@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 16:02:51 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/25 07:29:32 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/25 08:20:29 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <readline/history.h>
 # include <signal.h>
 
-typedef struct	s_env {
+typedef struct s_env {
 	char			*name;
 	char			*variable;
 	int				is_env;

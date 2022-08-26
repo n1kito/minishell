@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 08:17:43 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/26 05:54:19 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ static void	clean_env(t_env **env)
 			free(tmp->name);
 		if (tmp->variable)
 			free(tmp->variable);
-		free(tmp);
+		if (tmp)
+			free(tmp);
 	}
 	*env = NULL;
 }
@@ -126,22 +127,3 @@ int	get_env(char **envp, t_env **ptr_env)
 		clean_env(ptr_env);
 	return (ret);
 }
-
-/*
-int	main(int argc, char **argv, char **envp)
-{
-	int		ret_env;
-	int		i;
-	t_env	*env;
-	char	**array = NULL;
-
-	i = 0;
-	env = NULL;
-	ret_env = 0;
-	(void)argc;
-	(void)argv;
-	ret_env = get_env(envp, &env);
-	ret_env = env_for_exe(env, array);
-	printf("%i\n", ret_env);
-}
-

@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/05 10:05:59 by mjallada          #+#    #+#              #
-#    Updated: 2022/08/25 07:40:15 by vrigaudy         ###   ########.fr        #
+#    Updated: 2022/08/26 03:02:11 by vrigaudy         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CC			:= cc
 CFLAGS			:= -Wall -Wextra -Werror -g
 
 INC_DIR			:= include
-SRC_DIR			:= src/env
+SRC_DIR			:= src/*/
 BIN_DIR			:= bin
 
 LIB_DIR			:= libft
@@ -40,7 +40,13 @@ END_COLOR		:= \033[0;39m
 # **************************************************************************** #
 # SOURCES
 
-SRC_FILES		:= get_env.c env_for_exe.c
+SRC_FILES		:= 	main.c \
+					get_env.c \
+					env_for_exe.c \
+					export.c \
+					unset.c \
+					env.c
+
 OBJ_FILES		:=	$(SRC_FILES:%.c=$(BIN_DIR)/%.o)
 
 # **************************************************************************** #
