@@ -26,12 +26,10 @@ void	print_parsed_tokens(t_tokens *tokens)
 				                        else if (current->token_type == 7)
 				                                printf("FILE_NAME");
 				                        else if (current->token_type == 8)
-				                                printf("IO_NUMBER");
-				                        else if (current->token_type == 9)
 				                                printf("HERE_DOC");
-				                        else if (current->token_type == 10)
+				                        else if (current->token_type == 9)
 				                                printf("DELIMITER");
-										else if (current->token_type == 11)
+										else if (current->token_type == 10)
 												printf("INVISIBLE");
 				                        else
 				                                printf("UNKNOWN");

@@ -1,10 +1,6 @@
 #include "../../include/minishell.h"
 
 /* Checks that tokens form a coherent command line. */
-// TODO Should I check the content of the command / filename names ?
-// 		> Je crois paaaas.
-// TODO Should I also check the FDs of the IO_NUMBERS ? > INT_MAX c'est ok ?
-// 		Je dirais que oui puisqu'on peut set les FDs sur unlimited.
 int	syntax_checker(t_master *master)
 {
 	t_tokens	*current;
@@ -25,9 +21,8 @@ int	syntax_checker(t_master *master)
 				|| current->token_type == REDIRECT_FROM
 				|| current->token_type == APPEND)
 			&& (!current->next
-				|| (current->next->token_type != FILE_NAME
-					&& current->next->token_type != IO_NUMBER)))
-			return (err_msg("parsing: redirection needs file or fd",
+				|| (current->next->token_type != FILE_NAME)))
+			return (err_msg("parsing: redirection needs file name",
 					0, master));
 		current = current->next;
 	}
