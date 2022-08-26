@@ -10,16 +10,14 @@
 # define REDIRECT_TO 5
 # define APPEND 6
 # define FILE_NAME 7
-# define IO_NUMBER 8
-# define HERE_DOC 9
-# define DELIMITER 10
-# define INVISIBLE 11
+# define HERE_DOC 8
+# define DELIMITER 9
+# define INVISIBLE 10
 
 // parser.c
 int		parser(t_tokens **tokens);
-int		is_io_number_token(t_tokens *token);
+int		is_file_name_token(t_tokens *token);
 int		is_operator_token(t_tokens *tokens);
-int		is_only_digits(char *token);
 void	print_parsed_tokens(t_tokens *tokens);
 
 // parser_identify_tokens.c
