@@ -49,38 +49,40 @@
 // TODO : Move all structure to minishell.h ?
 typedef struct s_tokens
 {
-	char			*token;
+	char				*token;
 	//TODO if token_type is IO_NUMBER I think I need to convert the token into an FD int ?
-	int				token_type;
-	int				token_had_quotes;
-	struct s_tokens	*next;
-	struct s_tokens	*previous;
+	int					token_type;
+	int					token_had_quotes;
+	struct s_tokens		*next;
+	struct s_tokens		*previous;
 }	t_tokens;
 
 typedef struct s_tokenizer
 {
-	int				token_start;
-	int				position;
-	int				quote_match_found;
-	int				last_token_end;
-	char			*line;
+	int					token_start;
+	int					position;
+	int					quote_match_found;
+	int					last_token_end;
+	char				*line;
 }	t_tokenizer_helpers;
 
 typedef struct s_expand
 {
-	int				start;
-	int				name_start;
-	int				name_len;
-	int				name_end;
-	char			*name;
-	char			*value;
-	struct s_expand	*next;
+	int					start;
+	int					name_start;
+	int					name_len;
+	int					name_end;
+	char				*name;
+	char				*value;
+	struct s_expand		*next;
 }	t_expand;
 
 typedef struct s_command
 {
 	char				**cmd_array;
 	char				*cmd_path;
+	int					*fds;
+	int					redirections_count;
 }	t_command;
 
 typedef struct s_master
@@ -90,9 +92,8 @@ typedef struct s_master
 	t_tokenizer_helpers	helpers;
 	t_expand			*expansions;
 	t_command			**commands;
+	int					here_doc_fd;
 	char				**paths;
-	int					**file_fds;
-//	char				***command_array;
 	t_env				*env;
 	char				**env_array;
 	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.

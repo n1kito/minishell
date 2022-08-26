@@ -6,7 +6,7 @@
 int	prep_execution_resources(t_master *master)
 {
 	if (!generate_command_structure(master)
-		|| !open_file_descriptors(master))
+		|| !set_up_file_descriptors(master))
 		// set up fds and open necessary files -> how do we handle HEREDOCS ?
 		// set up master path array: what happends if we delete the PATH between two prompts 
 		// 		I think it should be redone everytime. Or we can update the path too

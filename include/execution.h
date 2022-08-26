@@ -17,8 +17,8 @@ int			count_words_in_segment(t_master *master);
 int			count_commands(t_tokens	*tokens);
 
 // execution_file_descriptors.c
-int			open_file_descriptors(t_master *master);
-void		open_fd(t_master *master, t_tokens *token);
-int			count_fds(t_tokens *tokens);
+int			setup_file_descriptors(t_master *master);
+void		open_file_descriptors(t_master *master, t_tokens *token);
+int			count_file_descriptors(t_tokens *tokens);
 
 #endif
