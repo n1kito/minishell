@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/26 05:53:37 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/26 05:58:17 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,13 @@ static int	check_match(char *name, char *arg)
 			return (1);
 	}
 	return (0);
+}
+
+static void	ft_print_error(char *variable)
+{
+	write (2, "Unset: Error:", 19);
+	write (2, variable, ft_strlen(variable));
+	write (2, " not a valid identifier\n", 26);
 }
 
 static t_env	*unset_middle(t_env *env, t_env *start)
@@ -69,7 +76,10 @@ int	ft_unset(t_env *env, char **arg)
 			}
 		}
 		else
+		{
+			ft_print_error(arg[i]);
 			ret = 1;
+		}
 		i++;
 		env = start;
 	}
