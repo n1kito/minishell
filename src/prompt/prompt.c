@@ -22,29 +22,21 @@
 
 void	ctrlc_handler(int pid, int sig)
 {
-	if (pid == 0)
+	if (sig == SIGINT)
 	{
+		if (pid == 0)
+		{
 		
+		}
+		else
+		{
+			write(2, "\n", 1);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+			exit(sig);
+		}
 	}
-	else
-	{
-		write(2, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-		exit(sig);
-	}
-}
-
-void	ctrlb_handler(int pid, int sig)
-{
-	if (pid == 0)
-	{
-		ft_putstr_fd("Quit (core dumped)\n", 2);
-		return (sig);
-	}
-	else
-		signal(SIGQUIT, SIG_IGN);
 }
 
 void	signal_handler(int sig, siginfo_t *siginfo, void *context)
@@ -53,10 +45,8 @@ void	signal_handler(int sig, siginfo_t *siginfo, void *context)
 
 	(void)context;
 	pid = getpid();
-	if (sig == SIGINT)
-		ctrlc_handler(pid, sig);
-	if (sig == SIGQUIT)
-		ctrlb_handler(pid, sig);
+	signal(SIGQUIT, SIG_IGN);
+	ctrlc_handler(pid, sig);
 }
 
 void	read_prompt(void)
@@ -72,7 +62,10 @@ void	read_prompt(void)
 			rl_redisplay();
 		}
 		if (!line)
+		{
+			write(1, "exit\n", 5);
 			break ;
+		}
 	}
 }
 
