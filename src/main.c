@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/29 13:48:50 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/30 10:49:51 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ int	execute_command(char *command_line, t_master *master)
 		|| !syntax_checker(master)
 		|| !prep_execution_resources(master))
 			return (0);
-	exec_loop(master);
+	if (!exec_loop(master))
+		return (0); // Not sure I can use this function as an int. Might need to use exit instead of return.
 	// TODO add exec loop or function
 	// TODO The master structure should be freed after each execution, to avoid leaks and bad expansions.
 	// > Except for env I think, this one should be freed when closing or exiting only.

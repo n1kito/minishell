@@ -40,6 +40,8 @@ void	free_command_structures(t_master *master)
 			free(master->commands[i]->cmd_path);
 		if (master->commands[i]->cmd_array)
 			free(master->commands[i]->cmd_array);
+		if (master->commands[i]->fds)
+			free(master->commands[i]->fds);
 		free(master->commands[i++]);
 	}
 	free(master->commands);
@@ -61,8 +63,12 @@ int	free_master(t_master *master, int return_value)
 		free(current);
 		current = next_token;
 	}
+	master->tokens = NULL;
 	free_expansions(&master->expansions);
+	master->expansions = NULL;
 	if (master->commands)
 		free_command_structures(master);
+	master->pipe[0] = -1; // Check that is this useful because I don't knowwwww.
+	master->pipe[1] = -1; // same here
 	return (return_value);
 }

@@ -94,6 +94,7 @@ typedef struct s_master
 	t_expand			*expansions;
 	t_command			**commands;
 	int					*processes;
+	int					pipe[2];
 	int					here_doc_fd;
 	t_env				*env;
 	char				**env_array;
