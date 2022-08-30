@@ -35,8 +35,9 @@ int	expansion_name_len(char *expansion)
 	while (expansion[i]
 		&& !is_blank_char(expansion[i])
 		&& !is_quote_character(expansion[i])
+		&& expansion[i] != '\n'
 		&& expansion[i] != '$')
-			i++;
+		i++;
 	return (i);
 }
 

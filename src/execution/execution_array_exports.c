@@ -1,21 +1,5 @@
 #include "minishell.h"
 
-/* Takes master structer and converts command lines
- * and environment structures to arrays to be used
- * during execution. */
-int	prep_execution_resources(t_master *master)
-{
-	if (!generate_command_structure(master)
-		|| !set_up_file_descriptors(master))
-		// set up fds and open necessary files -> how do we handle HEREDOCS ?
-		// set up master path array: what happends if we delete the PATH between two prompts 
-		// 		I think it should be redone everytime. Or we can update the path too
-		// set up the binary path in each command node
-/*		|| !convert_env_to_array(master))*/
-		return (0);
-	return (1);
-}
-
 /* Logs commands in command structures.
  * Will only log the tokens marked WORD, and stop
  * each array when a pipe or the end of the list

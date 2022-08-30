@@ -53,7 +53,7 @@ int	main(int argc, char **argv)
 		tokenizer(argv[1], &master, &master.helpers);
 		parser(&master.tokens);
 		NEWLINE
-		if (expander(&master, master.env))
+		if (expander(&master))
 			print_tokens(master.tokens);
 		else
 			printf("Error: Open quote.\n");

@@ -71,7 +71,7 @@ int	main(int argc, char **argv)
 		tokenizer(argv[1], &master, &master.helpers);
 		NEWLINE
 		parser(&master.tokens);
-		expander(&master, master.env);
+		expander(&master);
 		if (syntax_checker(&master))
 			print_parsed_tokens(master.tokens);
 		else

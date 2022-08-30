@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 11:11:24 by mjallada          #+#    #+#             */
-/*   Updated: 2022/05/12 11:11:29 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/28 20:40:54 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ char	*get_next_line(int fd)
 		if (stash)
 			free(stash->content);
 		free(stash);
+		stash = NULL;
 		return (NULL);
 	}
 	line = NULL;

@@ -3,7 +3,7 @@
 /* Goes through tokens, checks that there are no single quotes.
  * If there are not, identifies variables to expand and expands them.
  * Then removes all removable quotes. */
-int	expander(t_master *master, t_env *env)
+int	expander(t_master *master)
 {
 	t_tokens	*current;
 
@@ -14,11 +14,11 @@ int	expander(t_master *master, t_env *env)
 			return (0);
 		if (current->token_type != DELIMITER)
 		{
-			if (!log_expansions(current->token, env, master))
+			if (!log_expansions(current->token, master))
 				return (err_msg("failed to log expansions [expander()]",
 						0, master));
 			if (master->expansions)
-				if (!expand_token(current, master->expansions))
+				if (!expand_line(&current->token, master->expansions))
 					return (err_msg("failed to expand [expander()]",
 							0, master));
 		}
@@ -81,7 +81,7 @@ int	remove_quotes(t_tokens **token_node, int quote1, int quote2, t_master *m)
 }
 
 /* Expands all expansions, back to front. */
-int	expand_token(t_tokens *current, t_expand *expansions)
+int	expand_line(char **line, t_expand *expansions)
 {
 	char		*tmp_token;
 	char		*new_token;
@@ -90,19 +90,19 @@ int	expand_token(t_tokens *current, t_expand *expansions)
 	exp = expansions;
 	while (exp)
 	{
-		tmp_token = str_join(exp->value, &current->token[exp->name_end + 1]);
+		tmp_token = str_join(exp->value, *line + exp->name_end + 1);
 		if (!tmp_token)
 			return (0);
-		current->token[exp->start] = '\0';
-		new_token = str_join(current->token, tmp_token);
+		*(*line + exp->start) = '\0';
+		new_token = str_join(*line, tmp_token);
 		if (!new_token)
 		{
 			free(tmp_token);
 			return (0);
 		}
 		free(tmp_token);
-		tmp_token = current->token;
-		current->token = new_token;
+		tmp_token = *line;
+		*line = new_token;
 		free(tmp_token);
 		exp = exp->next;
 	}

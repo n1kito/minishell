@@ -13,10 +13,12 @@ int	err_msg(char *error, int error_code, t_master *master)
 void	init_master_structure(t_master *master, t_env *env)
 {
 	master->tokens = NULL;
+	// TODO ?? master->helpers = NULL;
 	master->expansions = NULL;
 	master->env = env;
 	//init_env_structure(&master->env); // doing this by hand in the  main for now. Need to include env building function here.
 	master->commands = NULL;
+	master->processes = NULL;
 	master->env_array = NULL;
 	master->next_command_start = NULL;
 	master->latest_return_code = 0;

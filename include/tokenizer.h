@@ -81,8 +81,9 @@ typedef struct s_command
 {
 	char				**cmd_array;
 	char				*cmd_path;
-	int					*fds;
+	int					*fds; //they're all initialized at -1
 	int					redirections_count;
+	int					heredoc_fd;
 }	t_command;
 
 typedef struct s_master
@@ -92,8 +93,8 @@ typedef struct s_master
 	t_tokenizer_helpers	helpers;
 	t_expand			*expansions;
 	t_command			**commands;
+	int					*processes;
 	int					here_doc_fd;
-	char				**paths;
 	t_env				*env;
 	char				**env_array;
 	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.

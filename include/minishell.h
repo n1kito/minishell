@@ -13,9 +13,13 @@ typedef struct s_master
 */
 
 // INCLUDES
+# define _GNU_SOURCE // TODO needed to use O_TMPFILE flag with open. Check if ok to use here.
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 # include "libft.h"
 # include "environment.h"
 # include "tokenizer.h"

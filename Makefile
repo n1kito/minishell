@@ -53,9 +53,12 @@ SRC_FILES		:= 	main\
 					parser/parser\
 					parser/parser_syntax_checker\
 					execution/execution\
-					execution/execution_utils\
 					execution/execution_array_exports\
-					execution/execution_array_exports_utils
+					execution/execution_array_exports_utils\
+					execution/execution_command_path_utils\
+					execution/execution_file_descriptors\
+					execution/execution_setup\
+					execution/execution_utils
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #

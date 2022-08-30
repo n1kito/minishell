@@ -84,3 +84,9 @@ $ $ $
 
 '$"USER"'
 [$"USER"]
+
+>> $USER
+[>>|nikito]
+
+<< $USER
+[<<|$USER]

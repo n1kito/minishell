@@ -55,7 +55,7 @@ int	count_commands(t_tokens *tokens)
 	return (pipe_count + 1);
 }
 
-int	count_files_in_segment(t_master *master, int segment_index, int token_type)
+int	count_files_in_segment(t_master *master, int segment_index)
 {
 	int			count;
 	t_tokens	*current;
@@ -64,8 +64,7 @@ int	count_files_in_segment(t_master *master, int segment_index, int token_type)
 	count = 0;
 	while (current && current->token_type != PIPE_TOKEN)
 	{
-		if (current->token_type == IO_NUMBER
-			|| current->token_type == FILE_NAME)
+		if (current->token_type == FILE_NAME)
 			count++;
 		current = current->next;
 	}
