@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/26 06:33:56 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/08/30 21:24:30 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@
 #include <errno.h>
 #include <limits.h>
 
-static void	ft_get_pwd(t_env *env);
+static void	ft_get_pwd(t_env *env)
 {
 	t_env	*pwd;
 	t_env	*old;
 	char	buffer[PATH_MAX + 1];
-	
+
 	pwd = NULL;
 	old = NULL;
 	while (env)
@@ -32,16 +32,14 @@ static void	ft_get_pwd(t_env *env);
 			pwd = env;
 		if (ft_strncmp(env->name, "OLDPWD=", 7) == 0 \
 			&& ft_strlen(env->name) == 7)
-		old = env;
+			old = env;
 		env = env->next;
 	}
 	if (old->variable)
-		free(old->variable)
+		free(old->variable);
 	old->variable = pwd->variable;
 	getcwd(buffer, PATH_MAX);
 	pwd->variable = ft_strdup(buffer);
-	if (!pwd->variable)
-		return ;
 }
 
 static void	create_env_pwd(t_env *env, char *name)
@@ -79,12 +77,37 @@ static void	ft_update_pwd(t_env *env)
 			old = env;
 		env = env->next;
 	}
-	env = save;
 	if (!pwd)
-		create_env_pwd(env, "PWD=");
+		create_env_pwd(save, "PWD=");
 	if (!old)
-		create_env_pwd(env, "OLDPWD=");
-	ft_get_pwd(env);
+		create_env_pwd(save, "OLDPWD=");
+	ft_get_pwd(save);
+}
+
+static int	find_home(t_env *env)
+{
+	t_env	*home;
+	int		ret;
+
+	home = NULL;
+	while (env)
+	{
+		if (ft_strncmp(env->name, "HOME=", 5) == 0 \
+			&& ft_strlen(env->variable) == 5)
+			home = env;
+		env = env->next;
+	}
+	if (home)
+	{
+		ret = chdir(home->variable);
+		if (ret)
+			perror("Error: cd: ");
+	}
+	else
+	{
+		ft_putstr("Minishell: cd: HOME not set\n", 2);
+		return (1);
+	}
 }
 
 int	cd(char **path, t_env *env)
@@ -97,30 +120,11 @@ int	cd(char **path, t_env *env)
 	start = env;
 	if (path[2])
 	{
-		ft_putstr("Minishell: cd: too many arguments\n", 2);
+		ft_putstr_fd("Minishell: cd: too many arguments\n", 2);
 		return (1);
 	}
 	if (!path[1])
-	{
-		while (env)
-		{
-			if (ft_strncmp(env->name, "HOME=", 5) == 0 \
-				&& ft_strlen(env->variable) == 5)
-				home = env;
-			env = env->next;
-		}
-		if (home)
-		{
-			ret = chdir(home->variable)
-			if (ret)
-				perror("Error: cd: ");
-		}
-		else
-		{
-			ft_putstr("Minishell: cd: HOME not set\n", 2);
-			return (1);
-		}
-	}
+		ret = find_home(env);
 	else
 	{
 		ret = chdir(path[1]);
