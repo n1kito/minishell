@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+// TODO added this function randomly to fix a leak. Add to header and move somewhere else probably.
+void	free_paths(char **paths)
+{
+	int	i;
+
+	i = 0;
+	while (paths && paths[i])
+		free(paths[i++]);
+	free(paths);
+}
+
 /* This function will split the $PATH environment variable into an array
  * try to find each command in every single folder in the paths provided.
  * If none is found, path variable is set to NULL. If there is a '\' in
@@ -19,15 +30,19 @@ int	assign_command_paths(t_master *master)
 				master->commands[i]->cmd_path = master->commands[i]->cmd_array[0];
 			else 
 				if (!get_cmd_path(&master->commands[i]->cmd_path, master->commands[i]->cmd_array[0], paths, master))
+				{
+					free_paths(paths);
 					return (0);
+				}
 		}
 		i++;
 	}
+	free_paths(paths);
 	return (1);
 }
 
 /* Given a command an array of paths, this function will try to access the
- * command in each path one a a time. If one is found, its path is returned.
+ * command in each path one a a time. If one is found, its path is set.
  * If none is found, the path VARIABLE remains NULL. */
 int	get_cmd_path(char **cmd_path, char *command, char **paths, t_master *master)
 {
@@ -36,7 +51,7 @@ int	get_cmd_path(char **cmd_path, char *command, char **paths, t_master *master)
 	char	*full_path;
 
 	i = 0;
-	while (paths[i])
+	while (command && paths[i])
 	{
 		tmp_path = ft_strjoin(paths[i], "/");
 		if (!tmp_path)

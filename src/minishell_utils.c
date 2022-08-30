@@ -66,6 +66,7 @@ int	free_master(t_master *master, int return_value)
 	master->tokens = NULL;
 	free_expansions(&master->expansions);
 	master->expansions = NULL;
+	free(master->processes);
 	if (master->commands)
 		free_command_structures(master);
 	master->pipe[0] = -1; // Check that is this useful because I don't knowwwww.

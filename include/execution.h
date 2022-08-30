@@ -24,7 +24,7 @@ char		*get_path_variable(t_env *env);
 // execution_file_descriptors.c
 int			setup_file_descriptors(t_master *master);
 int			allocate_file_descriptors(t_master *master);
-void		open_file_descriptors(t_master *master);
+int			open_file_descriptors(t_master *master, int i);
 
 // execution_heredoc_handling.c
 int			setup_heredocs(t_master *master);

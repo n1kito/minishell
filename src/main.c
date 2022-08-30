@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/30 10:49:51 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/08/30 22:23:11 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)envp;
 	init_master_structure(&master, env);
+	master.env_array = envp;
 	if (argc > 2) // TODO change to argc > 1 for the final program. This is just to test.
 		return (err_msg("./minishell only needs one argument", 0, &master));
 	if (!execute_command(argv[1], &master))

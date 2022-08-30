@@ -83,6 +83,7 @@ typedef struct s_command
 	char				*cmd_path;
 	int					*fds; //they're all initialized at -1
 	int					redirections_count;
+	int					error_code;
 	int					heredoc_fd;
 }	t_command;
 

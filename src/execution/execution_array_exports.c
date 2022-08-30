@@ -32,6 +32,8 @@ int	create_command_structures(t_master *master, int cmd_count)
 					0, master));
 		master->commands[i]->cmd_array = NULL;
 		master->commands[i]->cmd_path = NULL;
+		master->commands[i]->error_code = 0;
+		master->commands[i]->fds = NULL;
 		i++;
 	}
 	master->commands[i] = NULL;
