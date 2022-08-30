@@ -30,7 +30,7 @@ void		open_file_descriptors(t_master *master);
 int			setup_heredocs(t_master *master);
 int			read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *master);
 int			expand_heredoc_line(char **line, t_master *master);
-int			log_heredoc_expansions(char *line, t_msater *master);
+int			log_heredoc_expansions(char *line, t_master *master);
 
 // execution_setup.c
 int			prep_execution_resources(t_master *master);
