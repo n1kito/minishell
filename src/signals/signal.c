@@ -1,53 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   prompt.c                                           :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/01 14:41:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/31 14:48:59 by vrigaudy         ###   ########.fr       */
+/*   Created: 2022/08/31 13:31:58 by vrigaudy          #+#    #+#             */
+/*   Updated: 2022/08/31 14:47:39 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-#include <stdio.h>
 #include <signal.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>
-#include <sys/types.h>
+#include <stdio.h>
 #include <unistd.h>
-#include "libft.h"
 
-void	read_prompt(void)
+void	ctrlc_handler(int pid, int sig)
 {
-	char	*line;
-
-	while (1)
+	if (sig == SIGINT)
 	{
-		line = readline("🔥🔥🔥MINISHELL🔥🔥🔥 : ");
-		if (line)
+		if (pid == 0)
 		{
-			add_history(line);
-			rl_redisplay();
+			
 		}
-		if (!line)
+		else
 		{
-			write(1, "exit\n", 5);
-			break ;
+			write(2, "exit\n", 5);
+			rl_on_new_line();
+			rl_replace_line("", 0);
+			rl_redisplay();
+			exit(sig);
 		}
 	}
 }
 
-int	main(void)
+void	signal_handler(int sig, siginfo_t *siginfo, void *context)
 {
-	struct sigaction	sa;
+	int	pid;
 
-	sa.sa_sigaction = &signal_handler;
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-	read_prompt();
-	return (0);
+	(void)context;
+	pid = getpid();
+	signal(SIGQUIT, SIG_IGN);
+	ctrlc_handler(pid, sig);
 }
