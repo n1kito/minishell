@@ -8,6 +8,7 @@ int	setup_file_descriptors(t_master *master)
 	return (1);
 }
 
+// should I init at -1 ? that's what I wrote in tokenizer.h
 int	allocate_file_descriptors(t_master *master)
 {
 	int			i;
@@ -16,13 +17,16 @@ int	allocate_file_descriptors(t_master *master)
 	i = 0;
 	while (i < master->cmd_count)
 	{
-		master->commands[i]->redirections_count = count_files_in_segment(master, i);
-		master->commands[i]->fds = malloc(sizeof(int) * master->commands[i]->redirections_count);
+		master->commands[i]->redirections_count
+			= count_files_in_segment(master, i);
+		master->commands[i]->fds
+			= malloc(sizeof(int) * master->commands[i]->redirections_count);
 		if (!master->commands[i]->fds)
-			return (err_msg("malloc failed [open_file_descriptors()]", 0, master));
+			return (err_msg("malloc failed [open_file_descriptors()]",
+					0, master));
 		j = 0;
 		while (j < master->commands[i]->redirections_count)
-			master->commands[i]->fds[j++] = 0; // should I init at -1 ? that's what I wrote in tokenizer.h
+			master->commands[i]->fds[j++] = 0;
 		i++;
 	}
 	return (1);
@@ -71,7 +75,7 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 		return (0);
 	}
 	else if (access(current->token, F_OK) == 0
-			&& access(current->token, R_OK) == -1)
+		&& access(current->token, R_OK) == -1)
 	{
 		perror(current->token);
 		return (0);
@@ -94,9 +98,11 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 		return (0);
 	}
 	else if (current->previous->token_type == REDIRECT_TO)
-		master->commands[i]->fds[j] = open(current->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		master->commands[i]->fds[j]
+			= open(current->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	else if (current->previous->token_type == APPEND)
-		master->commands[i]->fds[j] = open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		master->commands[i]->fds[j]
+			= open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (access(current->token, F_OK) == 0
 		&& access(current->token, W_OK) == -1)
 	{

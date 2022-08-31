@@ -27,13 +27,14 @@ int	assign_command_paths(t_master *master)
 		if (master->commands[i]->cmd_array)
 		{
 			if (ft_strchr(master->commands[i]->cmd_array[0], '/'))
-				master->commands[i]->cmd_path = master->commands[i]->cmd_array[0];
-			else 
-				if (!get_cmd_path(&master->commands[i]->cmd_path, master->commands[i]->cmd_array[0], paths, master))
-				{
-					free_paths(paths);
-					return (0);
-				}
+				master->commands[i]->cmd_path
+					= master->commands[i]->cmd_array[0];
+			else if (!get_cmd_path(&master->commands[i]->cmd_path,
+					master->commands[i]->cmd_array[0], paths, master))
+			{
+				free_paths(paths);
+				return (0);
+			}
 		}
 		i++;
 	}
@@ -80,7 +81,7 @@ char	*get_path_variable(t_env *env)
 	current = env;
 	while (current)
 	{
-		if (ft_strncmp(current->name, "PATH", 4) && ft_strlen(current->name) == 4)
+		if (ft_strcmp(current->name, "PATH") == 0)
 			return (current->variable);
 		current = current->next;
 	}
