@@ -14,6 +14,8 @@ int	prep_execution_resources(t_master *master)
 	return (1);
 }
 
+/* Allocates memory for the int array used to
+ * store PIDs. */
 int	setup_process_array(t_master *master)
 {
 	int	command_count;

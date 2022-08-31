@@ -1,5 +1,7 @@
 #include "minishell.h"
 
+/* Checks if the string passed as parameter matches
+ * the name of one of the builtins. */
 int	is_builtin_function(char *name)
 {
 	int	name_len;
@@ -16,6 +18,10 @@ int	is_builtin_function(char *name)
 	return (0);
 }
 
+/* For each command segment, checks for errors with files.
+ * If an error is found in a segment, the checking process
+ * stops and the function returns. Any files after that are
+ * not checked. */
 int	command_error_check(t_master *master, int i)
 {
 	t_command	*command;
@@ -27,20 +33,17 @@ int	command_error_check(t_master *master, int i)
 		command_not_found = ft_strjoin(command->cmd_array[0], ": command not found\n");
 		ft_printf_fd(2, "%s", command_not_found);
 		free(command_not_found);
-		// TODO: find a way to use perror to get command not found error.
 		command->error_code = 127;	
 		return (0);
 	}
 	else if (command->cmd_path && access(command->cmd_path, F_OK) == -1)
 	{
-		//ft_printf_fd(2, "%s: No such file or directory\n", command->cmd_path);
 		perror(command->cmd_path);
 		command->error_code = 127;
 		return (0);
 	}
 	else if (command->cmd_path && access(command->cmd_path, X_OK) == -1)
 	{
-		//ft_printf_fd(2, "%s: Permission denied\n", command->cmd_path);
 		perror(command->cmd_path);
 		command->error_code = 126;
 		return (0);
