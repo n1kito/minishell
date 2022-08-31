@@ -31,15 +31,21 @@ void	init_master_structure(t_master *master, t_env *env)
 void	free_command_structures(t_master *master)
 {
 	int	i;
+	//int	j;
 
 	i = 0;
 	while (master->commands
 			&& master->commands[i])
 	{
-		if (master->commands[i]->cmd_path)
+		//j = 0;
+		//while (master->commands[i]->cmd_array && master->commands[i]->cmd_array[j])
+		//	free(master->commands[i]->cmd_array[j++]);
+		if (master->commands[i]->cmd_path
+			&& master->commands[i]->cmd_path != master->commands[i]->cmd_array[0])
 			free(master->commands[i]->cmd_path);
-		if (master->commands[i]->cmd_array)
-			free(master->commands[i]->cmd_array);
+		free(master->commands[i]->cmd_array);
+		//if (master->commands[i]->cmd_array)
+		//	free(master->commands[i]->cmd_array);
 		if (master->commands[i]->fds)
 			free(master->commands[i]->fds);
 		free(master->commands[i++]);
@@ -55,6 +61,8 @@ int	free_master(t_master *master, int return_value)
 	t_tokens	*current;
 	t_tokens	*next_token;
 
+	if (master->commands)
+		free_command_structures(master);
 	current = master->tokens;
 	while (current)
 	{
@@ -67,8 +75,6 @@ int	free_master(t_master *master, int return_value)
 	free_expansions(&master->expansions);
 	master->expansions = NULL;
 	free(master->processes);
-	if (master->commands)
-		free_command_structures(master);
 	master->pipe[0] = -1; // Check that is this useful because I don't knowwwww.
 	master->pipe[1] = -1; // same here
 	return (return_value);
