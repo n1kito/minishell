@@ -16,7 +16,6 @@ int	is_builtin_function(char *name)
 	return (0);
 }
 
-//TODO: code error_printer()
 int	command_error_check(t_master *master, int i)
 {
 	t_command	*command;
@@ -24,29 +23,21 @@ int	command_error_check(t_master *master, int i)
 	command = master->commands[i];
 	if (!command->cmd_path)
 	{
-		error_printer(command->cmd_array[0], "command not found");
+		ft_printf_fd(2, "%s: command not found\n", command->cmd_array[0]);
 		command->error_code = 127;	
 		return (0);
 	}
 	else if (access(command->cmd_path, F_OK) == -1)
 	{
-		error_printer(command->cmd_path, "No such file or directory");
+		ft_printf_fd(2, "%s: No such file or directory\n", command->cmd_path);
 		command->error_code = 127;
 		return (0);
 	}
 	else if (access(command->cmd_path, X_OK) == -1)
 	{
-		error_printer(command->cmd_path, "Permission denied");
+		ft_printf_fd(2, "%s: Permission denied\n", command->cmd_path);
 		command->error_code = 126;
 		return (0);
 	}
 	return (1);
-}
-
-void	error_printer(char *name, char *message)
-{
-	write(2, name, ft_strlen(name));
-	write(2, ": ", 2);
-	write(2, message, ft_strlen(message));
-	write(2, "\n", 1);
 }
