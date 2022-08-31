@@ -20,6 +20,8 @@ typedef struct s_master
 # include <sys/types.h>
 # include <sys/stat.h>
 # include <fcntl.h>
+# include <string.h>
+# include <errno.h>
 # include "libft.h"
 # include "environment.h"
 # include "tokenizer.h"

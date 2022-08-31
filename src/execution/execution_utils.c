@@ -19,23 +19,29 @@ int	is_builtin_function(char *name)
 int	command_error_check(t_master *master, int i)
 {
 	t_command	*command;
+	char		*command_not_found;
 
 	command = master->commands[i];
-	if (!command->cmd_path)
+	if (!command->cmd_path && command->cmd_array[0] && access(command->cmd_array[0], X_OK == -1))
 	{
-		ft_printf_fd(2, "%s: command not found\n", command->cmd_array[0]);
+		command_not_found = ft_strjoin(command->cmd_array[0], ": command not found\n");
+		ft_printf_fd(2, "%s", command_not_found);
+		free(command_not_found);
+		// TODO: find a way to use perror to get command not found error.
 		command->error_code = 127;	
 		return (0);
 	}
-	else if (access(command->cmd_path, F_OK) == -1)
+	else if (command->cmd_path && access(command->cmd_path, F_OK) == -1)
 	{
-		ft_printf_fd(2, "%s: No such file or directory\n", command->cmd_path);
+		//ft_printf_fd(2, "%s: No such file or directory\n", command->cmd_path);
+		perror(command->cmd_path);
 		command->error_code = 127;
 		return (0);
 	}
-	else if (access(command->cmd_path, X_OK) == -1)
+	else if (command->cmd_path && access(command->cmd_path, X_OK) == -1)
 	{
-		ft_printf_fd(2, "%s: Permission denied\n", command->cmd_path);
+		//ft_printf_fd(2, "%s: Permission denied\n", command->cmd_path);
+		perror(command->cmd_path);
 		command->error_code = 126;
 		return (0);
 	}

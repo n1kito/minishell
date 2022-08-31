@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+/* Goes through all tokens in the line and treat heredocs found one by one. */
 int	setup_heredocs(t_master *master)
 {
 	t_tokens	*current;
@@ -23,6 +24,23 @@ int	setup_heredocs(t_master *master)
 	return (1);
 }
 
+/* Prints out warning when a heredoc is not delimited by the delimiter
+ * but by an EOF (CTRL + D). */
+// TODO: check that this warning does print out to stdout and not stderr
+void	print_heredoc_warning(char *delimiter)
+{
+	char *tmp_message;
+	char *warning;
+
+	tmp_message = ft_strjoin("warning: here-document delimited by end-of-file (wanted '", delimiter);
+	warning = ft_strjoin(tmp_message, "')\n");
+	free (tmp_message);
+	ft_printf_fd(1, "%s", warning);
+	free(warning);
+}
+
+/* The heredoc read loop. Will continually get_next_line until line is either only the delimiter,
+ * or is completely empty, meaning an EOL character was found. */
 int	read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *master)
 {
 	char	*line;
@@ -36,21 +54,23 @@ int	read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *mas
 	while (1)
 	{
 		line = get_next_line(0);
-		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
-			&& ft_strlen(line) - 1 == ft_strlen(delimiter))
+		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
+			&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
 		{
 			free(line);
 			get_next_line(-1);
+			if (!line)
+				print_heredoc_warning(delimiter);
 			return (1);	
 		}
-		if (should_expand)
-			if (!expand_heredoc_line(&line, master))
-				return (0);
+		if (should_expand && !expand_heredoc_line(&line, master))
+			return (0);
 		write(command_node->heredoc_fd, line, ft_strlen(line));
 		free(line);
 	}
 }
 
+/* Will process the expansions in the line passed as parameter. */
 int	expand_heredoc_line(char **line, t_master *master)
 {
 	if (!log_heredoc_expansions(*line, master))
@@ -62,6 +82,7 @@ int	expand_heredoc_line(char **line, t_master *master)
 	return (1);
 }
 
+/* Goes through heredoc line and logs all candidates for expansion. */
 int	log_heredoc_expansions(char *line, t_master *master)
 {
 	int	i;

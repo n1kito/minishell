@@ -30,13 +30,7 @@ int	allocate_file_descriptors(t_master *master)
 
 /* This function opens file descriptors and checks them immediately.
  * As soon as the loop encounters an error, the function stops opening files
- * for that segment and moves on to the next.
- * Errors are: for REDIRECT_TO or APPEND, filename cannot be a folder.
- * (for REDIRECT_FROM, filename can be a folder), or trying to read/write
- * to a file/folder we don't have permissions on. */
-// TODO shorten this bullshit
-// Actually this needs to be checked inside of the forks, because if you look
-// at bash, the errors don't always appear in the same order.
+ * for that segment and moves on to the next. */
 int	open_file_descriptors(t_master *master, int i)
 {
 	int			j;
@@ -51,40 +45,63 @@ int	open_file_descriptors(t_master *master, int i)
 			if (current->previous->token_type == REDIRECT_TO
 				|| current->previous->token_type == APPEND)
 			{
-				if (open(current->token, O_DIRECTORY) != -1)
-				{
-					ft_printf_fd(2, "%s: Is a directory\n", current->token);
+				if (!check_output_file(master, current, i, j))
 					return (0);
-				}
-				else if (current->previous->token_type == REDIRECT_TO)
-					master->commands[i]->fds[j] = open(current->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				else if (current->previous->token_type == APPEND)
-					master->commands[i]->fds[j] = open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
-				if (access(current->token, F_OK) == 0
-					&& access(current->token, W_OK) == -1)
-				{
-					ft_printf_fd(2, "%s: Permission denied\n", current->token);
-					return (0);
-				}
 			}
 			else if (current->previous->token_type == REDIRECT_FROM)
 			{
-				master->commands[i]->fds[j] = open(current->token, O_RDONLY);
-				if (access(current->token, F_OK) == -1)
-				{
-					ft_printf_fd(2, "%s: No such file or directory\n", current->token);
+				if (!check_input_file(master, current, i, j))
 					return (0);
-				}
-				else if (access(current->token, F_OK) == 0
-						&& access(current->token, R_OK) == -1)
-				{
-					ft_printf_fd(2, "%s: Permission denied\n", current->token);
-					return (0);
-				}
 			}
 			j++;
 		}	
 		current = current->next;
+	}
+	return (1);
+}
+
+/* Checks input files (REDIRECT_FROM) and outputs error if the file
+ * does not exist or cannot be read. */
+int	check_input_file(t_master *master, t_tokens *current, int i, int j)
+{
+	master->commands[i]->fds[j] = open(current->token, O_RDONLY);
+	if (access(current->token, F_OK) == -1)
+	{
+		perror(current->token);
+		return (0);
+	}
+	else if (access(current->token, F_OK) == 0
+			&& access(current->token, R_OK) == -1)
+	{
+		perror(current->token);
+		return (0);
+	}
+	return (1);
+}
+
+/* Checks output files (APPEND and REDIRECT_TO) and outputs error if
+ * the file is actually a directory or it exists but canno be written
+ * to. */
+int	check_output_file(t_master *master, t_tokens *current, int i, int j)
+{
+	char		*error_message;
+
+	if (open(current->token, O_DIRECTORY) != -1)
+	{
+		error_message = ft_strjoin(current->token, ": Is a directory\n");
+		ft_printf_fd(2, "%s", error_message);
+		free (error_message);
+		return (0);
+	}
+	else if (current->previous->token_type == REDIRECT_TO)
+		master->commands[i]->fds[j] = open(current->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (current->previous->token_type == APPEND)
+		master->commands[i]->fds[j] = open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (access(current->token, F_OK) == 0
+		&& access(current->token, W_OK) == -1)
+	{
+		perror(current->token);
+		return (0);
 	}
 	return (1);
 }

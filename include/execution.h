@@ -39,5 +39,7 @@ int			setup_process_array(t_master *master);
 // execution_utils.c
 int			is_builtin_function(char *name);
 int			command_error_check(t_master *master, int i);
+int			check_input_file(t_master *master, t_tokens *current, int i, int j);
+int			check_output_file(t_master *master, t_tokens *current, int i, int j);
 
 #endif
