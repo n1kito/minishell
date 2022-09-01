@@ -2,7 +2,7 @@
 
 int	close_pipes(t_master *master)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < master->cmd_count - 1)
@@ -89,7 +89,7 @@ int	command_error_check(t_command *command)
 			= ft_strjoin(command->cmd_array[0], ": command not found\n");
 		ft_printf_fd(2, "%s", command_not_found);
 		free(command_not_found);
-		command->error_code = 128;
+		command->error_code = 127;
 	}
 	else if (command->cmd_path && access(command->cmd_path, F_OK) == -1)
 	{

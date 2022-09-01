@@ -22,7 +22,7 @@ void	init_master_structure(t_master *master, t_env *env)
 	master->pipes = NULL;
 	master->env_array = NULL;
 	master->next_command_start = NULL;
-	master->latest_return_code = 0;
+	master->latest_exit_code = 0;
 	master->malloc_ok = 1;
 	master->printed_error_msg = 0;
 }
@@ -60,6 +60,8 @@ void	free_pipes(t_master *master)
 	int i;
 
 	i = 0;
+	if (!master->pipes)
+		return ;
 	while (i < master->cmd_count - 1)
 	{
 		free(master->pipes[i]);

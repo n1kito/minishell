@@ -33,6 +33,11 @@ int			read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *m
 int			expand_heredoc_line(char **line, t_master *master);
 int			log_heredoc_expansions(char *line, t_master *master);
 
+// execution_pipe_utils.c
+void		plug_first_cmd(t_master *master, int i, int infile, int outfile);
+void		plug_middle_cmd(t_master *master, int i, int infile, int outfile);
+void		plug_last_cmd(t_master *master, int i, int infile, int outfile);
+
 // execution_setup.c
 int			prep_execution_resources(t_master *master);
 int			setup_process_array(t_master *master);

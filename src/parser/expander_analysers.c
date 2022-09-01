@@ -13,7 +13,7 @@ char	*search_env(t_env *env, char *name, int name_len)
 		i = 0;
 		while (current->name[i] == name[i] && i < name_len)
 			i++;
-		if (i == name_len && current->name[i] == '\0') // TODO: On HEREDOC expand the USER variable is not found...
+		if (i == name_len && current->name[i] == '\0')
 			return (current->variable);
 		else
 			current = current->next;

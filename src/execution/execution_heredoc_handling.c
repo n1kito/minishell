@@ -4,6 +4,7 @@
 int	setup_heredocs(t_master *master)
 {
 	t_tokens	*current;
+	char		*heredoc_filepath;
 	int			i;
 
 	i = 0;
@@ -14,14 +15,13 @@ int	setup_heredocs(t_master *master)
 			i++;
 		else if (current->token_type == HERE_DOC)
 		{
+			heredoc_filepath = ft_strjoin("/tmp/heredoc_", ft_itoa(i));
 			master->commands[i]->heredoc_fd
-				= open("/tmp/", O_TMPFILE | O_RDWR, 0644);
+				= open(heredoc_filepath, O_RDWR | O_CREAT | O_TRUNC, 0644);
+			free(heredoc_filepath);
 			if (master->commands[i]->heredoc_fd == -1)
 				return (0);
 			read_heredoc(current, master->commands[i], master);
-			// TODO I can't use TMP apparently, since when I write to it after GNL
-			// the reading head moves to the end of the file. I need to open it again.
-			lseek(master->commands[i]->heredoc_fd, 0, SEEK_SET);
 		}
 		current = current->next;
 	}
@@ -38,7 +38,8 @@ void	print_heredoc_warning(char *line, char *delimiter)
 
 	if (line)
 		return ;
-	tmp_message = ft_strjoin("\nmini(s)hell: warning: here-document delimited by end-of-file (wanted '", delimiter);
+	tmp_message = ft_strjoin("\nmini(s)hell: warning: here-document \
+delimited by end-of-file (wanted '", delimiter);
 	warning = ft_strjoin(tmp_message, "')\n");
 	free (tmp_message);
 	ft_printf_fd(1, "%s", warning);

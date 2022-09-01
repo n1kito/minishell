@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/01 08:29:10 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/01 20:07:29 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (err_msg("./minishell only needs one or two arguments", 0, &master));
 	if (!execute_command(argv[1], &master))
 	{
-		return (free_master(&master, 1));
+		return (free_master(&master, master.latest_exit_code));
 	}
 	if (argc == 3 && (ft_strcmp("-v", argv[2]) == 0 || ft_strcmp("-visual", argv[2]) == 0))
 	{
@@ -93,5 +93,5 @@ int	main(int argc, char *argv[], char *envp[])
 		}
 		printf("\n");
 	}
-	return (free_master(&master, 0));
+	return (free_master(&master, master.latest_exit_code));
 }
