@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/01 14:41:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/31 14:48:59 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/01 16:27:31 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,18 @@
 #include <unistd.h>
 #include "libft.h"
 
-void	read_prompt(void)
+int	main(void)
 {
-	char	*line;
+	t_master			master;
+	char				*line;
+	struct sigaction	sa;
 
+	line = NULL;
+	init_master_master(&master);
+	sa.sa_sigaction = &signal_handler;
+	sa.sa_flags = SA_RESTART;
+	sigaction(SIGINT, &sa, NULL);
+	sigaction(SIGQUIT, &sa, NULL);
 	while (1)
 	{
 		line = readline("🔥🔥🔥MINISHELL🔥🔥🔥 : ");
@@ -31,6 +39,7 @@ void	read_prompt(void)
 		{
 			add_history(line);
 			rl_redisplay();
+			execute_command(line, &master);
 		}
 		if (!line)
 		{
@@ -38,16 +47,5 @@ void	read_prompt(void)
 			break ;
 		}
 	}
-}
-
-int	main(void)
-{
-	struct sigaction	sa;
-
-	sa.sa_sigaction = &signal_handler;
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
-	read_prompt();
 	return (0);
 }
