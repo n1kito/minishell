@@ -25,6 +25,7 @@ char		*get_path_variable(t_env *env);
 int			setup_file_descriptors(t_master *master);
 int			allocate_file_descriptors(t_master *master);
 int			open_file_descriptors(t_master *master, int i);
+int			check_output_file(t_master *master, t_tokens *current, int i, int j);
 
 // execution_heredoc_handling.c
 int			setup_heredocs(t_master *master);
@@ -35,12 +36,14 @@ int			log_heredoc_expansions(char *line, t_master *master);
 // execution_setup.c
 int			prep_execution_resources(t_master *master);
 int			setup_process_array(t_master *master);
+int			setup_pipes(t_master *master);
 
 // execution_utils.c
+int			close_pipes(t_master *master);
+int			close_files(t_master *master, int i);
 int			is_builtin_function(char *name);
 int			is_special_builtin(char *name);
 int			command_error_check(t_command *command);
 int			check_input_file(t_master *master, t_tokens *current, int i, int j);
-int			check_output_file(t_master *master, t_tokens *current, int i, int j);
 
 #endif

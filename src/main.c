@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/01 07:53:56 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/01 08:29:10 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,29 +65,33 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)envp;
 	init_master_structure(&master, env);
 	master.env_array = envp;
-	if (argc > 2) // TODO change to argc > 1 for the final program. This is just to test.
-		return (err_msg("./minishell only needs one argument", 0, &master));
+	if (argc > 3) // TODO change to argc > 1 for the final program. This is just to test.
+		return (err_msg("./minishell only needs one or two arguments", 0, &master));
 	if (!execute_command(argv[1], &master))
 	{
 		return (free_master(&master, 1));
 	}
-	printf("\n\033[1;92mSuccess\033[0;39m\n\U00002713 Tokenizer\n\U00002713 Parser\n\U00002713 Expander\n\U00002713 Syntax checker\n\n"); // TODO this will be removed once execution is set up of course.
-	int j = 0;
-	printf("COMMANDS\n");
-	while (master.commands[j])
+	if (argc == 3 && (ft_strcmp("-v", argv[2]) == 0 || ft_strcmp("-visual", argv[2]) == 0))
 	{
-		printf("[%d] ", j + 1);
-		if (master.commands[j]->cmd_array[0])
+		printf("\n\033[1;92mSuccess\033[0;39m\n\U00002713 Tokenizer\n\U00002713 Parser\n\U00002713 Expander\n\U00002713 Syntax checker\n\n"); // TODO this will be removed once execution is set up of course.
+		int j = 0;
+		printf("COMMANDS\n");
+		while (master.commands[j])
 		{
-			int k = 0;
-			while (master.commands[j]->cmd_array[k])
-				printf("%s (%s)", master.commands[j]->cmd_array[k++], master.commands[j]->cmd_path);
+			printf("[%d] ", j + 1);
+			if (master.commands[j]->cmd_array[0])
+			{
+				int k = 0;
+				while (master.commands[j]->cmd_array[k])
+					printf("%s ", master.commands[j]->cmd_array[k++]);
+				printf("(%s)", master.commands[j]->cmd_path);
+			}
+			else
+				printf("no command found");
+			printf("\n");
+			j++;
 		}
-		else
-			printf("no command found");
 		printf("\n");
-		j++;
 	}
-	printf("\n");
 	return (free_master(&master, 0));
 }

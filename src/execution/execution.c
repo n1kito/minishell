@@ -62,52 +62,96 @@ void	launch_exec(t_master *master, int i)
 	if (!is_builtin_function(master->commands[i]->cmd_array[0]))
 		if (!command_error_check(master->commands[i]))
 			exit(free_master(master, master->commands[i]->error_code));
-	// redirections
 	input_redirection = last_input_fd(master, i);
 	output_redirection = last_output_fd(master, i);
-	if (input_redirection)
+	if (i == 0)// handle first command
 	{
-		if (dup2(input_redirection, STDIN_FILENO) == -1)
-			exit(err_msg("dup2 failed", i, master) && free_master(master, 1));
+		if (input_redirection)
+		{
+			if (dup2(input_redirection, STDIN_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close(input_redirection);
+		}
+		if (output_redirection)
+		{
+			if (dup2(output_redirection, STDOUT_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close(output_redirection);
+		}
+		else
+		{
+			if (master->cmd_count > 1)
+			{
+				if (dup2(master->pipes[i][1], STDOUT_FILENO) == -1)	
+					exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+				//close(master->pipe[1]);
+			}
+		}
+		//close(master->pipe[0]);
 	}
-	else
+	else if (i == master->cmd_count - 1) // handle last command
 	{
-		if (i)
-			if (dup2(master->pipe[0], STDIN_FILENO) == -1)
-				exit(err_msg("dup2 failed", i, master) && free_master(master, 1));
+		if (input_redirection)
+		{
+			if (dup2(input_redirection, STDIN_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close (input_redirection);
+		}
+		else
+		{
+			if (dup2(master->pipes[i - 1][0], STDIN_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close (master->pipe[0]);
+		}
+		if (output_redirection)
+		{
+			if(dup2(output_redirection, STDOUT_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close (output_redirection);
+		}
+		//close(master->pipe[1]);
 	}
-	if (output_redirection)
+	else // handle middle commands
 	{
-		if (dup2(output_redirection, STDOUT_FILENO) == -1)
-			exit(err_msg("dup2 failed", i, master) && free_master(master, 1));
+		if (input_redirection)
+		{
+			if (dup2(input_redirection, STDIN_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close (input_redirection);
+			//close (master->pipe[0]);
+		}
+		else
+		{
+			if (dup2(master->pipes[i - 1][0], STDIN_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close(master->pipe[0]);
+		}
+		if (output_redirection)
+		{
+			if (dup2(output_redirection, STDOUT_FILENO) == -1)
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close(output_redirection);
+			//close(master->pipe[1]);
+		}
+		else
+		{
+			if (dup2(master->pipes[i][1], STDOUT_FILENO) == -1)	
+				exit(err_msg("dup2 failed", 1, master) && free_master(master, 1));
+			//close(master->pipe[1]);
+		}
 	}
-	else
-	{
-		if (i < master->cmd_count - 1)
-			if (dup2(master->pipe[1], STDOUT_FILENO) == -1)
-				exit(err_msg("dup2 failed", i, master) && free_master(master, 1));
-	}
-	// end of redirections
-	close(master->pipe[0]);
-	close(master->pipe[1]);
-	/*
-	int x = 0;
-	while (x < count_files_in_segment(master, i))
-		close(master->commands[i]->fds[x++]);
-	*/
+	if (!close_pipes(master))
+		exit(err_msg("could not close pipes", 1, master) && free_master(master, 1));
+	if (!close_files(master, i))
+		exit(err_msg("could not close files", 1, master) && free_master(master, 1));
 	execve(master->commands[i]->cmd_path, master->commands[i]->cmd_array, master->env_array);
 	/*
-	if (i == 0)
-		plug_first_command(master, i);
-	else
-		plug_nth_command(master, i);
-	pipe_and_file_closer(master);
 	if (is_builtin_function(master->command[i]->cmd_array[0]))
 		execute_builtin(master);
 	else
 		execve(master->commands[i]->cmd_path,
 			master->commands[i]->cmd_array, master->env_array);
-		*/
+	*/
 	exit(free_master(master, 1));
 }
 
@@ -120,9 +164,6 @@ int	exec_loop(t_master *master)
 	int	i;
 
 	i = 0;
-	// TODO: should I move this pipe init somewhere else ?
-	if (pipe(master->pipe) == -1)
-		return (err_msg("pipe failed", 1, master));
 	//if (master->cmd_count == 1
 	//	&& is_special_builtin(master->commands[0]->cmd_array[0]))
 		//launch_special_builting(master);
@@ -143,5 +184,18 @@ int	exec_loop(t_master *master)
 			return (err_msg("waitpid failed", 0, master));
 		*/
 	//}
+	//printf("command_cound = %d\n", master->cmd_count);
+	if (!close_pipes(master))
+		return(err_msg("could not close pipes", 0, master));
+	//if (!close_files(master))
+		//return(err_msg("could not close files", 0, master));
+	int w = 0;
+	int x = -1;
+	while (++x < master->cmd_count)
+	{
+		//ft_printf_fd(2, "waiting %d\n", x);	
+		waitpid(master->processes[x], &w, 0);
+	}
+
 	return (1);
 }

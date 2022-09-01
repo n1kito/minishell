@@ -12,13 +12,15 @@ int	ft_strcmp(const char *first, const char *second)
 
 	if (!first || !second)
 		return (-1);
+	if (ft_strlen(first) != ft_strlen(second))
+		return (-1);
 	c1 = (unsigned char *)first;
 	c2 = (unsigned char *)second;
 	i = 0;
 	while (c1[i] && c2[i])
 	{
 		if (c1[i] != c2[i])
-			return (c1[i] - c2[i]);
+			return (-1);
 		i++;
 	}
 	return (0);

@@ -26,7 +26,7 @@ int	allocate_file_descriptors(t_master *master)
 					0, master));
 		j = 0;
 		while (j < master->commands[i]->redirections_count)
-			master->commands[i]->fds[j++] = 0;
+			master->commands[i]->fds[j++] = -1;
 		i++;
 	}
 	return (1);

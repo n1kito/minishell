@@ -1,5 +1,43 @@
 #include "minishell.h"
 
+int	close_pipes(t_master *master)
+{
+	int i;
+
+	i = 0;
+	while (i < master->cmd_count - 1)
+	{
+		if (close(master->pipes[i][0]) == -1)
+			return (0);
+		if (close(master->pipes[i][1]) == -1)
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	close_files(t_master *master, int i)
+{
+	int	j;
+
+	if (master->commands[i]->redirections_count == 0)
+		return (1);
+	j = 0;
+	while (j < master->commands[i]->redirections_count)
+	{
+		if (master->commands[i]->fds[j])
+			if (close(master->commands[i]->fds[j]) == -1)
+				return (0);
+		j++;
+	}
+	/*
+	if (master->commands[i]->heredoc_fd)
+		if (close(master->commands[i]->heredoc_fd) == -1)
+			return (0);
+	*/
+	return (1);
+}
+
 /* Checks if the string passed as parameter matches
  * the name of one of the builtins. */
 int	is_builtin_function(char *name)
