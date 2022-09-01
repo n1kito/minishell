@@ -128,15 +128,15 @@ int	exec_loop(t_master *master)
 		//launch_special_builting(master);
 	//else
 	//{
-		while (i < master->cmd_count)
-		{
-			master->processes[i] = fork();
-			if (master->processes[i] == -1)
-				return (err_msg("fork failed [exec_loop]", 1, master));
-			if (master->processes[i] == 0)
-				launch_exec(master, i);
-			i++;
-		}
+	while (i < master->cmd_count)
+	{
+		master->processes[i] = fork();
+		if (master->processes[i] == -1)
+			return (err_msg("fork failed [exec_loop]", 1, master));
+		if (master->processes[i] == 0)
+			launch_exec(master, i);
+		i++;
+	}
 		/*
 		pipe_and_file_closer(master);
 		if (!process_waiter(master))
