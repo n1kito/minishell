@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/31 22:30:50 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/01 07:53:56 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,6 @@ int	main(int argc, char *argv[], char *envp[])
 	{
 		return (free_master(&master, 1));
 	}
-	/*
 	printf("\n\033[1;92mSuccess\033[0;39m\n\U00002713 Tokenizer\n\U00002713 Parser\n\U00002713 Expander\n\U00002713 Syntax checker\n\n"); // TODO this will be removed once execution is set up of course.
 	int j = 0;
 	printf("COMMANDS\n");
@@ -82,7 +81,7 @@ int	main(int argc, char *argv[], char *envp[])
 		{
 			int k = 0;
 			while (master.commands[j]->cmd_array[k])
-				printf("%s ", master.commands[j]->cmd_array[k++]);
+				printf("%s (%s)", master.commands[j]->cmd_array[k++], master.commands[j]->cmd_path);
 		}
 		else
 			printf("no command found");
@@ -90,6 +89,5 @@ int	main(int argc, char *argv[], char *envp[])
 		j++;
 	}
 	printf("\n");
-	*/
 	return (free_master(&master, 0));
 }
