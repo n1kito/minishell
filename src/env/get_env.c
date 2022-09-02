@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/26 05:54:19 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/02 15:04:30 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static int	var_env_malloc_init(t_env *env, char **envp)
 	i = 0;
 	while (env)
 	{
-		med = 0;
+		med = 1;
 		len = 0;
 		while (envp[i][len])
 			len++;
@@ -47,7 +47,7 @@ static int	var_env_malloc_init(t_env *env, char **envp)
 	return (0);
 }
 
-static void	clean_env(t_env **env)
+void	clean_env(t_env **env)
 {
 	t_env	*tmp;
 	t_env	*lst;
@@ -75,8 +75,10 @@ static t_env	*env_init(void)
 	new = (t_env *)malloc(sizeof(t_env));
 	if (!new)
 		return (NULL);
-	ft_bzero(new, sizeof(t_env));
+	new->name = NULL;
+	new->variable = NULL;
 	new->is_env = 1;
+	new->next = NULL;
 	return (new);
 }
 
@@ -86,26 +88,21 @@ static t_env	*env_init(void)
 static int	list_init(t_env **env, char **envp)
 {
 	int		i;
-	t_env	*lst;
 	t_env	*tmp;
 
 	i = 0;
-	lst = *env;
 	tmp = NULL;
 	while (envp[i])
 	{
 		tmp = env_init();
 		if (!tmp)
 			return (1);
-		if (!lst)
-		{
+		if (!(*env))
 			*env = tmp;
-			lst = *env;
-		}
 		else
 		{
-			lst->next = tmp;
-			lst = lst->next;
+			tmp->next = *env;
+			*env = tmp;
 		}
 		i++;
 	}
