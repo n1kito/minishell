@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/04 09:49:28 by mjallada          #+#    #+#              #
-#    Updated: 2022/06/24 08:56:48 by mjallada         ###   ########.fr        #
+#    Updated: 2022/08/31 06:30:09 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC				:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 AR 				:= ar rc
 
-INC_DIR			:= inc
+INC_DIR			:= include
 SRC_DIR			:= src
 BIN_DIR			:= bin
 
@@ -55,6 +55,7 @@ SRC_FILES		:=	ft_isalpha \
 					ft_strchr \
 					ft_strrchr \
 					ft_strncmp \
+					ft_strcmp \
 					ft_memchr \
 					ft_memcmp \
 					ft_strnstr \
@@ -89,9 +90,11 @@ OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 # **************************************************************************** #
 # RULES
 
-all: space header $(NAME)
+#all: space header $(NAME)
+all: space $(NAME)
 
 $(NAME): $(OBJ_FILES)
+	@@echo "\n++ building $(NAME)"
 	@$(AR) $(NAME) $(OBJ_FILES)
 	@echo "\n++ $(GREEN)$(NAME) compiled :)$(END_COLOR)"
 

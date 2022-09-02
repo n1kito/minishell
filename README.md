@@ -12,11 +12,15 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
-- [ ] Implementer le prompt
-	- [ ] Comprendre comment fonctionne l'historique
-- [ ] Lexer / Parser
-	- [ ] Discuter des structs necessaires au parsing
-	- [ ] Coder une fonction print qui permet d'imprimer tous les ASTs pour visualiser que le parsing se passe correctement.
+- [ ] Fix norminette problem in Makefile ! (not urgent)
+- [ ] Start writing a coherent main that uses tokenizer and parser.
+  - [ ] Test cases where token syntax is wrong.
+      - [ ] Does not leak.
+  - [ ] Test cases where quotes are not closed.
+      - [ ] Does not leak.
+  - [ ] Test cases where everything goes well.
+      - [ ] Does not leak.
+- [ ] Update tester to check this.
 
 ### Teamwork Guidelines
 
@@ -82,11 +86,15 @@ Shell reads and executes commands in the following way:
 1. Reads its input from a file or terminal.
 2. Breaks this input into words and operators, obeying the shell quoting rules.
    - Alias expansion is performed here.
-3. parses the token in to _simple_ and _compound_ commands.
+3. Parses the token in to _simple_ and _compound_ commands.
 4. Perfoms the various shell expansions, breaking expanded tokens into lists of filenames and commands and arguments.
 5. Performs any necessary redirections and removes the redirection operators and their operands from the argument list.
 6. Executes the command.
 7. Optionally waits for the command to complete and collects its exit status.
+
+## Token Recognition
+
+[See README](src/tokenizer/README.md)
 
 ## Simple Command Expansion
 

@@ -1,0 +1,68 @@
+abc "coucou" abc
+[abc|"coucou"|abc]
+
+   "
+["]
+
+""
+[""]
+
+    "   "
+["   "]
+
+  "test >> | >"
+["test >> | >"]
+
+  hello"comment"ca"va"?
+[hello"comment"ca"va"?]
+
+   hello"comment ca va?
+[hello"comment|ca|va?]
+
+ cou'cou' "pouet '"
+[cou'cou'|"pouet '"]
+
+abc 'coucou>>|||||||||""pouet'abc
+[abc|'coucou>>|||||||||""pouet'abc]
+
+hello"hello'''''$HOP"goodbye
+[hello"hello'''''$HOP"goodbye]
+
+hello"hello'''''$HOPgoodbye
+[hello"hello'''''$HOPgoodbye]
+
+'' lol ''
+[''|lol|'']
+
+> ''
+[>|'']
+
+> ""
+[>|""]
+
+"pp">'pppp'
+["pp"|>|'pppp']
+
+; "pp"
+[;|"pp"]
+
+<'pp'
+[<|'pp']
+
+< "pp"
+[<|"pp"]
+
+;< "pp"
+[;|<|"pp"]
+
+< 'pp'
+[<|'pp']
+
+"pp">   ''
+["pp"|>|'']
+
+       "pp">>>     ''>
+["pp"|>>|>|''|>]
+
+     "p'p">>>>||   ""<
+["p'p"|>>|>>|||||""|<]
