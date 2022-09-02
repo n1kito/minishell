@@ -1,20 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   environment.h                                      :+:      :+:    :+:   */
+/*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/25 07:27:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 07:38:51 by vrigaudy         ###   ########.fr       */
+/*   Created: 2022/08/10 19:30:51 by vrigaudy          #+#    #+#             */
+/*   Updated: 2022/08/26 05:44:43 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENVIRONMENT_H
+#ifndef BUILTIN_H
 
-# define ENVIRONMENT_H
+# define BUILTIN_H
 
-int	get_env(char **envp, t_env **env);
-int	env_for_exe(t_env *env, char **array);
+//fonctions our les builtins
+int		ft_pwd(void);
+int		ft_env(t_env *env);
+int		ft_echo(char **arg);
+int		ft_cd(char *path, t_env *env);
+int		ft_unset(t_env *env, char **arg);
+int		ft_export(t_env **env, char **variable);
+//int		ft_exit(t_master *master);
+
+//utils pour les builtins
+int		arg_is_ok_for_env(char const *str);
 
 #endif

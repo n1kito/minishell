@@ -12,6 +12,13 @@ typedef struct s_master
 }	t_master;
 */
 
+typedef struct s_env {
+	char			*name;
+	char			*variable;
+	int				is_env;
+	struct s_env	*next;
+}		
+
 // INCLUDES
 # define _GNU_SOURCE // TODO needed to use O_TMPFILE flag with open. Check if ok to use here.
 # include <stdlib.h>
@@ -23,6 +30,9 @@ typedef struct s_master
 # include <fcntl.h>
 # include <string.h>
 # include <errno.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <signal.h>
 # include "libft.h"
 # include "environment.h"
 # include "tokenizer.h"

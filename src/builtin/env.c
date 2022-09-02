@@ -1,20 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   environment.h                                      :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/08/25 07:27:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 07:38:51 by vrigaudy         ###   ########.fr       */
+/*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
+/*   Updated: 2022/08/26 04:55:41 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ENVIRONMENT_H
+#include "minishell.h"
+#include "builtin.h"
 
-# define ENVIRONMENT_H
-
-int	get_env(char **envp, t_env **env);
-int	env_for_exe(t_env *env, char **array);
-
-#endif
+int	ft_env(t_env *env)
+{
+	while (env)
+	{
+		if (env->is_env == 1)
+		{
+			if (env->name)
+			{
+				printf("%s", env->name);
+				if (env->variable)
+					printf("%s", env->variable);
+				printf("\n");
+			}
+		}
+		env = env->next;
+	}
+	return (0);
+}

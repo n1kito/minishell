@@ -13,11 +13,12 @@
 # VARIABLES
 
 NAME			:= minishell
-CC				:= cc
+
+CC			:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 
 INC_DIR			:= include
-SRC_DIR			:= src
+SRC_DIR			:= src/*/
 BIN_DIR			:= bin
 
 LIB_DIR			:= libft
@@ -72,9 +73,9 @@ all: header $(NAME)
 #all: header norm $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	@make --no-print-directory -C libft
-	@$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB)
-	@echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
+	make --no-print-directory -C libft
+	$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB) -lreadline
+	echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@$(CC) -MD -g -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/$(INC_DIR) $< -o $@
