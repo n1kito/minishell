@@ -108,6 +108,17 @@ int	exec_loop(t_master *master)
 		}
 		if (!close_pipes(master))
 			return(err_msg("could not close pipes", 0, master));
+		i = -1;
+		while (++i < master->cmd_count)
+		{
+			if (master->commands[i]->heredoc_fd)
+			{
+				if (close(master->commands[i]->heredoc_fd) == -1)
+					// TODO change this error
+					ft_printf_fd(2, "COULD NOT CLOSE FD IN MAIN\n");
+				unlink(master->commands[i]->heredoc_path);
+			}
+		}
 	i = -1;
 	while (++i < master->cmd_count)
 		waitpid(master->processes[i], &master->latest_exit_code, 0);

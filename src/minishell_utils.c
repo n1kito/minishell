@@ -45,6 +45,13 @@ void	free_command_structures(t_master *master)
 			&& master->commands[i]->cmd_path != master->commands[i]->cmd_array[0])
 			free(master->commands[i]->cmd_path);
 		free(master->commands[i]->cmd_array);
+		if (master->commands[i]->heredoc_fd)
+		{
+			if (access(master->commands[i]->heredoc_path, F_OK | W_OK))
+				if (!unlink(master->commands[i]->heredoc_path))
+					err_msg("could not remove heredoc_file [free_command_structures()]", 0, master); // sometimes it removes the files even if they are chmod 0, I have no idea what is the fuck.
+			free (master->commands[i]->heredoc_path);
+		}
 		//if (master->commands[i]->cmd_array)
 		//	free(master->commands[i]->cmd_array);
 		if (master->commands[i]->fds)

@@ -4,7 +4,6 @@
 int	setup_heredocs(t_master *master)
 {
 	t_tokens	*current;
-	char		*heredoc_filepath;
 	int			i;
 
 	i = 0;
@@ -15,13 +14,15 @@ int	setup_heredocs(t_master *master)
 			i++;
 		else if (current->token_type == HERE_DOC)
 		{
-			heredoc_filepath = ft_strjoin("/tmp/heredoc_", ft_itoa(i));
-			master->commands[i]->heredoc_fd
-				= open(heredoc_filepath, O_RDWR | O_CREAT | O_TRUNC, 0644);
-			free(heredoc_filepath);
-			if (master->commands[i]->heredoc_fd == -1)
+			if (!set_heredoc_path(master, i)
+				|| !open_heredoc(master, i))
 				return (0);
-			read_heredoc(current, master->commands[i], master);
+			if (!read_heredoc(current, master->commands[i], master, i))
+				return (0);
+			//TODO: protext close and open below
+			close(master->commands[i]->heredoc_fd);
+			master->commands[i]->heredoc_fd
+				= open(master->commands[i]->heredoc_path, O_RDONLY);
 		}
 		current = current->next;
 	}
@@ -49,7 +50,7 @@ delimited by end-of-file (wanted '", delimiter);
 /* The heredoc read loop. Will continually get_next_line until line
  * is either only the delimiter, or is completely empty, meaning an
  * EOL character was found. */
-int	read_heredoc(t_tokens *token, t_command *command_node, t_master *master)
+int	read_heredoc(t_tokens *token, t_command *command_node, t_master *master, int i)
 {
 	char	*line;
 	char	*delimiter;
@@ -73,6 +74,12 @@ int	read_heredoc(t_tokens *token, t_command *command_node, t_master *master)
 		}
 		if (should_expand && !expand_heredoc_line(&line, master))
 			return (0);
+		if (access(master->commands[i]->heredoc_path, F_OK | W_OK | R_OK) == -1)
+		{
+			free(line);
+			get_next_line(-1);
+			return (err_msg("here_doc file error [read_heredoc()]", 0, master));
+		}
 		write(command_node->heredoc_fd, line, ft_strlen(line));
 		free(line);
 	}

@@ -20,6 +20,12 @@ int	close_files(t_master *master, int i)
 {
 	int	j;
 
+	j = -1;
+	// need to close all heredocs in the master structure
+	while (++j < master->cmd_count)
+		if (master->commands[j]->heredoc_fd)
+			if (close(master->commands[j]->heredoc_fd) == -1)
+				return (0);
 	if (master->commands[i]->redirections_count == 0)
 		return (1);
 	j = 0;
@@ -30,11 +36,6 @@ int	close_files(t_master *master, int i)
 				return (0);
 		j++;
 	}
-	/*
-	if (master->commands[i]->heredoc_fd)
-		if (close(master->commands[i]->heredoc_fd) == -1)
-			return (0);
-	*/
 	return (1);
 }
 

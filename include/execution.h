@@ -29,9 +29,13 @@ int			check_output_file(t_master *master, t_tokens *current, int i, int j);
 
 // execution_heredoc_handling.c
 int			setup_heredocs(t_master *master);
-int			read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *master);
+int			read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *master, int i);
 int			expand_heredoc_line(char **line, t_master *master);
 int			log_heredoc_expansions(char *line, t_master *master);
+
+// execution_heredoc_handling_utils.c
+int			set_heredoc_path(t_master *master, int i);
+int			open_heredoc(t_master *master, int i);
 
 // execution_pipe_utils.c
 void		plug_first_cmd(t_master *master, int i, int infile, int outfile);

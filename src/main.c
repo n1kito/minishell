@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/01 20:07:29 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/02 08:19:37 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	execute_command(char *command_line, t_master *master)
 	if (!tokenizer(command_line, master, &master->helpers)
 		|| !parser(&master->tokens)
 		|| !expander(master)
-		|| !syntax_checker(master)
-		|| !prep_execution_resources(master))
+		|| !prep_execution_resources(master)
+		|| !syntax_checker(master))
 			return (0);
 	if (!exec_loop(master))
 		return (0); // Not sure I can use this function as an int. Might need to use exit instead of return.

@@ -85,6 +85,7 @@ typedef struct s_command
 	int					redirections_count;
 	int					error_code;
 	int					heredoc_fd;
+	char				*heredoc_path;
 }	t_command;
 
 typedef struct s_master
@@ -96,7 +97,7 @@ typedef struct s_master
 	t_command			**commands;
 	int					*processes;
 	int					**pipes;
-	int					here_doc_fd;
+	int					here_doc_fd; // TODO I think I can remove this
 	t_env				*env;
 	char				**env_array;
 	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
