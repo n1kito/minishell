@@ -15,6 +15,7 @@ void	free_paths(char **paths)
  * try to find each command in every single folder in the paths provided.
  * If none is found, path variable is set to NULL. If there is a '\' in
  * the command name, the command name will be treated as its path. */
+// TODO fix for when the PATH variable is unset
 int	assign_command_paths(t_master *master)
 {
 	char		**paths;

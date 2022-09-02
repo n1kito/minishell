@@ -17,10 +17,9 @@ typedef struct s_env {
 	char			*variable;
 	int				is_env;
 	struct s_env	*next;
-}		
+}	t_env;
 
 // INCLUDES
-# define _GNU_SOURCE // TODO needed to use O_TMPFILE flag with open. Check if ok to use here.
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
@@ -38,12 +37,13 @@ typedef struct s_env {
 # include "tokenizer.h"
 # include "parser.h"
 # include "execution.h"
+# include "signals.h"
 
 // main.c
 
 // minishell_utils.c
 int		err_msg(char *error, int error_code, t_master *master);
-void	init_master_structure(t_master *master, t_env *env);
+void	init_master_structure(t_master *master, char *envp[]);
 int		free_master(t_master *master, int return_value);
 
 #endif

@@ -37,7 +37,7 @@ void	read_prompt(t_master *master)
 	line = NULL;
 	while (1)
 	{
-		line = readline("🔥MINISHELL🔥 : ");
+		line = readline("mini🔥hell \033[0;31m>\033[0;39m ");
 		if (line)
 		{
 			add_history(line);

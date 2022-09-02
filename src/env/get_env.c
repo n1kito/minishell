@@ -6,13 +6,11 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/02 15:04:30 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/02 15:49:09 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "environment.h"
-#include "libft.h"
 
 // This function initializes the 2 pointers used to store the name and the var
 // It allocates sufficient memory for them to accomodate the strings
@@ -23,28 +21,26 @@
 static int	var_env_malloc_init(t_env *env, char **envp)
 {
 	int		i;
-	int		med;
+	int		equal;
 	int		len;
 
 	i = 0;
 	while (env)
 	{
-		med = 1;
-		len = 0;
-		while (envp[i][len])
-			len++;
-		while (envp[i][med - 1] != '=' && envp[i][med])
-			med++;
-		env->name = malloc(sizeof(char) * med + 1);
-		env->variable = malloc(sizeof(char) * len - med + 1);
+		equal = 1;
+		len = ft_strlen(envp[i]);
+		while (envp[i][equal] != '=')
+			equal++;
+		env->name = malloc(sizeof(char) * equal + 1);
+		env->variable = malloc(sizeof(char) * len - equal);
 		if (!env->variable || !env->name)
-			return (1);
-		ft_strlcpy(env->name, envp[i], med + 1);
-		ft_strlcpy(env->variable, &(envp[i][med]), len - med + 1);
+			return (0);
+		ft_strlcpy(env->name, envp[i], equal + 1);
+		ft_strlcpy(env->variable, &(envp[i][equal + 1]), len - equal);
 		env = env->next;
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 void	clean_env(t_env **env)
@@ -96,7 +92,7 @@ static int	list_init(t_env **env, char **envp)
 	{
 		tmp = env_init();
 		if (!tmp)
-			return (1);
+			return (0);
 		if (!(*env))
 			*env = tmp;
 		else
@@ -106,7 +102,7 @@ static int	list_init(t_env **env, char **envp)
 		}
 		i++;
 	}
-	return (0);
+	return (1);
 }
 
 // This function takes the environment given as an argument
@@ -118,9 +114,9 @@ int	get_env(char **envp, t_env **ptr_env)
 	int		ret;
 
 	ret = list_init(ptr_env, envp);
-	if (!ret)
-		ret = var_env_malloc_init(*ptr_env, envp);
 	if (ret)
+		ret = var_env_malloc_init(*ptr_env, envp);
+	else
 		clean_env(ptr_env);
 	return (ret);
 }

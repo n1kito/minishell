@@ -18,7 +18,7 @@ CC			:= cc
 CFLAGS			:= -Wall -Wextra -Werror
 
 INC_DIR			:= include
-SRC_DIR			:= src/*/
+SRC_DIR			:= src
 BIN_DIR			:= bin
 
 LIB_DIR			:= libft
@@ -62,7 +62,10 @@ SRC_FILES		:= 	main\
 					execution/execution_heredoc_handling_utils\
 					execution/execution_pipe_utils\
 					execution/execution_setup\
-					execution/execution_utils
+					execution/execution_utils\
+					env/env_for_exe\
+					env/get_env\
+					signals/signals
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
 # **************************************************************************** #
@@ -73,16 +76,16 @@ all: header $(NAME)
 #all: header norm $(NAME)
 
 $(NAME): $(OBJ_FILES)
-	make --no-print-directory -C libft
-	$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB) -lreadline
-	echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
+	@make --no-print-directory -C libft
+	@$(CC) -o $(NAME) $(OBJ_FILES) -L $(LIB_DIR) -l $(LIB) -lreadline
+	@echo "\n🔥 $(RED_BLINK)$(NAME) compiled$(END_COLOR) 🔥\n"
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@$(CC) -MD -g -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/$(INC_DIR) $< -o $@
 	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
-	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution
+	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution $(BIN_DIR)/signals $(BIN_DIR)/env
 	@echo "$(IPURPLE)Created $(BIN_DIR)/ directory.$(END_COLOR)"
 
 clean:

@@ -1,6 +1,7 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
+/*
 // TODO remove this before pushing. Only using for testers and visualiser.
 # ifdef VISUAL
 #  define ONE printf("[1]");
@@ -37,6 +38,7 @@
 #  define COLOR_CROCHET_END printf("]\n");
 #  define PIPE_PRINT printf("|");
 # endif
+*/
 
 // STRUCTURES
 
@@ -107,9 +109,11 @@ typedef struct s_master
 }	t_master;
 
 // DEFINES
+/*
 // Blank Characters
 # define SPACE 32
 # define TAB 9
+*/
 // Operator Characters
 # define PIPE 124
 # define L_CHEVRON 60

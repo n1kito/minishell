@@ -10,12 +10,13 @@ int	err_msg(char *error, int error_code, t_master *master)
 }
 
 /* Initialises the master structure with correct values. */
-void	init_master_structure(t_master *master, t_env *env)
+void	init_master_structure(t_master *master, char *envp[])
 {
 	master->tokens = NULL;
 	// TODO ?? master->helpers = NULL;
 	master->expansions = NULL;
-	master->env = env;
+	master->env = NULL;
+	get_env(envp, &master->env);
 	//init_env_structure(&master->env); // doing this by hand in the  main for now. Need to include env building function here.
 	master->commands = NULL;
 	master->processes = NULL;
@@ -101,6 +102,7 @@ int	free_master(t_master *master, int return_value)
 	free_pipes(master);
 	master->expansions = NULL;
 	free(master->processes);
+	master->processes = NULL;
 	// add free function for pipes
 	return (return_value);
 }
