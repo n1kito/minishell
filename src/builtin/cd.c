@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/01 15:19:46 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/02 18:39:47 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ static void	ft_update_old(t_env *env, char *buffer)
 	old = NULL;
 	while (env)
 	{
-		if (ft_strncmp(env->name, "OLDPWD=", 7) == 0 \
-			&& ft_strlen(env->name) == 7)
+		if (ft_strncmp(env->name, "OLDPWD", 6) == 0 \
+			&& ft_strlen(env->name) == 6)
 			old = env;
 		env = env->next;
 	}
@@ -59,10 +59,10 @@ static void	ft_get_pwd(t_env *env)
 	old = NULL;
 	while (env)
 	{
-		if (ft_strncmp(env->name, "PWD=", 4) == 0 && ft_strlen(env->name) == 4)
+		if (ft_strncmp(env->name, "PWD", 3) == 0 && ft_strlen(env->name) == 3)
 			pwd = env;
-		if (ft_strncmp(env->name, "OLDPWD=", 7) == 0 \
-			&& ft_strlen(env->name) == 7)
+		if (ft_strncmp(env->name, "OLDPWD", 6) == 0 \
+			&& ft_strlen(env->name) == 6)
 			old = env;
 		env = env->next;
 	}
@@ -89,7 +89,7 @@ static void	ft_update_pwd(t_env *env, char *buffer)
 	save = env;
 	while (env)
 	{
-		if (ft_strncmp(env->name, "PWD=", 4) == 0 && ft_strlen(env->name) == 4)
+		if (ft_strncmp(env->name, "PWD", 3) == 0 && ft_strlen(env->name) == 3)
 			pwd = env;
 		env = env->next;
 	}
@@ -112,8 +112,8 @@ static int	find_home(t_env *env)
 	home = NULL;
 	while (env)
 	{
-		if (ft_strncmp(env->name, "HOME=", 5) == 0 \
-			&& ft_strlen(env->variable) == 5)
+		if (ft_strncmp(env->name, "HOME", 4) == 0 \
+			&& ft_strlen(env->variable) == 4)
 			home = env;
 		env = env->next;
 	}

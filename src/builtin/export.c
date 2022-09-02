@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/26 03:17:04 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/02 19:27:54 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,24 +16,29 @@
 
 static void	update_env(t_env *env, char *str)
 {
+	char	*tmp;
 	size_t	i;
 
 	i = 0;
-	while (str[i] && str[i - 1] != '=')
-		i++;
+	tmp = NULL;
 	while (ft_strncmp(str, env->name, ft_strlen(env->name)) != 0 \
 			|| ft_strlen(env->name) != i)
 		env = env->next;
-	if (env->variable)
-	{
-		free(env->variable);
-		env->variable = NULL;
-	}
 	while (str[i] && str[i - 1] != '=')
 		i++;
 	if (str[i])
 	{
-		env->variable = ft_strdup(&str[i]);
+		if (str[i - 2] && str[i - 2] == '+' && str[i - 1] == '=')
+		{
+			tmp = env->variable;
+			env->variable = ft_strjoin(tmp, str[i])
+			free(tmp)
+		}
+		else if (str[i - 1] && str[i - 1] == '=')
+		{
+			free(env->variable);
+			env->variable = ft_strdup(&str[i]);
+		}
 		env->is_env = 1;
 	}
 }

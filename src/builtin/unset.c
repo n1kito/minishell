@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/31 22:53:29 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/02 19:09:17 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ static int	check_match(char *name, char *arg)
 {
 	if (ft_strncmp(name, arg, ft_strlen(arg)) == 0)
 	{
-		if (name[ft_strlen(name) - 1] == '=' \
-			&& ft_strlen(name) == ft_strlen(arg) + 1)
-			return (1);
-		else if (ft_strlen(name) == ft_strlen(arg))
+		if (ft_strlen(name) == ft_strlen(arg))
 			return (1);
 	}
 	return (0);
