@@ -23,7 +23,6 @@ void	init_master_structure(t_master *master, char *envp[])
 	master->pipes = NULL;
 	master->env_array = NULL;
 	master->next_command_start = NULL;
-	master->latest_exit_code = 0;
 	master->malloc_ok = 1;
 	master->printed_error_msg = 0;
 }

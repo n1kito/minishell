@@ -103,7 +103,6 @@ typedef struct s_master
 	t_env				*env;
 	char				**env_array;
 	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
-	int					latest_exit_code; // don't know if I need this one but at least it's here.
 	int					malloc_ok;
 	int					printed_error_msg;
 }	t_master;

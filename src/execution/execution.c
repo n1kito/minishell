@@ -121,7 +121,7 @@ int	exec_loop(t_master *master)
 		}
 	i = -1;
 	while (++i < master->cmd_count)
-		waitpid(master->processes[i], &master->latest_exit_code, 0);
-	master->latest_exit_code = WEXITSTATUS(master->latest_exit_code);
+		waitpid(master->processes[i], &g_minishexit, 0);
+	g_minishexit = WEXITSTATUS(g_minishexit);
 	return (1);
 }

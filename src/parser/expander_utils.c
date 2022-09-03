@@ -32,8 +32,11 @@ int	expansion_name_len(char *expansion)
 
 	expansion++;
 	i = 0;
+	if (expansion[i] == '?')
+		return (1);
 	while (expansion[i]
 		&& !is_blank_char(expansion[i])
+		&& (ft_isalnum(expansion[i]) || expansion[i] == '_')
 		&& !is_quote_character(expansion[i])
 		&& expansion[i] != '\n'
 		&& expansion[i] != '$')

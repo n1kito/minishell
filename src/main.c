@@ -13,6 +13,8 @@
 
 #include "minishell.h"
 
+int	g_minishexit = 0;
+
 int	execute_command(char *command_line, t_master *master)
 {
 	if (command_line == NULL)
