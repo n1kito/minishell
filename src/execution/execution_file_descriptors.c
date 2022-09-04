@@ -99,10 +99,10 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 	}
 	else if (current->previous->token_type == REDIRECT_TO)
 		master->commands[i]->fds[j]
-			= open(current->token, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			= open(current->token, O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	else if (current->previous->token_type == APPEND)
 		master->commands[i]->fds[j]
-			= open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0644);
+			= open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	if (access(current->token, F_OK) == 0
 		&& access(current->token, W_OK) == -1)
 	{

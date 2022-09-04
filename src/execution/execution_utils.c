@@ -1,5 +1,15 @@
 #include "minishell.h"
 
+void	close_pipes_and_files(t_master *master, int i)
+{
+	if (!close_pipes(master))
+		exit(err_msg("could not close pipes", 1, master)
+			&& free_master(master, 1));
+	if (!close_files(master, i))
+		exit(err_msg("could not close files", 1, master)
+			&& free_master(master, 1));
+}
+
 int	close_pipes(t_master *master)
 {
 	int	i;
@@ -53,14 +63,21 @@ int	is_builtin_function(char *name)
 		|| ft_strcmp(name, "echo") == 0
 		|| ft_strcmp(name, "exit") == 0
 		|| ft_strcmp(name, "env") == 0
+		|| ft_strcmp(name, "pwd") == 0
 		|| ft_strcmp(name, "cd") == 0)
 		return (1);
 	return (0);
 }
-
+/*
+int	execute_builtin(t_master *master)
+{
+// TODO KEEP CODING HERE
+}
+*/
 /* Checks if the string passed as parameter matches
  * the name of a special buitin, meaning a builtin that should not
  * be forked when it is the only command in the command line. */
+/*
 int	is_special_builtin(char *name)
 {
 	int	name_len;
@@ -76,6 +93,7 @@ int	is_special_builtin(char *name)
 		return (1);
 	return (0);
 }
+*/
 
 /* Checks for errors with command in passed segment and
  * prints out corresponding error. */
@@ -83,8 +101,10 @@ int	command_error_check(t_command *command)
 {
 	char		*command_not_found;
 
-	if (!command->cmd_path && command->cmd_array[0]
-		&& access(command->cmd_array[0], X_OK == -1))
+	// TODO if I run an unknown command but a file with the same name is in the directory, no error is thrown
+	// TODO if I run a command that only has quotes, there is no error message (command not found)
+	if (!command->cmd_path && ((command->cmd_array[0]
+		&& access(command->cmd_array[0], X_OK) == -1) || !command->cmd_array))
 	{
 		command_not_found
 			= ft_strjoin(command->cmd_array[0], ": command not found\n");

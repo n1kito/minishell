@@ -27,7 +27,8 @@ int	assign_command_paths(t_master *master)
 	{
 		if (master->commands[i]->cmd_array)
 		{
-			if (ft_strchr(master->commands[i]->cmd_array[0], '/'))
+			if (ft_strchr(master->commands[i]->cmd_array[0], '/')
+				|| !paths)
 				master->commands[i]->cmd_path
 					= master->commands[i]->cmd_array[0];
 			else if (!get_cmd_path(&master->commands[i]->cmd_path,
@@ -53,7 +54,7 @@ int	get_cmd_path(char **cmd_path, char *command, char **paths, t_master *master)
 	char	*full_path;
 
 	i = 0;
-	while (command && paths[i])
+	while (command && command[0] && paths && paths[i])
 	{
 		tmp_path = ft_strjoin(paths[i], "/");
 		if (!tmp_path)

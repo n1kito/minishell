@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/10 19:43:14 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/04 16:33:42 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	echo_option_check(char *str)
 		return (0);
 }
 
-int	echo(char **arg)
+int	ft_echo(char **arg)
 {
 	int	n;
 	int	check;

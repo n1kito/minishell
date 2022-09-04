@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   get_env.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/05 17:25:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/02 15:49:09 by mjallada         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 // This function initializes the 2 pointers used to store the name and the var
@@ -114,6 +102,8 @@ int	get_env(char **envp, t_env **ptr_env)
 	int		ret;
 
 	ret = list_init(ptr_env, envp);
+	if (envp[0] == NULL)
+		return (1);
 	if (ret)
 		ret = var_env_malloc_init(*ptr_env, envp);
 	else

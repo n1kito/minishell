@@ -26,7 +26,13 @@ int	execute_command(char *command_line, t_master *master)
 		|| !syntax_checker(master)
 		|| !prep_execution_resources(master))
 			return (0);
-	if (!exec_loop(master))
+	if (master->cmd_count == 1
+		&& is_builtin_function(master->commands[0]->cmd_array[0]))
+	{
+		if(!execute_single_builtin(master))
+			return (0);
+	}
+	else if (!exec_loop(master))
 		return (0);
 	free_master(master, 1);
 	return (1);

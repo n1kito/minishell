@@ -42,6 +42,7 @@ END_COLOR		:= \033[0;39m
 
 SRC_FILES		:= 	main\
 					minishell_utils\
+					builtins/echo\
 					tokenizer/tokenizer\
 					tokenizer/tokenizer_analysers\
 					tokenizer/tokenizer_analysers_2\
@@ -57,6 +58,7 @@ SRC_FILES		:= 	main\
 					execution/execution_array_exports\
 					execution/execution_array_exports_utils\
 					execution/execution_command_path_utils\
+					execution/execution_builtins\
 					execution/execution_file_descriptors\
 					execution/execution_heredoc_handling\
 					execution/execution_heredoc_handling_utils\
@@ -82,10 +84,10 @@ $(NAME): $(OBJ_FILES)
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@$(CC) -MD -g -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/$(INC_DIR) $< -o $@
-	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
+	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)\t\t\t"
 
 $(BIN_DIR):
-	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution $(BIN_DIR)/signals $(BIN_DIR)/env
+	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution $(BIN_DIR)/signals $(BIN_DIR)/env $(BIN_DIR)/builtins
 	@echo "$(IPURPLE)Created $(BIN_DIR)/ directory.$(END_COLOR)"
 
 clean:

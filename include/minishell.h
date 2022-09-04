@@ -35,6 +35,7 @@ typedef struct s_env {
 # include <readline/history.h>
 # include <signal.h>
 # include "libft.h"
+# include "builtin.h"
 # include "environment.h"
 # include "tokenizer.h"
 # include "parser.h"

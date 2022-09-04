@@ -3,6 +3,9 @@
 
 // execution.c
 int			exec_loop(t_master *master);
+//TODO move the next 2 functions to separate file
+int			last_input_fd(t_master *master, int i);
+int			last_output_fd(t_master *master, int i);
 
 // execution_array_exports.c
 int			generate_command_structure(t_master *master);
@@ -15,6 +18,12 @@ t_tokens	*go_to_nth_segment(int i, t_tokens *token);
 int			count_words_in_segment(t_master *master);
 int			count_commands(t_tokens	*tokens);
 int			count_files_in_segment(t_master *master, int segment_index);
+
+// execution_builtins.c
+int			execute_single_builtin(t_master *master);
+int			run_builtin(t_master *master, int cmd_index);
+int			setup_sing_builtin_redir(int infile, int outfile);
+int			reset_sing_builtin_redir(int infile, int outfile, int tmp_stdin, int tmp_stdout);
 
 // execution_command_path_utils.c
 int			assign_command_paths(t_master *master);
@@ -48,10 +57,12 @@ int			setup_process_array(t_master *master);
 int			setup_pipes(t_master *master);
 
 // execution_utils.c
+void		close_pipes_and_files(t_master *master, int i);
 int			close_pipes(t_master *master);
 int			close_files(t_master *master, int i);
 int			is_builtin_function(char *name);
-int			is_special_builtin(char *name);
+//int			is_special_builtin(char *name);
+int			execute_builtin(t_master *master);
 int			command_error_check(t_command *command);
 int			check_input_file(t_master *master, t_tokens *current, int i, int j);
 

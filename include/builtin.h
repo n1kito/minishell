@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 19:30:51 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/26 05:44:43 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/04 17:00:22 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 int		ft_pwd(void);
 int		ft_env(t_env *env);
 int		ft_echo(char **arg);
-int		ft_cd(char *path, t_env *env);
+int		ft_cd(char **path, t_env *env);
 int		ft_unset(t_env *env, char **arg);
 int		ft_export(t_env **env, char **variable);
 //int		ft_exit(t_master *master);

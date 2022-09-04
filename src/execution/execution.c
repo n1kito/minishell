@@ -70,13 +70,12 @@ void	launch_exec(t_master *master, int i)
 		plug_last_cmd(master, i, input_redirection, output_redirection);
 	else
 		plug_middle_cmd(master, i, input_redirection, output_redirection);
-	if (!close_pipes(master))
-		exit(err_msg("could not close pipes", 1, master) && free_master(master, 1));
-	if (!close_files(master, i))
-		exit(err_msg("could not close files", 1, master) && free_master(master, 1));
-	//if (is_builtin_function(master->command[i]->cmd_array[0]))
-		//execute_builtin(master);
-	//else
+	close_pipes_and_files(master, i);
+	if (!master->commands[i]->cmd_array[0]
+		|| (is_builtin_function(master->commands[i]->cmd_array[0])
+			&& !run_builtin(master, i)))
+				exit(free_master(master, 0));
+	if (!is_builtin_function(master->commands[i]->cmd_array[0]))
 		execve(master->commands[i]->cmd_path,
 				master->commands[i]->cmd_array, master->env_array);
 	exit(free_master(master, 1));
@@ -91,37 +90,34 @@ int	exec_loop(t_master *master)
 	int	i;
 
 	i = 0;
-	//if (master->cmd_count == 1
-	//	&& is_special_builtin(master->commands[0]->cmd_array[0]))
-		//launch_special_builting(master);
-		// TODO think that even builtins can open files and redirections
-	//else
-	//{
-		while (i < master->cmd_count)
+	while (i < master->cmd_count)
+	{
+		master->processes[i] = fork();
+		if (master->processes[i] == -1)
+			return (err_msg("fork failed [exec_loop]", 0, master));
+		if (master->processes[i] == 0)
+			launch_exec(master, i);
+		i++;
+	}
+	if (!close_pipes(master))
+		return(err_msg("could not close pipes", 0, master));
+	// TODO export to close_heredocs()
+	i = -1;
+	while (++i < master->cmd_count)
+	{
+		if (master->commands[i]->heredoc_fd)
 		{
-			master->processes[i] = fork();
-			if (master->processes[i] == -1)
-				return (err_msg("fork failed [exec_loop]", 0, master));
-			if (master->processes[i] == 0)
-				launch_exec(master, i);
-			i++;
+			if (close(master->commands[i]->heredoc_fd) == -1)
+				// TODO change this error
+				ft_printf_fd(2, "COULD NOT CLOSE FD IN MAIN\n");
+			unlink(master->commands[i]->heredoc_path);
 		}
-		if (!close_pipes(master))
-			return(err_msg("could not close pipes", 0, master));
-		i = -1;
-		while (++i < master->cmd_count)
-		{
-			if (master->commands[i]->heredoc_fd)
-			{
-				if (close(master->commands[i]->heredoc_fd) == -1)
-					// TODO change this error
-					ft_printf_fd(2, "COULD NOT CLOSE FD IN MAIN\n");
-				unlink(master->commands[i]->heredoc_path);
-			}
-		}
+	}
+	// TODO export to process_waiter()
 	i = -1;
 	while (++i < master->cmd_count)
 		waitpid(master->processes[i], &g_minishexit, 0);
 	g_minishexit = WEXITSTATUS(g_minishexit);
+	//
 	return (1);
 }
