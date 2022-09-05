@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 18:04:10 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/02 20:56:59 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 15:14:10 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	env_for_exe(t_env *env, char **array)
 	{
 		if (env->is_env)
 		{
-			array[i] = ft_strjoin(env->name, '=');
+			array[i] = ft_strjoin(env->name, "=");
 			tmp = array[i];
 			array[i] = ft_strjoin(array[i], env->variable);
 			free(tmp);
