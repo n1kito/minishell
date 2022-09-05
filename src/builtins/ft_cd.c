@@ -22,7 +22,7 @@ static void	ft_update_old(t_env *env, char *buffer)
 	while (env)
 	{
 		if (ft_strncmp(env->name, "OLDPWD", 6) == 0 \
-			&& ft_strlen(env->name) == 6)
+				&& ft_strlen(env->name) == 6)
 			old = env;
 		env = env->next;
 	}
@@ -56,7 +56,7 @@ static void	ft_get_pwd(t_env *env)
 		if (ft_strncmp(env->name, "PWD", 3) == 0 && ft_strlen(env->name) == 3)
 			pwd = env;
 		if (ft_strncmp(env->name, "OLDPWD", 6) == 0 \
-			&& ft_strlen(env->name) == 6)
+				&& ft_strlen(env->name) == 6)
 			old = env;
 		env = env->next;
 	}
@@ -107,7 +107,7 @@ static int	find_home(t_env *env)
 	while (env)
 	{
 		if (ft_strncmp(env->name, "HOME", 4) == 0 \
-			&& ft_strlen(env->variable) == 4)
+				&& ft_strlen(env->variable) == 4)
 			home = env;
 		env = env->next;
 	}
@@ -140,22 +140,30 @@ int	ft_cd(char **path, t_env *env)
 
 	start = env;
 	ret = 0;
-	getcwd(buffer, PATH_MAX);
-	if (path[2])
+	if (getcwd(buffer, PATH_MAX))
 	{
-		ft_putstr_fd("Minishell: cd: too many arguments\n", 2);
-		g_minishexit = 1;
+		if (path[2])
+		{
+			ft_putstr_fd("Minishell: cd: too many arguments\n", 2);
+			g_minishexit = 1;
+		}
+		if (!path[1])
+			ret = find_home(env);
+		else
+			ret = chdir(path[1]);
+		if (ret == 0)
+			ft_update_pwd(start, buffer);
+		if (ret != 0)
+			perror("Error: cd: ");
+		ret = g_minishexit;
+		if (g_minishexit)
+			return (0);
+		return (1);
 	}
-	if (!path[1])
-		ret = find_home(env);
 	else
-		ret = chdir(path[1]);
-	if (ret == 0)
-		ft_update_pwd(start, buffer);
-	if (ret != 0)
+	{
 		perror("Error: cd: ");
-	ret = g_minishexit;
-	if (g_minishexit)
+		g_minishexit = 0;
 		return (0);
-	return (1);
+	}
 }
