@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+// TODO move this
 int	last_input_fd(t_master *master, int i)
 {
 	t_tokens	*current;
@@ -27,6 +28,7 @@ int	last_input_fd(t_master *master, int i)
 	return (0);
 }
 
+// TODO move this
 int	last_output_fd(t_master *master, int i)
 {
 	t_tokens	*current;
@@ -81,10 +83,6 @@ void	launch_exec(t_master *master, int i)
 	exit(free_master(master, 1));
 }
 
-//TODO implement builtins here. If there is only one command count
-// and it is a special builtin, the files are still created etc
-// but OUTSIDE of a fork. Therefore the builtin is only executed
-// if there are no issues with the files. */
 int	exec_loop(t_master *master)
 {
 	int	i;

@@ -10,6 +10,7 @@ int	execute_single_builtin(t_master *master)
 	int	tmp_stdin;
 	int	tmp_stdout;
 
+	printf("EXECUTING SINGLE BUILTIN\n");
 	// TODO check what happens if there is an error opening file descriptors with single builtin	
 	if (!open_file_descriptors(master, 0))
 		return (0);

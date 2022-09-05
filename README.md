@@ -13,6 +13,8 @@ You will learn a lot about processes and file descriptors.
 # To-do
 
 - [ ] implementer env_for_exe
+- [ ] redirection to file with single builtin `echo` does not work
+- [ ] check what needs to be freed after every execution
 - [ ] `segfault` when `unset` is ran with no env.
 - [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
 - [ ] builtins: rajouter messages d'erreur malloc (pas urgent)
