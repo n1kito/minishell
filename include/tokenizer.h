@@ -102,6 +102,7 @@ typedef struct s_master
 	int					here_doc_fd; // TODO I think I can remove this
 	t_env				*env;
 	char				**env_array;
+	char				**env_for_exec;
 	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
 	int					malloc_ok;
 	int					printed_error_msg;

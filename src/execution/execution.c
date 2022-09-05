@@ -1,5 +1,6 @@
 #include "minishell.h"
 
+// TODO move this
 int	last_input_fd(t_master *master, int i)
 {
 	t_tokens	*current;
@@ -27,6 +28,7 @@ int	last_input_fd(t_master *master, int i)
 	return (0);
 }
 
+// TODO move this
 int	last_output_fd(t_master *master, int i)
 {
 	t_tokens	*current;
@@ -71,20 +73,16 @@ void	launch_exec(t_master *master, int i)
 	else
 		plug_middle_cmd(master, i, input_redirection, output_redirection);
 	close_pipes_and_files(master, i);
-	if (!master->commands[i]->cmd_array[0]
+	if (!master->commands[i]->cmd_array[0] || !env_for_exe(master)
 		|| (is_builtin_function(master->commands[i]->cmd_array[0])
 			&& !run_builtin(master, i)))
 				exit(free_master(master, 0));
 	if (!is_builtin_function(master->commands[i]->cmd_array[0]))
 		execve(master->commands[i]->cmd_path,
-				master->commands[i]->cmd_array, master->env_array);
+				master->commands[i]->cmd_array, master->env_for_exec);
 	exit(free_master(master, 1));
 }
 
-//TODO implement builtins here. If there is only one command count
-// and it is a special builtin, the files are still created etc
-// but OUTSIDE of a fork. Therefore the builtin is only executed
-// if there are no issues with the files. */
 int	exec_loop(t_master *master)
 {
 	int	i;

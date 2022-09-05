@@ -13,6 +13,7 @@ You will learn a lot about processes and file descriptors.
 # To-do
 
 - [ ] implementer env_for_exe
+- [ ] check what needs to be freed after every execution
 - [ ] `segfault` when `unset` is ran with no env.
 - [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
 - [ ] builtins: rajouter messages d'erreur malloc (pas urgent)
@@ -35,6 +36,7 @@ You will learn a lot about processes and file descriptors.
 - [ ] env -i les chemins absolus doivent fonctionner quand meme
 - [ ] Write the easiest tester possible
 - [ ] Fix norminette problem in Makefile ! (not urgent)
+- [x] redirection to file with single builtin `echo` does not work
 - [x] If `env` is empty, commands should return `command not found` not `no such filr or directory`
     - Actually the should return `No such file or directory`. To test, launch `bash` and `unset PATH`. Running any command will give `No such file or directory`.
 - [x] `< Makefile | ls` doit faire le ls ]
