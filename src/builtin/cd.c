@@ -137,7 +137,7 @@ static int	find_home(t_env *env)
 //It will then update the PWD and OLDPWD accordingly
 //in case of an error, it returns a 1 and a 0 in case of success
 
-int	cd(char **path, t_env *env)
+void	cd(char **path, t_env *env)
 {
 	t_env	*start;
 	t_env	*home;
@@ -160,5 +160,5 @@ int	cd(char **path, t_env *env)
 		ft_update_pwd(start, buffer);
 	if (ret != 0)
 		perror("Error: cd: ");
-	return (ret);
+	ret = g_minishexit:
 }

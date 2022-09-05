@@ -30,28 +30,29 @@ static int	echo_option_check(char *str)
 		return (0);
 }
 
-int	echo(char **arg)
+void	echo(char **arg)
 {
 	int	n;
-	int	check;
 	int	i;
+	int	ret;
 
+	ret = 0;
 	i = 1;
-	n = echo_option_check(arg[i]);
-	check = n;
-	while (n == 1)
-	{
-		i++;
+	if arg[i]
 		n = echo_option_check(arg[i]);
-	}
-	while (arg[i])
+	else
+		n = 0;
+	while (arg[i] && echo_option_check(arg[i]))
+		i++;
+	while (arg[i] && ret == 0)
 	{
-		printf("%s", arg[i]);
+		ret = write(1, arg[i], ft_strlen(arg[i]));
 		if (arg[i + 1])
-			printf(" ");
+			ret = write(1, " ", 1);
 		i++;
 	}
-	if (!check)
-		printf("\n");
-	return (0);
+	if (!n)
+		ret = write(1, "\n", 1);
+	ret = -ret;
+	g_minishexit = ret;
 }
