@@ -1,7 +1,5 @@
-/* ************************************************************************** */
-/*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   builtin.h                                          :+:      :+:    :+:   */
+/*   builtins.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,9 +8,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef BUILTIN_H
-
-# define BUILTIN_H
+#ifndef BUILTINS_H
+# define BUILTINS_H
 
 //fonctions our les builtins
 int		ft_pwd(void);
@@ -21,7 +18,7 @@ int		ft_echo(char **arg);
 int		ft_cd(char **path, t_env *env);
 int		ft_unset(t_env *env, char **arg);
 int		ft_export(t_env **env, char **variable);
-//int		ft_exit(t_master *master);
+int		ft_exit(t_master *master, int cmd_index);
 
 //utils pour les builtins
 int		arg_is_ok_for_env(char const *str);

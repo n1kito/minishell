@@ -1,34 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 14:08:10 by vrigaudy         ###   ########.fr       */
+/*   Created: 2022/07/15 14:29:06 by vrigaudy          #+#    #+#             */
+/*   Updated: 2022/09/05 14:20:33 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//TODO clean up
 #include "minishell.h"
-#include "builtin.h"
 
-int	ft_env(t_env *env)
+int	ft_pwd(void)
 {
-	while (env)
+	char	buffer[PATH_MAX + 1];
+
+	if (getcwd(buffer, PATH_MAX))
 	{
-		if (env->is_env == 1)
-		{
-			if (env->name)
-			{
-				printf("%s=", env->name);
-				if (env->variable)
-					printf("%s", env->variable);
-				printf("\n");
-			}
-		}
-		env = env->next;
+		printf("%s\n", buffer);
+		g_minishexit = 0;
+		return (0);
 	}
-	g_minishexit = 0;
-	return (1);
+	else
+	{
+		perror("Error: pwd: ");
+		g_minishexit = 1;
+		return (1);
+	}
 }

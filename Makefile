@@ -42,7 +42,13 @@ END_COLOR		:= \033[0;39m
 
 SRC_FILES		:= 	main\
 					minishell_utils\
-					builtins/echo\
+					builtins/ft_echo\
+					builtins/ft_export\
+					builtins/ft_unset\
+					builtins/ft_env\
+					builtins/ft_exit\
+					builtins/ft_cd\
+					builtins/ft_pwd\
 					tokenizer/tokenizer\
 					tokenizer/tokenizer_analysers\
 					tokenizer/tokenizer_analysers_2\

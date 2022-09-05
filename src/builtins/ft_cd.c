@@ -1,22 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 15:03:39 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 14:17:30 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtin.h"
-#include "libft.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <errno.h>
-#include <limits.h>
 
 //this function updates OLDPWD if PWD has been unset
 
@@ -94,9 +88,9 @@ static void	ft_update_pwd(t_env *env, char *buffer)
 		env = env->next;
 	}
 	if (pwd)
-		ft_get_pwd(start);
+		ft_get_pwd(save);
 	if (!pwd)
-		ft_update_old(start, buffer);
+		ft_update_old(save, buffer);
 }
 
 //This function is called if no ath is given to cd
@@ -122,10 +116,11 @@ static int	find_home(t_env *env)
 		ret = chdir(home->variable);
 		if (ret)
 			perror("Error: cd: ");
+		return (0);
 	}
 	else
 	{
-		ft_putstr("Minishell: cd: HOME not set\n", 2);
+		ft_putstr_fd("Minishell: cd: HOME not set\n", 2);
 		return (1);
 	}
 }
@@ -137,14 +132,14 @@ static int	find_home(t_env *env)
 //It will then update the PWD and OLDPWD accordingly
 //in case of an error, it returns a 1 and a 0 in case of success
 
-int	cd(char **path, t_env *env)
+int	ft_cd(char **path, t_env *env)
 {
 	t_env	*start;
-	t_env	*home;
-	char	buffer[MAX_PATH + 1];
+	int		ret;
+	char	buffer[PATH_MAX + 1];
 
-	home = NULL;
 	start = env;
+	ret = 0;
 	getcwd(buffer, PATH_MAX);
 	if (path[2])
 	{

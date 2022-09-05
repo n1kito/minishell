@@ -12,6 +12,11 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
+- [ ] implementer env_for_exe
+- [ ] `env` : print err message when two many arguments
+- [ ] `export` : bug lors des assignamtions
+- [ ] `export` `+=` ne fonctionne pas
+- [ ] `cd` suppression du dossier parent: voir erreurs de bash
 - [ ] Protext all open() and close() calls
 - [ ] Do a bunch of `heredoc` + `chmod 0` tests
 - [ ] `CTRL + C` from minishell should print out `\n`?

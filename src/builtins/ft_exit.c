@@ -1,19 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 15:02:54 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 14:49:48 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtin.h"
-#include "libft.h"
-#include <stdlib.h>
 
 static int	ft_is_num(char	*str)
 {
@@ -26,9 +23,12 @@ static int	ft_is_num(char	*str)
 	return (1);
 }
 
-int	ft_exit(char **variable)
+int	ft_exit(t_master *master, int cmd_index)
 {
-	if (getpid() > 0)
+	char	**variable;
+
+	variable = master->commands[cmd_index]->cmd_array;
+	if (master->processes[cmd_index] > 0)
 		ft_putstr_fd("exit\n", 0);
 	if (!variable[1])
 		g_minishexit = 0;
@@ -46,6 +46,6 @@ int	ft_exit(char **variable)
 		return (1);
 	}
 	else
-		g_minishexit = ft_atoi(varibale[1]);
+		g_minishexit = ft_atoi(variable[1]);
 	exit(g_minishexit);
 }

@@ -6,13 +6,11 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 15:11:14 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/05 14:01:08 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtin.h"
-#include "libft.h"
 
 static int	update_env(t_env *env, char *str)
 {
@@ -31,7 +29,7 @@ static int	update_env(t_env *env, char *str)
 		if (str[i - 2] && str[i - 2] == '+' && str[i - 1] == '=')
 		{
 			tmp = env->variable;
-			env->variable = ft_strjoin(tmp, str[i]);
+			env->variable = ft_strjoin(tmp, &str[i]);
 			free(tmp);
 		}
 		else if (str[i - 1] && str[i - 1] == '=')
@@ -78,12 +76,8 @@ static int	add_elem_to_env(t_env *env, char *str)
 static int	check_if_in_env(t_env *env, char *str)
 {
 	size_t	i;
-	t_env	*save;
-	t_env	*check;
 
 	i = 0;
-	save = env;
-	check = NULL;
 	while (str[i] && str[i - 1] != '=')
 		i++;
 	while (env)
@@ -113,7 +107,7 @@ int	arg_is_ok_for_env(char const *str)
 	return (0);
 }
 
-void	ft_export(t_env **env, char **variable)
+int	ft_export(t_env **env, char **variable)
 {
 	int	i;
 	int	ret;
@@ -134,7 +128,7 @@ void	ft_export(t_env **env, char **variable)
 		{
 			write (2, "Export: Error:", 14);
 			write (2, variable[i], ft_strlen(variable[i]));
-			write (2, " not a valid identifier\n", 26);
+			write (2, " not a valid identifier\n", 24);
 			g_minishexit = 1;
 		}
 		i++;

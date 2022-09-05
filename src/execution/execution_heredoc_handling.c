@@ -39,6 +39,7 @@ void	print_heredoc_warning(char *line, char *delimiter)
 
 	if (line)
 		return ;
+	// TODO protext strjoini
 	tmp_message = ft_strjoin("\nmini(s)hell: warning: here-document \
 delimited by end-of-file (wanted '", delimiter);
 	warning = ft_strjoin(tmp_message, "')\n");

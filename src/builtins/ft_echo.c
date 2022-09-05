@@ -6,12 +6,11 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 15:13:31 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/05 14:00:42 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtin.h"
 
 static int	echo_option_check(char *str)
 {
@@ -32,28 +31,30 @@ static int	echo_option_check(char *str)
 
 int	ft_echo(char **arg)
 {
-	int	n;
+	int	option_n;
 	int	i;
 	int	ret;
 
+	g_minishexit = 0;
 	ret = 0;
 	i = 1;
 	if (arg[i])
-		n = echo_option_check(arg[i]);
+		option_n = echo_option_check(arg[i]);
 	else
-		n = 0;
+		option_n = 0;
 	while (arg[i] && echo_option_check(arg[i]))
 		i++;
-	while (arg[i] && ret == 0)
+	while (arg[i] && ret >= 0)
 	{
 		ret = write(1, arg[i], ft_strlen(arg[i]));
-		if (arg[i + 1] && ret == 0)
+		if (arg[i + 1] && ret >= 0)
 			ret = write(1, " ", 1);
 		i++;
 	}
-	if (!n)
+	if (!option_n && ret >= 0)
 		ret = write(1, "\n", 1);
-	g_minishexit = -ret;
+	if (ret < 0)
+		g_minishexit = 1;
 	if (g_minishexit)
 		return (0);
 	return (1);
