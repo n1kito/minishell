@@ -6,14 +6,14 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/02 18:40:36 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 10:54:35 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtin.h"
 
-int	ft_env(t_env *env)
+void	ft_env(t_env *env)
 {
 	while (env)
 	{
@@ -29,5 +29,5 @@ int	ft_env(t_env *env)
 		}
 		env = env->next;
 	}
-	return (0);
+	g_minishexit = 0;
 }

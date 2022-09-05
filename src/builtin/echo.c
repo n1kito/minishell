@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/10 19:43:14 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 10:59:44 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,11 @@ void	echo(char **arg)
 	while (arg[i] && ret == 0)
 	{
 		ret = write(1, arg[i], ft_strlen(arg[i]));
-		if (arg[i + 1])
+		if (arg[i + 1] && ret == 0)
 			ret = write(1, " ", 1);
 		i++;
 	}
 	if (!n)
 		ret = write(1, "\n", 1);
-	ret = -ret;
-	g_minishexit = ret;
+	g_minishexit = -ret;
 }

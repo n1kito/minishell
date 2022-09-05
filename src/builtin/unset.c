@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/02 19:09:17 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 11:21:12 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,14 @@ static void	ft_swap(t_env *start, t_env *env, char *arg)
 	}
 }
 
-int	ft_unset(t_env *env, char **arg)
+void	ft_unset(t_env *env, char **arg)
 {
 	int		i;
-	int		ret;
 	t_env	*start;
 
 	i = 1;
-	ret = 0;
 	start = env;
+	g_minishexit = 0;
 	while (arg[i])
 	{
 		if (arg_is_ok_for_env(arg[i]) == 0)
@@ -77,9 +76,8 @@ int	ft_unset(t_env *env, char **arg)
 				env = unset_middle(env, start);
 		}
 		else
-			ret = ft_print_error(arg[i]);
+			g_minishexit = ft_print_error(arg[i]);
 		i++;
 		env = start;
 	}
-	return (ret);
 }
