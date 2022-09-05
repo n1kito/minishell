@@ -13,6 +13,8 @@ You will learn a lot about processes and file descriptors.
 # To-do
 
 - [ ] implementer env_for_exe
+- [ ] builtins: rajouter messages d'erreur malloc (pas urgent)
+- [ ] builtins: proteger tous les strjoin & cie
 - [ ] `env` : print err message when two many arguments
 - [ ] `export` : bug lors des assignamtions
 - [ ] `export` `+=` ne fonctionne pas
