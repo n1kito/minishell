@@ -25,18 +25,19 @@ You will learn a lot about processes and file descriptors.
 - [ ] `CTRL + C` from heredo leaves current heredoc and exec ?
 - [ ] If the program is launched with a empty env, hard code the 3 basic variables
 - [ ] Increment `$SHLVL` when the program is lauched
-- [ ] If `env` is empty, commands should return `command not found` not `no such filr or directory`
 - [ ] Check exit errors codes when passed invalid arguments
 - [ ] Test commands with empty sections (token that only has quotes between two `|`)
 - [ ] Exit exits only with the code of the latest command ran in minishell
 - [ ] `unset` all variables and see if it craches
 - [ ] `top -bn1` et grep le process qu'on veut pour verifier qu'il n'y a pas des process qu'on a pas close
-- [ ] `< Makefile | ls` doit faire le ls ]
-- [ ] Quand je pipe un truc ver `wc` mais que le mot suivant la commande est une expansion vide (avec quotes donc pas invisible), `wc` renvoie une erreur `invalid zero-length file name`, puisque le token du name existe mais est vide.
 - [ ] `bash | bash` renvoie des erreurs dans minishell et pas dans bash
 - [ ] env -i les chemins absolus doivent fonctionner quand meme
 - [ ] Write the easiest tester possible
 - [ ] Fix norminette problem in Makefile ! (not urgent)
+- [x] If `env` is empty, commands should return `command not found` not `no such filr or directory`
+    - Actually the should return `No such file or directory`. To test, launch `bash` and `unset PATH`. Running any command will give `No such file or directory`.
+- [x] `< Makefile | ls` doit faire le ls ]
+- [x] Quand je pipe un truc ver `wc` mais que le mot suivant la commande est une expansion vide (avec quotes donc pas invisible), `wc` renvoie une erreur `invalid zero-length file name`, puisque le token du name existe mais est vide.
 
 ### Teamwork Guidelines
 
