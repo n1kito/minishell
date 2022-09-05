@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/02 18:39:47 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 15:03:39 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	ft_update_old(t_env *env, char *buffer)
 	if (old)
 	{
 		if (old->variable)
-			free(old->variable)
+			free(old->variable);
 		old->variable = NULL;
 		if (old->is_env == 1)
 			old->is_env = 0;
@@ -137,11 +137,10 @@ static int	find_home(t_env *env)
 //It will then update the PWD and OLDPWD accordingly
 //in case of an error, it returns a 1 and a 0 in case of success
 
-void	cd(char **path, t_env *env)
+int	cd(char **path, t_env *env)
 {
 	t_env	*start;
 	t_env	*home;
-	int		ret;
 	char	buffer[MAX_PATH + 1];
 
 	home = NULL;
@@ -150,7 +149,7 @@ void	cd(char **path, t_env *env)
 	if (path[2])
 	{
 		ft_putstr_fd("Minishell: cd: too many arguments\n", 2);
-		return (1);
+		g_minishexit = 1;
 	}
 	if (!path[1])
 		ret = find_home(env);
@@ -160,5 +159,8 @@ void	cd(char **path, t_env *env)
 		ft_update_pwd(start, buffer);
 	if (ret != 0)
 		perror("Error: cd: ");
-	ret = g_minishexit:
+	ret = g_minishexit;
+	if (g_minishexit)
+		return (0);
+	return (1);
 }

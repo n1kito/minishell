@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 11:09:32 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 15:02:27 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "builtin.h"
 #include "libft.h"
 
-static void	update_env(t_env *env, char *str)
+static int	update_env(t_env *env, char *str)
 {
 	char	*tmp;
 	size_t	i;
@@ -31,8 +31,8 @@ static void	update_env(t_env *env, char *str)
 		if (str[i - 2] && str[i - 2] == '+' && str[i - 1] == '=')
 		{
 			tmp = env->variable;
-			env->variable = ft_strjoin(tmp, str[i])
-			free(tmp)
+			env->variable = ft_strjoin(tmp, str[i]);
+			free(tmp);
 		}
 		else if (str[i - 1] && str[i - 1] == '=')
 		{
@@ -41,9 +41,12 @@ static void	update_env(t_env *env, char *str)
 		}
 		env->is_env = 1;
 	}
+	if (!env->variable)
+		return (0);
+	return (1);
 }
 
-static void	add_elem_to_env(t_env *env, char *str)
+static int	add_elem_to_env(t_env *env, char *str)
 {
 	int		i;
 	t_env	*new;
@@ -55,20 +58,21 @@ static void	add_elem_to_env(t_env *env, char *str)
 		i++;
 	new = ft_calloc(sizeof(t_env), 1);
 	if (!new)
-		return ;
+		return (0);
 	if (str[i])
 		new->is_env = 1;
 	new->name = malloc(sizeof(char) * (i + 1));
 	if (!new->name)
-		return ;
+		return (0);
 	if (str[i])
 	{
 		new->variable = ft_strdup(&str[i]);
 		if (!new->variable)
-			return ;
+			return (0);
 	}
 	ft_strlcat(new->name, str, i + 1);
 	env->next = new;
+	return (1);
 }
 
 static int	check_if_in_env(t_env *env, char *str)
@@ -115,15 +119,16 @@ void	ft_export(t_env **env, char **variable)
 	int	ret;
 
 	i = 0;
+	ret = 0;
 	g_minishexit = 0;
 	while (variable[i])
 	{
 		if (arg_is_ok_for_env(variable[i]) == 0)
 		{
 			if (check_if_in_env(*env, variable[i]))
-				update_env(*env, variable[i]);
+				ret = update_env(*env, variable[i]);
 			else
-				add_elem_to_env(*env, variable[i]);
+				ret = add_elem_to_env(*env, variable[i]);
 		}
 		else
 		{
@@ -134,4 +139,5 @@ void	ft_export(t_env **env, char **variable)
 		}
 		i++;
 	}
+	return (ret);
 }
