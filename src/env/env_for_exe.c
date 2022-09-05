@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 18:04:10 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/25 21:02:08 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/02 20:56:59 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,25 +53,31 @@ static int	count_env(t_env *env)
 
 int	env_for_exe(t_env *env, char **array)
 {
-	int	i;
-	int	len;
+	int		i;
+	char	*tmp;
+	int		len;
 
 	i = 0;
 	len = count_env(env);
 	array = ft_calloc(len + 1, sizeof(char *));
 	if (!array)
-		return (1);
+		return (0);
 	while (env)
 	{
 		if (env->is_env)
-			array[i] = ft_strjoin(env->name, env->variable);
+		{
+			array[i] = ft_strjoin(env->name, '=');
+			tmp = array[i];
+			array[i] = ft_strjoin(array[i], env->variable);
+			free(tmp);
+		}
 		if (!array[i])
 		{
 			ft_destroy_env(array, i);
-			return (1);
+			return (0);
 		}
 		env = env->next;
 		i++;
 	}
-	return (0);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/04 16:33:42 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/05 15:10:39 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,25 +33,28 @@ static int	echo_option_check(char *str)
 int	ft_echo(char **arg)
 {
 	int	n;
-	int	check;
 	int	i;
+	int	ret;
 
+	ret = 0;
 	i = 1;
-	n = echo_option_check(arg[i]);
-	check = n;
-	while (n == 1)
-	{
-		i++;
+	if arg[i]
 		n = echo_option_check(arg[i]);
-	}
-	while (arg[i])
+	else
+		n = 0;
+	while (arg[i] && echo_option_check(arg[i]))
+		i++;
+	while (arg[i] && ret == 0)
 	{
-		printf("%s", arg[i]);
-		if (arg[i + 1])
-			printf(" ");
+		ret = write(1, arg[i], ft_strlen(arg[i]));
+		if (arg[i + 1] && ret == 0)
+			ret = write(1, " ", 1);
 		i++;
 	}
-	if (!check)
-		printf("\n");
-	return (0);
+	if (!n)
+		ret = write(1, "\n", 1);
+	g_minishexit = -ret;
+	if (g_minishexit)
+		return (0);
+	return (1);
 }

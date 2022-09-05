@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/15 14:29:06 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/08/31 13:54:58 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/05 14:07:36 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	pwd(char **arg)
 	if (arg[1])
 	{
 		ft_putstr_fd("pwd: too many arguments", 2);
-		return (1);
+		g_minishexit = 1;
 	}
-	getcwd(buffer, PATH_MAX);
+	buffer = getcwd(buffer, PATH_MAX);
 	if (getcwd(buffer, PATH_MAX))
 	{
 		printf("%s\n", buffer);
