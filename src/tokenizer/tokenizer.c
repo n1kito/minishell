@@ -11,7 +11,7 @@ int	tokenizer(char *line, t_master *master, t_tokenizer_helpers *t)
 			handle_end_of_line(t, master);
 		else if (can_form_operator(&line[t->token_start], &line[t->position]))
 			t->position++;
-		else if (is_operator(line[t->position - 1])
+		else if (t->position && is_operator(line[t->position - 1])
 			&& !can_form_operator(&line[t->token_start], &line[t->position])
 			&& t->last_token_end != t->position - 1)
 			close_operator_token(t, master);

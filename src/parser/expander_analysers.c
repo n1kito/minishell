@@ -22,11 +22,11 @@ char	*search_env(t_env *env, char *name, int name_len)
 }
 
 /* Goes through token and logs expandable variables in a special structure. */
-int	log_expansions(char *token, t_env *env, t_master *master)
+int	log_expansions(char *token, t_master *master)
 {
-	int			i;
-	int			is_single_quoting;
-	int			is_double_quoting;
+	int	i;
+	int	is_single_quoting;
+	int	is_double_quoting;
 
 	is_single_quoting = 0;
 	is_double_quoting = 0;
@@ -36,10 +36,11 @@ int	log_expansions(char *token, t_env *env, t_master *master)
 		if (token[i] == '$'
 			&& token[i + 1]
 			&& !is_blank_char(token[i + 1])
+			&& (ft_isalpha(token[i + 1]) || token[i + 1] == '_' || token[i + 1] == '?')
 			&& !is_single_quoting
 			&& !(is_quote_character(token [i + 1]) && is_double_quoting))
 		{
-			if (!add_exp_node(master, token, i, env))
+			if (!add_exp_node(master, token, i))
 				return (0);
 		}
 		else if (token[i] == DOUBLE_QUOTE && !is_single_quoting)
@@ -53,7 +54,7 @@ int	log_expansions(char *token, t_env *env, t_master *master)
 
 /* Logs new node in expansion structure to track expansions, their positions and
  * values (if found in env). Note that they are added LIFO. */
-int	add_exp_node(t_master *master, char *token, int i, t_env *env)
+int	add_exp_node(t_master *master, char *token, int i)
 {
 	t_expand	*new_expand;
 
@@ -65,8 +66,11 @@ int	add_exp_node(t_master *master, char *token, int i, t_env *env)
 	new_expand->name_len = expansion_name_len(token + i);
 	new_expand->name_end = i + new_expand->name_len;
 	new_expand->name = token + new_expand->name_start;
-	new_expand->value = search_env(env, new_expand->name,
-			new_expand->name_len);
+	if (token[i + 1] == '?')
+		new_expand->value = ft_itoa(g_minishexit);
+	else
+		new_expand->value = search_env(master->env, new_expand->name,
+				new_expand->name_len);
 	new_expand->next = NULL;
 	if (master->expansions == NULL)
 		master->expansions = new_expand;

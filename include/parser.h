@@ -27,17 +27,17 @@ void	identify_token_type(t_tokens *token);
 int		syntax_checker(t_master *master);
 
 // expander.c
-int		expander(t_master *master, t_env *env);
+int		expander(t_master *master);
 int		remove_quotes(t_tokens **token_node, int first_quote,
 			int second_quote, t_master *master);
 int		process_and_remove_quotes(t_tokens *token_node, t_master *master);
-int		expand_token(t_tokens *current, t_expand *expansions);
+int		expand_line(char **line, t_expand *expansions);
 void	check_for_invisible_token(t_tokens	*token);
 
 // expander_analysers.c
 char	*search_env(t_env *env, char *name, int name_len);
-int		log_expansions(char *token, t_env *env, t_master *master);
-int		add_exp_node(t_master *master, char *token, int i, t_env *env);
+int		log_expansions(char *token, t_master *master);
+int		add_exp_node(t_master *master, char *token, int i);
 int		has_solitary_quote(char *token, t_master *master);
 
 // expander_utils.c

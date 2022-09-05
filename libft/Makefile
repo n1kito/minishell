@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/04 09:49:28 by mjallada          #+#    #+#              #
-#    Updated: 2022/08/19 16:11:36 by mjallada         ###   ########.fr        #
+#    Updated: 2022/08/31 06:30:09 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,6 +55,7 @@ SRC_FILES		:=	ft_isalpha \
 					ft_strchr \
 					ft_strrchr \
 					ft_strncmp \
+					ft_strcmp \
 					ft_memchr \
 					ft_memcmp \
 					ft_strnstr \
