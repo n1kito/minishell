@@ -13,6 +13,8 @@ You will learn a lot about processes and file descriptors.
 # To-do
 
 - [ ] implementer env_for_exe
+- [ ] `segfault` when `unset` is ran with no env.
+- [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
 - [ ] builtins: rajouter messages d'erreur malloc (pas urgent)
 - [ ] builtins: proteger tous les strjoin & cie
 - [ ] `env` : print err message when two many arguments
