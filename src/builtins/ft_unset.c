@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   unset.c                                            :+:      :+:    :+:   */
+/*   ft_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 14:01:26 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/05 18:05:11 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,9 @@ int	ft_unset(t_env *env, char **arg)
 	i = 1;
 	start = env;
 	g_minishexit = 0;
-	while (arg[i])
+	while (arg[i] && env)
 	{
-		if (arg_is_ok_for_env(arg[i]) == 0)
+		if (arg_is_ok_for_env(arg[i]) == 0 && env)
 		{
 			ft_swap(start, env, arg[i]);
 			while (env && !check_match(env->name, arg[i]))
