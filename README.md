@@ -12,15 +12,24 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
+- [ ] Protext all open() and close() calls
+- [ ] Do a bunch of `heredoc` + `chmod 0` tests
+- [ ] `CTRL + C` from minishell should print out `\n`?
+- [ ] `CTRL + C` from heredo leaves current heredoc and exec ?
+- [ ] If the program is launched with a empty env, hard code the 3 basic variables
+- [ ] Increment `$SHLVL` when the program is lauched
+- [ ] If `env` is empty, commands should return `command not found` not `no such filr or directory`
+- [ ] Check exit errors codes when passed invalid arguments
+- [ ] Test commands with empty sections (token that only has quotes between two `|`)
+- [ ] Exit exits only with the code of the latest command ran in minishell
+- [ ] `unset` all variables and see if it craches
+- [ ] `top -bn1` et grep le process qu'on veut pour verifier qu'il n'y a pas des process qu'on a pas close
+- [ ] `< Makefile | ls` doit faire le ls ]
+- [ ] Quand je pipe un truc ver `wc` mais que le mot suivant la commande est une expansion vide (avec quotes donc pas invisible), `wc` renvoie une erreur `invalid zero-length file name`, puisque le token du name existe mais est vide.
+- [ ] `bash | bash` renvoie des erreurs dans minishell et pas dans bash
+- [ ] env -i les chemins absolus doivent fonctionner quand meme
+- [ ] Write the easiest tester possible
 - [ ] Fix norminette problem in Makefile ! (not urgent)
-- [ ] Start writing a coherent main that uses tokenizer and parser.
-  - [ ] Test cases where token syntax is wrong.
-      - [ ] Does not leak.
-  - [ ] Test cases where quotes are not closed.
-      - [ ] Does not leak.
-  - [ ] Test cases where everything goes well.
-      - [ ] Does not leak.
-- [ ] Update tester to check this.
 
 ### Teamwork Guidelines
 
