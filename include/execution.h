@@ -22,7 +22,7 @@ int			count_files_in_segment(t_master *master, int segment_index);
 // execution_builtins.c
 int			execute_single_builtin(t_master *master);
 int			run_builtin(t_master *master, int cmd_index);
-int			setup_sing_builtin_redir(int infile, int outfile);
+int			setup_sing_builtin_redir(int infile, int outfile, int *tmp_stdin, int *tmp_stdout);
 int			reset_sing_builtin_redir(int infile, int outfile, int tmp_stdin, int tmp_stdout);
 
 // execution_command_path_utils.c
