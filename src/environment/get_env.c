@@ -93,6 +93,44 @@ static int	list_init(t_env **env, char **envp)
 	return (1);
 }
 
+static int	min_env(t_env **env)
+{
+	int		len;
+	char	*buffer;
+	t_env	*tmp;
+
+	len = 3;
+	tmp = NULL;
+	buffer = NULL;
+	buffer = getcwd(buffer, PATH_MAX);
+	while (len)
+	{
+		tmp = env_init();
+		if (len == 3)
+		{
+			tmp->name = ft_strdup("PWD");
+			tmp->variable = ft_strdup(buffer);
+		}
+		if (len == 2)
+		{
+			tmp->name = ft_strdup("SHLVL");
+			tmp->variable = ft_strdup("1");
+		}
+		if (len == 1)
+		{
+			tmp->name = ft_strdup("_");
+			tmp->variable = ft_strdup("/usr/bin/env");
+		}
+		if (!*env)
+			*env = tmp;
+		else
+			(*env)->next = tmp;
+		tmp = tmp->next;
+		len--;
+	}
+	return (0);
+}
+
 // This function takes the environment given as an argument
 // It then transforms it into a linked list with
 // It then returns a pointer to the first element of the list
@@ -100,13 +138,18 @@ static int	list_init(t_env **env, char **envp)
 int	get_env(char **envp, t_env **ptr_env)
 {
 	int		ret;
+	char	*buffer;
 
-	ret = list_init(ptr_env, envp);
-	if (envp[0] == NULL)
-		return (1);
-	if (ret)
-		ret = var_env_malloc_init(*ptr_env, envp);
+	buffer = NULL;
+	if (!envp[0])
+		return (min_env(ptr_env));
 	else
-		clean_env(ptr_env);
-	return (ret);
+	{
+		ret = list_init(ptr_env, envp);
+		if (ret)
+			ret = var_env_malloc_init(*ptr_env, envp);
+		else
+			clean_env(ptr_env);
+		return (ret);
+	}
 }

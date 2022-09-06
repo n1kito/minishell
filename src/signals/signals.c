@@ -4,11 +4,8 @@ static void	ctrlc_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		
 		g_minishexit = sig;
-		exit(sig);
 	}
 }
 
