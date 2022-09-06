@@ -28,6 +28,8 @@ int	free_master(t_master *master, int return_value)
 		free_commands_structure(master);
 	if (master->tokens)
 		free_tokens_structure(master);
+	if (master->env_for_exec)
+		ft_destroy_env(master);
 	master->tokens = NULL;
 	free_expansions(&master->expansions);
 	free_pipes(master);
