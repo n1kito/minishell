@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 18:25:07 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/06 14:07:55 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,12 @@ static int	update_env(t_env *env, char *str)
 		tmp = env->variable;
 	env->is_env = 1;
 	if (str[i] && str[i - 2] && str[i - 2] == '+' && str[i - 1] == '=')
-		env->variable = ft_strjoin(env->variable, &str[i]);
+	{
+		if (env->variable)
+			env->variable = ft_strjoin(env->variable, &str[i]);
+		else
+			env->variable = ft_strdup(&str[i]);
+	}
 	else if (str[i] && str[i - 1] && str[i - 1] == '=')
 		env->variable = ft_strdup(&str[i]);
 	else
@@ -93,6 +98,8 @@ int	arg_is_ok_for_env(char const *str)
 	int	i;
 
 	i = 0;
+	if (ft_strlen(str) == 1 && str[0] == '_')
+		return (2);
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (1);
 	i++;
@@ -124,7 +131,7 @@ int	ft_export(t_env **env, char **variable)
 		}
 		else
 		{
-			write (2, "Export: Error:", 14);
+			write (2, "Export: Error: ", 14);
 			write (2, variable[i], ft_strlen(variable[i]));
 			write (2, " not a valid identifier\n", 24);
 			g_minishexit = 1;
