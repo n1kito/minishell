@@ -68,5 +68,5 @@ int	env_for_exe(t_master *master)
 		i++;
 	}
 	master->env_for_exec = array;
-	return (0);
+	return (1);
 }
