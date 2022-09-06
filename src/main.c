@@ -49,8 +49,10 @@ void	read_prompt(t_master *master)
 		if (line)
 		{
 			add_history(line);
+			init_master_structure(master);
 			if (!execute_command(line, master))
 				free_master(master, 1);
+			clean_master_memory(master);
 			//rl_redisplay();
 		}
 		if (!line)
@@ -69,7 +71,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
-	init_master_structure(&master, envp);
+	master.env_array = envp;
 	sa.sa_sigaction = &signal_handler;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);

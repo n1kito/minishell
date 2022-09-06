@@ -1,58 +1,12 @@
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
-/*
-// TODO remove this before pushing. Only using for testers and visualiser.
-# ifdef VISUAL
-#  define ONE printf("[1]");
-#  define TWO printf("[2]");
-#  define THREE printf("[3]");
-#  define FOUR printf("[4]");
-#  define FIVE printf("[5]");
-#  define SIX printf("[6]");
-#  define SEVEN printf("[7]");
-#  define EIGHT printf("[8]");
-#  define NINE printf("[9]");
-#  define TEN printf("[10]");
-#  define PLUS printf("\033[0;33m+\033[0m");
-#  define NEWLINE printf("\n");
-#  define ARGUMENT printf(" %s\n", argv[1]);
-#  define COLOR_CROCHET_START printf("\033[0;35m[\033[0m");
-#  define COLOR_CROCHET_END printf("\033[0;35m]\033[0m\n");
-#  define PIPE_PRINT printf("\033[0;35m|\033[0m");
-# else
-#  define ONE
-#  define TWO
-#  define THREE
-#  define FOUR
-#  define FIVE
-#  define SIX
-#  define SEVEN
-#  define EIGHT
-#  define NINE
-#  define TEN
-#  define PLUS
-#  define NEWLINE
-#  define ARGUMENT
-#  define COLOR_CROCHET_START printf("[");
-#  define COLOR_CROCHET_END printf("]\n");
-#  define PIPE_PRINT printf("|");
-# endif
-*/
-
 // STRUCTURES
 
-// token_had_quotes: set to 1 when matching quotes are found in a token.
-// Useful for HEREDOC because a delimiter that initially had quotes
-// does not expand the content of the HEREDOC.
-// Also, an empty token that did not have any quotes automatically means
-// that it resulted from expansions that led to nothing and therefore
-// should be treated as invisible.
 // TODO : Move all structure to minishell.h ?
 typedef struct s_tokens
 {
 	char				*token;
-	//TODO if token_type is IO_NUMBER I think I need to convert the token into an FD int ?
 	int					token_type;
 	int					token_had_quotes;
 	struct s_tokens		*next;
@@ -99,21 +53,14 @@ typedef struct s_master
 	t_command			**commands;
 	int					*processes;
 	int					**pipes;
-	int					here_doc_fd; // TODO I think I can remove this
 	t_env				*env;
 	char				**env_array;
 	char				**env_for_exec;
-	t_tokens			*next_command_start; // initialy points to tokens and then is updated to point to token following next PIPE or EOL.
+	t_tokens			*next_command_start;
 	int					malloc_ok;
 	int					printed_error_msg;
 }	t_master;
 
-// DEFINES
-/*
-// Blank Characters
-# define SPACE 32
-# define TAB 9
-*/
 // Operator Characters
 # define PIPE 124
 # define L_CHEVRON 60
@@ -125,11 +72,11 @@ typedef struct s_master
 
 // tokenizer.c && tokenizer_for_debugging.c
 int			tokenizer(char *line, t_master *master, t_tokenizer_helpers *t);
-int			extract_token(t_master *master,
-				char *token_start, char *token_end);
-//to do: move extract_token to tokenizer_utils.c
 
 // tokenizer_utils.c
+int			extract_token(t_master *master,
+				char *token_start, char *token_end);
+void		init_token_values(t_tokens *token);
 void		init_tokenizer_helpers(t_tokenizer_helpers *t, char *line);
 t_tokens	*get_last_token(t_tokens *tokens_list);
 

@@ -46,8 +46,14 @@ typedef struct s_env {
 // main.c
 
 // minishell_utils.c
-int		err_msg(char *error, int error_code, t_master *master);
-void	init_master_structure(t_master *master, char *envp[]);
+void	init_master_structure(t_master *master);
 int		free_master(t_master *master, int return_value);
+int		err_msg(char *error, int error_code, t_master *master);
+
+// minishell_master_utils.c
+void	free_tokens_structure(t_master *master);
+void	clean_master_memory(t_master *master);
+void	free_commands_structure(t_master *master);
+void	free_pipes(t_master *master);
 
 #endif

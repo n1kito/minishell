@@ -21,7 +21,7 @@ void	launch_exec(t_master *master, int i)
 	else
 		plug_middle_cmd(master, i, input_redirection, output_redirection);
 	close_pipes_and_files(master, i);
-	if (!master->commands[i]->cmd_array[0] /* || !env_for_exe(master)*/
+	if (!master->commands[i]->cmd_array[0]/* || !env_for_exe(master)*/
 		|| (is_builtin_function(master->commands[i]->cmd_array[0])
 			&& !run_builtin(master, i)))
 		exit(free_master(master, 0));

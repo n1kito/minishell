@@ -42,6 +42,7 @@ END_COLOR		:= \033[0;39m
 
 SRC_FILES		:= 	main\
 					minishell_utils\
+					minishell_master_utils\
 					builtins/ft_echo\
 					builtins/ft_export\
 					builtins/ft_unset\
@@ -72,8 +73,8 @@ SRC_FILES		:= 	main\
 					execution/execution_pipe_utils\
 					execution/execution_setup\
 					execution/execution_utils\
-					env/env_for_exe\
-					env/get_env\
+					environment/env_for_exe\
+					environment/get_env\
 					signals/signals
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 
@@ -94,7 +95,8 @@ $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)\t\t\t"
 
 $(BIN_DIR):
-	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution $(BIN_DIR)/signals $(BIN_DIR)/env $(BIN_DIR)/builtins
+	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution\
+		$(BIN_DIR)/signals $(BIN_DIR)/environment $(BIN_DIR)/builtins
 	@echo "$(IPURPLE)Created $(BIN_DIR)/ directory.$(END_COLOR)"
 
 clean:
