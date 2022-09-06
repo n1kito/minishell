@@ -138,9 +138,7 @@ static int	min_env(t_env **env)
 int	get_env(char **envp, t_env **ptr_env)
 {
 	int		ret;
-	char	*buffer;
 
-	buffer = NULL;
 	if (!envp[0])
 		return (min_env(ptr_env));
 	else
