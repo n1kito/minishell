@@ -134,20 +134,15 @@ static int	min_env(t_env **env)
 // This function takes the environment given as an argument
 // It then transforms it into a linked list with
 // It then returns a pointer to the first element of the list
-
 int	get_env(char **envp, t_env **ptr_env)
 {
 	int		ret;
 
-	if (!envp[0])
-		return (min_env(ptr_env));
+	ret = list_init(ptr_env, envp);
+	if (ret)
+		ret = var_env_malloc_init(*ptr_env, envp);
 	else
-	{
-		ret = list_init(ptr_env, envp);
-		if (ret)
-			ret = var_env_malloc_init(*ptr_env, envp);
-		else
-			clean_env(ptr_env);
-		return (ret);
-	}
+		clean_env(ptr_env);
+	check_missing_env_values(ptr_env);
+	return (ret);
 }

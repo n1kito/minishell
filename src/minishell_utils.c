@@ -35,7 +35,7 @@ int	free_master(t_master *master, int return_value)
 	master->expansions = NULL;
 	free(master->processes);
 	master->processes = NULL;
-	rl_clear_history(); // check if this causes issues because I just added it
+	//rl_clear_history(); // check if this causes issues because I just added it
 	return (return_value);
 }
 
