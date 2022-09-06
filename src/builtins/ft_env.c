@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 14:00:51 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/06 23:02:44 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,22 @@
 
 int	ft_env(t_env *env)
 {
-	while (env)
+	t_env	*tmp;
+
+	tmp = env;
+	while (tmp)
 	{
-		if (env->is_env == 1)
+		if (tmp->is_env == 1)
 		{
-			if (env->name)
+			if (tmp->name)
 			{
-				printf("%s=", env->name);
-				if (env->variable)
-					printf("%s", env->variable);
+				printf("%s=", tmp->name);
+				if (tmp->variable)
+					printf("%s", tmp->variable);
 				printf("\n");
 			}
 		}
-		env = env->next;
+		tmp = tmp->next;
 	}
 	g_minishexit = 0;
 	return (1);
