@@ -42,8 +42,10 @@ int			last_output_fd(t_master *master, int i);
 
 // execution_heredoc_handling.c
 int			setup_heredocs(t_master *master);
-int			read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *master, int i);
+int			heredoc_process(t_master *master, t_tokens *tokens, int i);
+void		read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *master, int i);
 int			expand_heredoc_line(char **line, t_master *master);
+void		print_heredoc_warning(char *line, char *delimiter);
 
 // execution_heredoc_handling_utils.c
 int			set_heredoc_path(t_master *master, int i);

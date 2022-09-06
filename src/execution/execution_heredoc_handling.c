@@ -17,7 +17,8 @@ int	setup_heredocs(t_master *master)
 			if (!set_heredoc_path(master, i)
 				|| !open_heredoc(master, i))
 				return (0);
-			if (!read_heredoc(current, master->commands[i], master, i))
+			master->reading_heredoc = 1;
+			if (!heredoc_process(master, current, i))
 				return (0);
 			//TODO: protext close and open below
 			close(master->commands[i]->heredoc_fd);
@@ -26,32 +27,31 @@ int	setup_heredocs(t_master *master)
 		}
 		current = current->next;
 	}
+	master->reading_heredoc = 0;
 	return (1);
 }
 
-/* Prints out warning when a heredoc is not delimited by the delimiter
- * but by an EOF (CTRL + D). */
-// TODO: check that this warning does print out to stdout and not stderr
-void	print_heredoc_warning(char *line, char *delimiter)
+int	heredoc_process(t_master *master, t_tokens *current, int i)
 {
-	char	*tmp_message;
-	char	*warning;
+	int			heredoc_success;
+	int			heredoc_process;
 
-	if (line)
-		return ;
-	// TODO protext strjoini
-	tmp_message = ft_strjoin("\nmini(s)hell: warning: here-document \
-delimited by end-of-file (wanted '", delimiter);
-	warning = ft_strjoin(tmp_message, "')\n");
-	free (tmp_message);
-	ft_printf_fd(1, "%s", warning);
-	free(warning);
+	heredoc_process = fork();
+	if (heredoc_process == -1)
+		return (err_msg("fork failed [setup_heredocs()]", 0, master));
+	if (heredoc_process == 0)
+		read_heredoc(current, master->commands[i], master, i);
+	if (waitpid(heredoc_process, &heredoc_success, 0) == -1)
+		return (err_msg("waitpid() failed [setup_heredocs()]", 0, master));
+	if (heredoc_success == 0)
+		return (0);
+	return (1);
 }
 
 /* The heredoc read loop. Will continually get_next_line until line
  * is either only the delimiter, or is completely empty, meaning an
  * EOL character was found. */
-int	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
+void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 {
 	char	*line;
 	char	*delimiter;
@@ -62,6 +62,7 @@ int	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 	while (1)
 	{
 		write(1, "> \r", 2);
+		exit(free_master(master, 0)); // this is just for testing an exit in a line. gives me lots of fuckins leaks
 		line = get_next_line(0);
 		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
 				&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
@@ -69,12 +70,12 @@ int	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 			free(line);
 			get_next_line(-1);
 			print_heredoc_warning(line, delimiter);
-			return (1);
+			exit (1);
 		}
 		if (should_expand && !expand_heredoc_line(&line, master))
-			return (0);
+			exit (0);
 		if (!heredoc_file_access(master, i, line))
-			return (0);
+			exit (0);
 		write(cmd_node->heredoc_fd, line, ft_strlen(line));
 		free(line);
 	}
@@ -112,4 +113,23 @@ int	log_heredoc_expansions(char *line, t_master *master)
 		i++;
 	}
 	return (1);
+}
+
+/* Prints out warning when a heredoc is not delimited by the delimiter
+ * but by an EOF (CTRL + D). */
+// TODO: check that this warning does print out to stdout and not stderr
+void	print_heredoc_warning(char *line, char *delimiter)
+{
+	char	*tmp_message;
+	char	*warning;
+
+	if (line)
+		return ;
+	// TODO protext strjoini
+	tmp_message = ft_strjoin("\nmini(s)hell: warning: here-document \
+delimited by end-of-file (wanted '", delimiter);
+	warning = ft_strjoin(tmp_message, "')\n");
+	free (tmp_message);
+	ft_printf_fd(1, "%s", warning);
+	free(warning);
 }

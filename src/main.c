@@ -76,6 +76,7 @@ int	main(int argc, char **argv, char **envp)
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	init_master_structure(&master);
 	read_prompt(&master);
 	return (free_master(&master, 0));
 }
