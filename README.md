@@ -16,6 +16,19 @@ You will learn a lot about processes and file descriptors.
 - [ ] if I run an unknown command but a file with the same name is in the directory, no error is thrown [command_error_check()]
 - [ ] if I run a command that only has quotes, there is no error message (command not found) [command_error_check()]
 - [ ] check what needs to be freed after every execution
+      - [ ] create `reset_master_structure()` and call it at the very beginning of `init_master_structure()`
+          - [ ] move `init_master_structure()` to right before `execute_command()` in `readline()` loop.
+      - free tokens and set to NULL
+      - free helpers and set to NULL
+      - free expansions and set to NULL
+      - KEEP env
+      - free commands and set to null
+      - free processes and set to null
+      - free pipes and set to null
+      - env for exec should always be NULL since it's set in the fork
+      - next_command_start set to null
+      - malloc_ok set to 1
+      - printed_error_msg set to 0
 - [ ] `segfault` when `unset` is ran with no env.
 - [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
 - [ ] builtins: rajouter messages d'erreur malloc (pas urgent)

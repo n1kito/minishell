@@ -10,7 +10,7 @@ int	prep_execution_resources(t_master *master)
 		|| !setup_file_descriptors(master)
 		|| !setup_process_array(master)
 		|| !setup_pipes(master))
-/*		|| !convert_env_to_array(master))*/
+/*		|| !convert_env_to_array(master))*/ // this is done in exec actually
 		return (0);
 	return (1);
 }

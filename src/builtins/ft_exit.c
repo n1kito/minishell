@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 14:49:48 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/06 10:38:21 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_exit(t_master *master, int cmd_index)
 	char	**variable;
 
 	variable = master->commands[cmd_index]->cmd_array;
-	if (master->processes[cmd_index] > 0)
+	if (master->cmd_count == 1) // j'ai change ca pour eviter un segfault, a checker avec Victor
 		ft_putstr_fd("exit\n", 0);
 	if (!variable[1])
 		g_minishexit = 0;
@@ -47,5 +47,5 @@ int	ft_exit(t_master *master, int cmd_index)
 	}
 	else
 		g_minishexit = ft_atoi(variable[1]);
-	exit(g_minishexit);
+	exit(free_master(master, g_minishexit));
 }

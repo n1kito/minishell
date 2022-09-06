@@ -6,13 +6,11 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/13 18:04:10 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 15:14:10 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/06 09:26:02 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "environment.h"
-#include "libft.h"
 
 // This function destroys the char** that has been created for the excutiom
 // This function is noly executed if there is a malloc problem
