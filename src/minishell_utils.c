@@ -17,6 +17,8 @@ void	init_master_structure(t_master *master)
 	master->next_command_start = NULL;
 	master->malloc_ok = 1;
 	master->printed_error_msg = 0;
+	master->tmp_stdin = -1;
+	master->tmp_stdout = -1;
 }
 
 /* Frees all malloced variables in the master structure. */

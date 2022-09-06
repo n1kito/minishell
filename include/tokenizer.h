@@ -59,6 +59,8 @@ typedef struct s_master
 	t_tokens			*next_command_start;
 	int					malloc_ok;
 	int					printed_error_msg;
+	int					tmp_stdin;
+	int					tmp_stdout;
 }	t_master;
 
 // Operator Characters

@@ -21,6 +21,10 @@ int	close_pipes(t_master *master)
 					0, master));
 		i++;
 	}
+	if (master->tmp_stdin >= 0)
+		close (master->tmp_stdin);
+	if (master->tmp_stdout >= 0)
+		close (master->tmp_stdout);
 	return (1);
 }
 

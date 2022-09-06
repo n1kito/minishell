@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/06 10:38:21 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/06 12:21:07 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,11 @@ int	ft_exit(t_master *master, int cmd_index)
 
 	variable = master->commands[cmd_index]->cmd_array;
 	if (master->cmd_count == 1) // j'ai change ca pour eviter un segfault, a checker avec Victor
+	{
 		ft_putstr_fd("exit\n", 0);
+		close_files(master, cmd_index);
+		close_pipes(master);
+	}
 	if (!variable[1])
 		g_minishexit = 0;
 	else if (!ft_is_num(variable[1]))
