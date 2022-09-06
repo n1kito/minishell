@@ -17,12 +17,14 @@ int	execute_single_builtin(t_master *master)
 	out_redir = last_output_fd(master, 0);
 	//TODO proteger tmp_stdin et tmp_stdout
 	// et les set dans le setup_sing_builtin en passant les pointeurs sur int
-	if (!setup_sing_builtin_redir(in_redir, out_redir, &tmp_stdin, &tmp_stdout))
-		return (err_msg("redirection setup error [execute_single_builtin()]", 0, master));
+	if (!set_builtin_redir(in_redir, out_redir, &tmp_stdin, &tmp_stdout))
+		return (err_msg("redirection setup error [execute_single_builtin()]",
+				0, master));
 	if (!run_builtin(master, 0))
 		return (0);
-	if (!reset_sing_builtin_redir(in_redir, out_redir, tmp_stdin, tmp_stdout))
-		return (err_msg("redirection reset error [execute_single_builtin()]", 0, master));
+	if (!reset_builtin_redir(in_redir, out_redir, tmp_stdin, tmp_stdout))
+		return (err_msg("redirection reset error [execute_single_builtin()]",
+				0, master));
 	if (!close_files(master, 0))
 		return (err_msg("could not close files", 0, master));
 	return (1);
@@ -37,7 +39,7 @@ int	run_builtin(t_master *master, int cmd_index)
 	command = master->commands[cmd_index]->cmd_array[0];
 	arguments = master->commands[cmd_index]->cmd_array;
 	if ((ft_strcmp(command, "export") == 0
-		&& !ft_export(&master->env, arguments))
+			&& !ft_export(&master->env, arguments))
 		|| (ft_strcmp(command, "unset") == 0
 			&& !ft_unset(master->env, arguments))
 		|| (ft_strcmp(command, "echo") == 0
@@ -50,16 +52,16 @@ int	run_builtin(t_master *master, int cmd_index)
 			&& !ft_pwd())
 		|| (ft_strcmp(command, "cd") == 0
 			&& !ft_cd(arguments, master->env)))
-			return (0);
+		return (0);
 	return (1);
 }
 
 /* Sets up FDs for file/heredoc redirections with single builtins. */
-int	setup_sing_builtin_redir(int infile, int outfile, int *tmp_stdin, int *tmp_stdout)
+int	set_builtin_redir(int infile, int outfile, int *tmp_stdin, int *tmp_stdout)
 {
 	if (infile)
 	{
-		*tmp_stdin = dup(STDIN_FILENO);	
+		*tmp_stdin = dup(STDIN_FILENO);
 		if (*tmp_stdout == -1
 			|| dup2(infile, STDIN_FILENO) == -1)
 			return (0);
@@ -67,7 +69,7 @@ int	setup_sing_builtin_redir(int infile, int outfile, int *tmp_stdin, int *tmp_s
 	if (outfile)
 	{
 		*tmp_stdout = dup(STDOUT_FILENO);
-		if (*tmp_stdout == -1	
+		if (*tmp_stdout == -1
 			|| dup2(outfile, STDOUT_FILENO) == -1)
 			return (0);
 	}
@@ -75,7 +77,7 @@ int	setup_sing_builtin_redir(int infile, int outfile, int *tmp_stdin, int *tmp_s
 }
 
 /* Resets FDs after the single builtin function has been used. */
-int	reset_sing_builtin_redir(int infile, int outfile, int tmp_stdin, int tmp_stdout)
+int	reset_builtin_redir(int infile, int outfile, int tmp_stdin, int tmp_stdout)
 {
 	if (infile)
 	{

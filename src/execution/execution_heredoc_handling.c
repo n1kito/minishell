@@ -51,16 +51,14 @@ delimited by end-of-file (wanted '", delimiter);
 /* The heredoc read loop. Will continually get_next_line until line
  * is either only the delimiter, or is completely empty, meaning an
  * EOL character was found. */
-int	read_heredoc(t_tokens *token, t_command *command_node, t_master *master, int i)
+int	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 {
 	char	*line;
 	char	*delimiter;
 	int		should_expand;
 
 	delimiter = token->next->token;
-	should_expand = 0;
-	if (!token->next->token_had_quotes)
-		should_expand = 1;
+	check_if_heredoc_should_expand(token->next, &should_expand);
 	while (1)
 	{
 		write(1, "> \r", 2);
@@ -75,13 +73,9 @@ int	read_heredoc(t_tokens *token, t_command *command_node, t_master *master, int
 		}
 		if (should_expand && !expand_heredoc_line(&line, master))
 			return (0);
-		if (access(master->commands[i]->heredoc_path, F_OK | W_OK | R_OK) == -1)
-		{
-			free(line);
-			get_next_line(-1);
-			return (err_msg("here_doc file error [read_heredoc()]", 0, master));
-		}
-		write(command_node->heredoc_fd, line, ft_strlen(line));
+		if (!heredoc_file_access(master, i, line))
+			return (0);
+		write(cmd_node->heredoc_fd, line, ft_strlen(line));
 		free(line);
 	}
 }

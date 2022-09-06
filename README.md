@@ -13,6 +13,8 @@ You will learn a lot about processes and file descriptors.
 # To-do
 
 - [ ] implementer env_for_exe
+- [ ] if I run an unknown command but a file with the same name is in the directory, no error is thrown [command_error_check()]
+- [ ] if I run a command that only has quotes, there is no error message (command not found) [command_error_check()]
 - [ ] check what needs to be freed after every execution
 - [ ] `segfault` when `unset` is ran with no env.
 - [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
