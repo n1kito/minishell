@@ -4,7 +4,6 @@ static void	ctrlc_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		
 		g_minishexit = sig;
 	}
 }

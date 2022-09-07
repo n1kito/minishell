@@ -31,7 +31,7 @@ static int	var_env_malloc_init(t_env *env, char **envp)
 	return (1);
 }
 
-void	clean_env(t_env **env)
+int	clean_env(t_env **env, int return_code)
 {
 	t_env	*tmp;
 	t_env	*lst;
@@ -50,6 +50,7 @@ void	clean_env(t_env **env)
 			free(tmp);
 	}
 	*env = NULL;
+	return (return_code);
 }
 
 static t_env	*env_init(void)
@@ -142,6 +143,6 @@ int	get_env(char **envp, t_env **ptr_env)
 	if (ret)
 		ret = var_env_malloc_init(*ptr_env, envp);
 	else
-		clean_env(ptr_env);
+		clean_env(ptr_env, 0);
 	return (ret);
 }

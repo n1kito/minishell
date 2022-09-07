@@ -28,7 +28,7 @@ int	open_heredoc(t_master *master, int i)
 					0, master));
 	master->commands[i]->heredoc_fd
 		= open(master->commands[i]->heredoc_path,
-			O_RDWR | O_CREAT | O_TRUNC, 0644);
+			O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (master->commands[i]->heredoc_fd == -1)
 		return (err_msg("open() failed [open_heredoc()]", 0, master));
 	return (1);

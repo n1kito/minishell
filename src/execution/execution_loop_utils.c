@@ -70,9 +70,27 @@ int	close_heredocs(t_master *master)
 			if (close(master->commands[i]->heredoc_fd) == -1)
 				return (err_msg("could not close heredoc [close_heredocs()]",
 						0, master));
-			if (unlink(master->commands[i]->heredoc_path) == -1)
-				return (err_msg("could not unlink heredoc [close_heredocs()]",
+		}
+	}
+	return (1);
+}
+
+int	close_and_unlink_heredocs(t_master *master)
+{
+	int		i;
+
+	i = -1;
+	while (++i < master->cmd_count)
+	{
+		if (master->commands[i]->heredoc_fd)
+		{
+			if (close(master->commands[i]->heredoc_fd) == -1)
+				return (err_msg("could not close heredoc [close_and_unlink_heredocs()]",
 						0, master));
+			if (access(master->commands[i]->heredoc_path, F_OK) == 0)
+				if (unlink(master->commands[i]->heredoc_path) == -1)
+					return (err_msg("could not unlink heredoc [close_and_unlink_heredocs()]",
+							0, master));
 		}
 	}
 	return (1);
