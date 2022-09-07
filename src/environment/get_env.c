@@ -40,13 +40,17 @@ static t_env	*env_init(char *envp)
 	len = ft_strlen(envp);
 	new = (t_env *)malloc(sizeof(t_env));
 	new->name = malloc(sizeof(char) * equal + 1);
-	new->variable = malloc(sizeof(char) * len - equal);
+	if (!ft_strncmp("SHLVL", envp, equal))
+		new->variable = ft_strdup(ft_itoa(ft_atoi(&envp[equal + 1]) + 1));
+	else
+		new->variable = malloc(sizeof(char) * len - equal);
 	if (!new || !new->name)
 		return (NULL);
 	new->is_env = 1;
 	new->next = NULL;
 	ft_strlcpy(new->name, envp, equal + 1);
-	ft_strlcpy(new->variable, &envp[equal + 1], len - equal);
+	if (ft_strncmp("SHLVL", envp, 5))
+		ft_strlcpy(new->variable, &envp[equal + 1], len - equal);
 	return (new);
 }
 
