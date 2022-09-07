@@ -36,6 +36,7 @@ int			check_output_file(t_master *master, t_tokens *current, int i, int j);
 
 // execution_loop_utils.c
 int			close_heredocs(t_master *master);
+int			close_and_unlink_heredocs(t_master *master);
 int			process_waiter(t_master *master);
 int			last_input_fd(t_master *master, int i);
 int			last_output_fd(t_master *master, int i);

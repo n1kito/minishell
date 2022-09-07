@@ -31,6 +31,8 @@ int	setup_heredocs(t_master *master)
 	return (1);
 }
 
+/* Process for opening heredocs. Called once per heredoc. Heredocs were
+ * moved to process to allow for signal handling. */
 int	heredoc_process(t_master *master, t_tokens *current, int i)
 {
 	int			heredoc_success;
@@ -44,8 +46,27 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 	if (waitpid(heredoc_process, &heredoc_success, 0) == -1)
 		return (err_msg("waitpid() failed [setup_heredocs()]", 0, master));
 	if (heredoc_success == 0)
+	{
+		close_and_unlink_heredocs(master);
 		return (0);
+	}
+	else
+		close_heredocs(master);
 	return (1);
+}
+
+/* Called when there is a problem with heredocs or when a CTRL + C signal
+ * is caught. If so, everything is freed from this process it returns 
+ * an exit code 0 that is caught by the parent process and that process
+ * then knows to go back to the prompt. */
+int	exit_gnl(t_master *master, char *line, int return_code)
+{
+	free(line);
+	get_next_line(-1);
+	close_and_unlink_heredocs(master);
+	clean_env(&master->env, 0);
+	free_master(master, 0);
+	return (return_code);
 }
 
 /* The heredoc read loop. Will continually get_next_line until line
@@ -62,20 +83,20 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 	while (1)
 	{
 		write(1, "> \r", 2);
-		exit(free_master(master, 0)); // this is just for testing an exit in a line. gives me lots of fuckins leaks
 		line = get_next_line(0);
 		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
 				&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
 		{
+			print_heredoc_warning(line, delimiter);
 			free(line);
 			get_next_line(-1);
-			print_heredoc_warning(line, delimiter);
-			exit (1);
+			close_heredocs(master);
+			exit(clean_env(&master->env, 1) && free_master(master, 1));
 		}
 		if (should_expand && !expand_heredoc_line(&line, master))
-			exit (0);
+			exit(exit_gnl(master, line, 0) || free_master(master, 0)); // pas sur des return codes ici... a tester !!!
 		if (!heredoc_file_access(master, i, line))
-			exit (0);
+			exit(exit_gnl(master, line, 0) || free_master(master, 0));
 		write(cmd_node->heredoc_fd, line, ft_strlen(line));
 		free(line);
 	}

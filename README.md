@@ -12,10 +12,10 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
+- [ ] Ajouter clear_history functions a la fin de minishell et dans les fonctions d'exit
 - [ ] Attention jái des putains de segault si je `CTRL + D` sans avoir rien run dans minishell. Essaye de free des trucs qui sont meme pas initialises. 
   - Si j'init master dans le main avant le prompt ca me fait des `still reachable`
   - En fait j'ai des trucs qui sont pas free dans le fork du heredoc je pense quand j'exit en cas derreur, ou de `CTRL + C`. A voir parce que la c'est le mega bordel.u
-- [ ] move heredoc writing to child processes. source: Shells Use Temp Files to Implement Here Documents (from oilshell.org)
 - [ ] `CTRL+C`in cat process has to exit with code `130`
 - [ ] `segfault` when `unset` is ran with no env.
 - [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
@@ -39,6 +39,7 @@ You will learn a lot about processes and file descriptors.
 - [ ] env -i les chemins absolus doivent fonctionner quand meme
 - [ ] Write the easiest tester possible
 - [ ] Fix norminette problem in Makefile ! (not urgent)
+- [x] move heredoc writing to child processes. source: Shells Use Temp Files to Implement Here Documents (from oilshell.org)
 - [x] Exit exits only with the code of the latest command ran in minishell
 - [x] if I run an unknown command but a file with the same name is in the directory, no error is thrown [command_error_check()]
 - [x] if I run a command that only has quotes, there is no error message (command not found) [command_error_check()]
