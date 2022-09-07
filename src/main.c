@@ -70,12 +70,17 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_master			master;
 	struct sigaction	sa;
+	int	i;
 
+	i = 0;
+	while (envp[i + 1])
+		i++;
+	printf("%s\n", envp[i]);
 	(void)argc;
 	(void)argv;
 	master.env_array = envp;
 	master.env = NULL;
-	get_env(master.env_array, &master.env);
+	get_env(master.env_array, &master);
 	sa.sa_sigaction = &signal_handler;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);

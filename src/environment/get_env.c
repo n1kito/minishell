@@ -80,7 +80,7 @@ static int	list_init(t_env **env, char **envp)
 	return (1);
 }
 
-int	check_if_is_in_env(t_env *env, char *name)
+static int	is_in_env(t_env *env, char *name)
 {
 	t_env	*tmp;
 
@@ -96,61 +96,73 @@ int	check_if_is_in_env(t_env *env, char *name)
 	return (0);
 }
 
-int	add_missing_variables_to_env(t_env **env, int PWD, int SHLVL, int UN_SC)
+static t_env	*get_env_last(t_env *env)
 {
-	t_env	*tmp;
-	char	*buffer;
+	while (env && env->next)
+		env = env->next;
+	return (env);
+}
 
-	tmp = *env;
+static int	add_to_env(t_master *master, char *name, char *variable)
+{
+	t_env	*new_node;
+
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (err_msg("malloc fail [add_to_env()][1]", 0, master));
+	new_node->name = ft_strdup(name);
+	new_node->variable = ft_strdup(variable);
+	new_node->is_env = 1;
+	new_node->next = NULL;
+	if (!new_node->name || !new_node->variable)
+		return (err_msg("malloc fail [add_to_env()][2]", 0, master));
+	if (!master->env)
+		master->env = new_node;
+	else
+		get_env_last(master->env)->next = new_node;
+	return (1);
+}
+
+static int	add_missing_variables_to_env(t_master *master)
+{
+	char	*buffer;
+	t_env	*env;
+
+	env = master->env;
 	buffer = NULL;
-	getcwd(buffer, PATH_MAX);
-	while (tmp)
-	if (!PWD && !(*env))
-		*env = env_init("PWD=");
-	else if (!PWD)
+	buffer = getcwd(buffer, PATH_MAX);
+	if (!is_in_env(env, "PWD"))
 	{
-		(*env)->next = env_init("PWD=");
-		(*env) = (*env)->next;
+		if (!add_to_env(master, "PWD", buffer))
+			return (free(buffer), 0);
 	}
-	if (!PWD)
+	free(buffer);
+	if (!is_in_env(env, "SHLVL"))
 	{
-		if ((*env)->variable)
-			free((*env)->variable);
-		(*env)->variable = ft_strdup(buffer);
+		if (!add_to_env(master, "SHLVL", "1"))
+			return (0);
 	}
-	if (!SHLVL)
+	if (!is_in_env(env, "_"))
 	{
-		(*env)->next = env_init("SHLVL=1");
-		(*env) = (*env)->next;
+		if (!add_to_env(master, "_", "/usr/bin/env"))
+			return (0);
 	}
-	if (!UN_SC)
-		(*env)->next = env_init("_=/usr/bin/env");
 	return (1);
 }
 
 /*This function takes the environment given as an argument*/
 /*It then transforms it into a linked list with*/
 /*It then returns a pointer to the first element of the list*/
-int	get_env(char **envp, t_env **ptr_env)
+int	get_env(char **envp, t_master *master)
 {
-	int		PWD;
-	int		SHLVL;
-	int		UN_SC;
 	int		ret;
-	t_env	*start;
 
 	ret = 1;
 	if (envp && *envp)
-		ret = list_init(ptr_env, envp);
+		ret = list_init(&master->env, envp);
 	if (!ret)
-		return (clean_env(ptr_env, 0));
-	start = *ptr_env;
-	PWD = check_if_is_in_env(start, "PWD");
-	SHLVL = check_if_is_in_env(start, "SHLVL");
-	UN_SC = check_if_is_in_env(start, "_");
-	if (PWD == 1 && SHLVL == 1 && UN_SC == 1)
-		return (1);
-	if (!add_missing_variables_to_env(&start, PWD, SHLVL, UN_SC))
-		return (clean_env(ptr_env, 0));
+		return (clean_env(&master->env, 0));
+	if (!add_missing_variables_to_env(master))
+		return (clean_env(&master->env, 0));
 	return (1);
 }
