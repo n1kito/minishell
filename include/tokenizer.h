@@ -61,7 +61,7 @@ typedef struct s_master
 	int					printed_error_msg;
 	int					tmp_stdin;
 	int					tmp_stdout;
-	int					reading_heredoc;
+	struct sigaction	*sa;
 }	t_master;
 
 // Operator Characters

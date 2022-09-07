@@ -17,7 +17,6 @@ int	setup_heredocs(t_master *master)
 			if (!set_heredoc_path(master, i)
 				|| !open_heredoc(master, i))
 				return (0);
-			master->reading_heredoc = 1;
 			if (!heredoc_process(master, current, i))
 				return (0);
 			//TODO: protext close and open below
@@ -27,7 +26,6 @@ int	setup_heredocs(t_master *master)
 		}
 		current = current->next;
 	}
-	master->reading_heredoc = 0;
 	return (1);
 }
 
@@ -41,10 +39,16 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 	heredoc_process = fork();
 	if (heredoc_process == -1)
 		return (err_msg("fork failed [setup_heredocs()]", 0, master));
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	if (heredoc_process == 0)
+	{
+		setup_signals(*master->sa, &set_heredoc_signal);
 		read_heredoc(current, master->commands[i], master, i);
+	}
 	if (waitpid(heredoc_process, &heredoc_success, 0) == -1)
 		return (err_msg("waitpid() failed [setup_heredocs()]", 0, master));
+	setup_signals(*master->sa, &signal_handler);
 	if (heredoc_success == 0)
 	{
 		close_and_unlink_heredocs(master);
