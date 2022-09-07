@@ -75,11 +75,8 @@ int	main(int argc, char **argv, char **envp)
 	(void)argv;
 	master.env_array = envp;
 	master.env = NULL;
-	get_env(master.env_array, &master);
-	sa.sa_sigaction = &signal_handler;
-	sa.sa_flags = SA_RESTART;
-	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
+	master.sa = &sa;
+	setup_signals(sa, &signal_handler);
 	//init_master_structure(&master);
 	read_prompt(&master);
 	return (free_master(&master, 0) && clean_env(&master.env, 0));

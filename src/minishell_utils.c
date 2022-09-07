@@ -19,7 +19,6 @@ void	init_master_structure(t_master *master)
 	master->printed_error_msg = 0;
 	master->tmp_stdin = -1;
 	master->tmp_stdout = -1;
-	master->reading_heredoc = 0;
 }
 
 /* Frees all malloced variables in the master structure. */
