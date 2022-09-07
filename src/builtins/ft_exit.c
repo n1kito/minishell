@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/06 14:45:01 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/07 13:05:08 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	ft_exit(t_master *master, int cmd_index)
 	char	**variable;
 
 	variable = master->commands[cmd_index]->cmd_array;
-	if (master->cmd_count == 1) // j'ai change ca pour eviter un segfault, a checker avec Victor
+	if (master->cmd_count == 1) 
 	{
 		ft_putstr_fd("exit\n", 0);
 		close_files(master, cmd_index);
@@ -36,18 +36,19 @@ int	ft_exit(t_master *master, int cmd_index)
 	}
 	if (variable[1] && !ft_is_num(variable[1]))
 	{
-		ft_putstr_fd("Minishell: exit: ", 2);
+		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(variable[1], 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		g_minishexit = 2;
 	}
 	else if (variable[1] && variable[2])
 	{
-		ft_putstr_fd("Minishell: exit: too many arguments\n", 2);
+		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_minishexit = 1;
 		return (1);
 	}
 	else if (variable[1])
 		g_minishexit = ft_atoi(variable[1]);
+	clean_env(&master->env, 0);
 	exit(free_master(master, g_minishexit));
 }

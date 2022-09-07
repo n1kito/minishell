@@ -60,7 +60,7 @@ int	set_builtin_redir(int infile, int outfile, int *tmp_stdin, int *tmp_stdout)
 	if (infile)
 	{
 		*tmp_stdin = dup(STDIN_FILENO);
-		if (*tmp_stdout == -1
+		if (*tmp_stdin == -1
 			|| dup2(infile, STDIN_FILENO) == -1)
 			return (0);
 	}
