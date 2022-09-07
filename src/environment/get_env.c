@@ -101,14 +101,15 @@ int	add_missing_variables_to_env(t_env **env, int PWD, int SHLVL, int UN_SC)
 	t_env	*tmp;
 	char	*buffer;
 
-	tmp = NULL;
+	tmp = *env;
 	buffer = NULL;
 	getcwd(buffer, PATH_MAX);
+	while (tmp)
 	if (!PWD && !(*env))
-		*env = env_init("PWD");
+		*env = env_init("PWD=");
 	else if (!PWD)
 	{
-		(*env)->next = env_init("PWD");
+		(*env)->next = env_init("PWD=");
 		(*env) = (*env)->next;
 	}
 	if (!PWD)
@@ -139,13 +140,11 @@ int	get_env(char **envp, t_env **ptr_env)
 	t_env	*start;
 
 	ret = 1;
-	printf("OK\n");
 	if (envp && *envp)
 		ret = list_init(ptr_env, envp);
 	if (!ret)
 		return (clean_env(ptr_env, 0));
 	start = *ptr_env;
-	printf("OK\n");
 	PWD = check_if_is_in_env(start, "PWD");
 	SHLVL = check_if_is_in_env(start, "SHLVL");
 	UN_SC = check_if_is_in_env(start, "_");
