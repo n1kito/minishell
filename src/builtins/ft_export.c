@@ -6,11 +6,12 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/06 14:07:55 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/07 15:27:32 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include "builtins.h"
 
 static int	update_env(t_env *env, char *str)
 {
@@ -36,11 +37,7 @@ static int	update_env(t_env *env, char *str)
 	else if (str[i] && str[i - 1] && str[i - 1] == '=')
 		env->variable = ft_strdup(&str[i]);
 	else
-	{
-		free(env->variable);
-		env->variable = NULL;
-		return (1);
-	}
+		return (free(env->variable), env->variable = NULL, 1);
 	if (tmp)
 		free(tmp);
 	if (!env->variable)
@@ -120,6 +117,12 @@ int	ft_export(t_env **env, char **variable)
 	i = 1;
 	ret = 0;
 	g_minishexit = 0;
+	if (!variable[1])
+	{
+		print_env_by_alphabetical_order(*env);
+		g_minishexit = 0;
+		return (1);
+	}
 	while (variable[i])
 	{
 		if (arg_is_ok_for_env(variable[i]) == 0)

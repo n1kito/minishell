@@ -45,6 +45,7 @@ SRC_FILES		:= 	main\
 					minishell_master_utils\
 					builtins/ft_echo\
 					builtins/ft_export\
+					builtins/ft_export_no_arg\
 					builtins/ft_unset\
 					builtins/ft_env\
 					builtins/ft_exit\

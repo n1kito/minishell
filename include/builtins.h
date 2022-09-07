@@ -21,6 +21,7 @@ int		ft_export(t_env **env, char **variable);
 int		ft_exit(t_master *master, int cmd_index);
 
 //utils pour les builtins
+void	print_env_by_alphabetical_order(t_env *list);
 int		arg_is_ok_for_env(char const *str);
 
 #endif
