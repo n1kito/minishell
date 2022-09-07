@@ -44,6 +44,7 @@ static t_env	*env_init(char *envp)
 	if (!new || !new->name)
 		return (NULL);
 	new->is_env = 1;
+	new->next = NULL;
 	ft_strlcpy(new->name, envp, equal + 1);
 	ft_strlcpy(new->variable, &envp[equal + 1], len - equal);
 	return (new);
@@ -56,12 +57,12 @@ static int	list_init(t_env **env, char **envp)
 {
 	int		i;
 	t_env	*lst;
+	t_env	*tmp;
 
 	i = 0;
 	if (!(*env))
 	{
 		lst = env_init(envp[i]);
-		printf("%s=%s\n", lst->name, lst->variable);
 		i++;
 		if (!lst)
 			return (0);
@@ -69,10 +70,10 @@ static int	list_init(t_env **env, char **envp)
 	}
 	while (envp[i])
 	{
-		lst = env_init(envp[i]);
-		printf("%s=%s\n", lst->name, lst->variable);
-		if (!lst)
+		tmp = env_init(envp[i]);
+		if (!tmp)
 			return (0);
+		lst->next = tmp;
 		lst = lst->next;
 		i++;
 	}
@@ -84,6 +85,8 @@ int	check_if_is_in_env(t_env *env, char *name)
 	t_env	*tmp;
 
 	tmp = env;
+	if (!tmp)
+		return (0);
 	while (tmp)
 	{
 		if (!ft_strncmp(tmp->name, name, ft_strlen(name)))
@@ -129,21 +132,26 @@ int	add_missing_variables_to_env(t_env **env, int PWD, int SHLVL, int UN_SC)
 /*It then returns a pointer to the first element of the list*/
 int	get_env(char **envp, t_env **ptr_env)
 {
-//	int		PWD;
-//	int		SHLVL;
-//	int		UN_SC;
+	int		PWD;
+	int		SHLVL;
+	int		UN_SC;
 	int		ret;
+	t_env	*start;
 
-	ret = list_init(ptr_env, envp);
-
+	ret = 1;
+	printf("OK\n");
+	if (envp && *envp)
+		ret = list_init(ptr_env, envp);
 	if (!ret)
-		return (clean_env(ptr_env), 0);
-	//PWD = check_if_is_in_env(start, "PWD");
-	//SHLVL = check_if_is_in_env(start, "SHLVL");
-	//UN_SC = check_if_is_in_env(start, "_");
-	//if (PWD == 1 && SHLVL == 1 && UN_SC == 1)
-	//	return (1);
-	//if (!add_missing_variables_to_env(&start, PWD, SHLVL, UN_SC))
-	//	return (clean_env(ptr_env), 0);
+		return (clean_env(ptr_env, 0));
+	start = *ptr_env;
+	printf("OK\n");
+	PWD = check_if_is_in_env(start, "PWD");
+	SHLVL = check_if_is_in_env(start, "SHLVL");
+	UN_SC = check_if_is_in_env(start, "_");
+	if (PWD == 1 && SHLVL == 1 && UN_SC == 1)
+		return (1);
+	if (!add_missing_variables_to_env(&start, PWD, SHLVL, UN_SC))
+		return (clean_env(ptr_env, 0));
 	return (1);
 }
