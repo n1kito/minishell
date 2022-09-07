@@ -10,15 +10,16 @@ void	init_master_structure(t_master *master)
 	master->commands = NULL;
 	master->processes = NULL;
 	master->pipes = NULL;
-	master->env = NULL;
-	if (!master->env)
-		get_env(master->env_array, &master->env);
+//	master->env = NULL;
+//	if (!master->env)
+//		get_env(master->env_array, &master->env);
 	master->env_for_exec = NULL;
 	master->next_command_start = NULL;
 	master->malloc_ok = 1;
 	master->printed_error_msg = 0;
 	master->tmp_stdin = -1;
 	master->tmp_stdout = -1;
+	master->reading_heredoc = 0;
 }
 
 /* Frees all malloced variables in the master structure. */
@@ -28,11 +29,11 @@ int	free_master(t_master *master, int return_value)
 		free_commands_structure(master);
 	if (master->tokens)
 		free_tokens_structure(master);
-	master->tokens = NULL;
+	if (master->env_for_exec)
+		ft_destroy_env(master);
 	free_expansions(&master->expansions);
 	free_pipes(master);
-	clean_env(&master->env);
-	master->expansions = NULL;
+	//clean_env(&master->env); // TODO should this be here ? env should not be cleaned unless minishell is exited completely. Unless I decide to close minishell if there is a system problem, which would also make sense.
 	free(master->processes);
 	master->processes = NULL;
 	//rl_clear_history(); // check if this causes issues because I just added it

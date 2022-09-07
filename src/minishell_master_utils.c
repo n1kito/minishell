@@ -14,18 +14,25 @@ void	free_tokens_structure(t_master *master)
 		free(current);
 		current = next_token;
 	}
+	master->tokens = NULL;
 }
 
 /* Will free all mallocs() in master structure except for the env linked list,
  * which is the only structure that is used everytime we enter a command. */
+// TODO en fait cette fonction fait juste ce que fait free_master donc je vais la virer.
 void	clean_master_memory(t_master *master)
 {
 	if (master->commands)
 		free_commands_structure(master);
 	if (master->tokens)
 		free_tokens_structure(master);
+	if (master->processes)
+	{
+		free(master->processes);
+		master->processes = NULL;
+	}
+	free(master->pipes);
 }
-
 
 /* Frees memory allocated for storing the command arrays but not for the command themselves.
  * These are freed separately when freeing the tokens linked list. */
@@ -38,6 +45,9 @@ void	free_commands_structure(t_master *master)
 	while (master->commands
 			&& master->commands[i])
 	{
+		// TODO maybe remove this one I dont know but if not at least protect it
+		if (master->commands[i]->heredoc_fd)
+			close(master->commands[i]->heredoc_fd);
 		if (master->commands[i]->cmd_path
 			&& master->commands[i]->cmd_path != master->commands[i]->cmd_array[0])
 			free(master->commands[i]->cmd_path);

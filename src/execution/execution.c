@@ -21,14 +21,15 @@ void	launch_exec(t_master *master, int i)
 	else
 		plug_middle_cmd(master, i, input_redirection, output_redirection);
 	close_pipes_and_files(master, i);
-	if (!master->commands[i]->cmd_array[0] || !env_for_exe(master)
+	if (!master->commands[i]->cmd_array[0]
 		|| (is_builtin_function(master->commands[i]->cmd_array[0])
 			&& !run_builtin(master, i)))
-		exit(free_master(master, 0));
-	if (!is_builtin_function(master->commands[i]->cmd_array[0]))
+		exit(clean_env(&master->env, 0) && free_master(master, 0));
+	if (!is_builtin_function(master->commands[i]->cmd_array[0])
+		&& env_for_exe(master))
 		execve(master->commands[i]->cmd_path,
 			master->commands[i]->cmd_array, master->env_for_exec);
-	exit(free_master(master, 1));
+	exit(clean_env(&master->env, 1) && free_master(master, 1));
 }
 
 /* Loops through the command segments and creates a fork for each,

@@ -34,7 +34,7 @@ int	execute_command(char *command_line, t_master *master)
 	}
 	else if (!exec_loop(master))
 		return (0);
-	free_master(master, 1);
+	// free_master(master, 1); // TODO do we need this? Master is cleaned after every exec in read_prompt()
 	return (1);
 }
 
@@ -50,9 +50,11 @@ void	read_prompt(t_master *master)
 		{
 			add_history(line);
 			init_master_structure(master);
-			if (!execute_command(line, master))
-				free_master(master, 1);
-			clean_master_memory(master);
+			//if (!execute_command(line, master))
+				//free_master(master, 1);
+			//clean_master_memory(master);
+			execute_command(line, master);
+			free_master(master, 1);
 			//rl_redisplay();
 		}
 		if (!line)
@@ -72,10 +74,13 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	master.env_array = envp;
+	master.env = NULL;
+	get_env(master.env_array, &master.env);
 	sa.sa_sigaction = &signal_handler;
 	sa.sa_flags = SA_RESTART;
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
+	//init_master_structure(&master);
 	read_prompt(&master);
-	return (free_master(&master, 0));
+	return (free_master(&master, 0) && clean_env(&master.env, 0));
 }

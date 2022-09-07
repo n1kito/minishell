@@ -12,23 +12,11 @@ You will learn a lot about processes and file descriptors.
 
 # To-do
 
-- [ ] implementer env_for_exe
-- [ ] if I run an unknown command but a file with the same name is in the directory, no error is thrown [command_error_check()]
-- [ ] if I run a command that only has quotes, there is no error message (command not found) [command_error_check()]
-- [ ] check what needs to be freed after every execution
-      - [ ] create `reset_master_structure()` and call it at the very beginning of `init_master_structure()`
-          - [ ] move `init_master_structure()` to right before `execute_command()` in `readline()` loop.
-      - free tokens and set to NULL
-      - free helpers and set to NULL
-      - free expansions and set to NULL
-      - KEEP env
-      - free commands and set to null
-      - free processes and set to null
-      - free pipes and set to null
-      - env for exec should always be NULL since it's set in the fork
-      - next_command_start set to null
-      - malloc_ok set to 1
-      - printed_error_msg set to 0
+- [ ] Ajouter clear_history functions a la fin de minishell et dans les fonctions d'exit
+- [ ] Attention jái des putains de segault si je `CTRL + D` sans avoir rien run dans minishell. Essaye de free des trucs qui sont meme pas initialises. 
+  - Si j'init master dans le main avant le prompt ca me fait des `still reachable`
+  - En fait j'ai des trucs qui sont pas free dans le fork du heredoc je pense quand j'exit en cas derreur, ou de `CTRL + C`. A voir parce que la c'est le mega bordel.u
+- [ ] `CTRL+C`in cat process has to exit with code `130`
 - [ ] `segfault` when `unset` is ran with no env.
 - [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
 - [ ] builtins: rajouter messages d'erreur malloc (pas urgent)
@@ -42,15 +30,34 @@ You will learn a lot about processes and file descriptors.
 - [ ] `CTRL + C` from minishell should print out `\n`?
 - [ ] `CTRL + C` from heredo leaves current heredoc and exec ?
 - [ ] If the program is launched with a empty env, hard code the 3 basic variables
+    - Actually, when `./minishell` is launched, env is checked and if the three variables in question are not in there, they are added.
 - [ ] Increment `$SHLVL` when the program is lauched
 - [ ] Check exit errors codes when passed invalid arguments
 - [ ] Test commands with empty sections (token that only has quotes between two `|`)
-- [ ] Exit exits only with the code of the latest command ran in minishell
 - [ ] `unset` all variables and see if it craches
 - [ ] `top -bn1` et grep le process qu'on veut pour verifier qu'il n'y a pas des process qu'on a pas close
 - [ ] env -i les chemins absolus doivent fonctionner quand meme
 - [ ] Write the easiest tester possible
 - [ ] Fix norminette problem in Makefile ! (not urgent)
+- [x] move heredoc writing to child processes. source: Shells Use Temp Files to Implement Here Documents (from oilshell.org)
+- [x] Exit exits only with the code of the latest command ran in minishell
+- [x] if I run an unknown command but a file with the same name is in the directory, no error is thrown [command_error_check()]
+- [x] if I run a command that only has quotes, there is no error message (command not found) [command_error_check()]
+- [x] check what needs to be freed after every execution
+      - [x] create `reset_master_structure()` and call it at the very beginning of `init_master_structure()`
+          - [x] move `init_master_structure()` to right before `execute_command()` in `readline()` loop.
+      - free tokens and set to NULL
+      - free helpers and set to NULL
+      - free expansions and set to NULL
+      - KEEP env
+      - free commands and set to null
+      - free processes and set to null
+      - free pipes and set to null
+      - env for exec should always be NULL since it's set in the fork
+      - next_command_start set to null
+      - malloc_ok set to 1
+      - printed_error_msg set to 0
+- [x] implementer env_for_exe
 - [x] redirection to file with single builtin `echo` does not work
 - [x] If `env` is empty, commands should return `command not found` not `no such filr or directory`
     - Actually the should return `No such file or directory`. To test, launch `bash` and `unset PATH`. Running any command will give `No such file or directory`.

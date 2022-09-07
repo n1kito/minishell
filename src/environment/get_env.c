@@ -6,7 +6,7 @@
 // the first string called NAME takes the beggininning of the string until the =
 // the second string VARIABLE takes the rest of the string
 
-void	clean_env(t_env **env)
+int	clean_env(t_env **env, int return_code)
 {
 	t_env	*tmp;
 	t_env	*lst;
@@ -25,6 +25,7 @@ void	clean_env(t_env **env)
 			free(tmp);
 	}
 	*env = NULL;
+	return (return_code);
 }
 
 static t_env	*env_init(char *envp)
@@ -134,6 +135,7 @@ int	get_env(char **envp, t_env **ptr_env)
 	int		ret;
 
 	ret = list_init(ptr_env, envp);
+
 	if (!ret)
 		return (clean_env(ptr_env), 0);
 	//PWD = check_if_is_in_env(start, "PWD");
