@@ -54,12 +54,12 @@ void	read_prompt(t_master *master)
 				//free_master(master, 1);
 			//clean_master_memory(master);
 			execute_command(line, master);
-//			free_master(master, 1);
+			free_master(master, 1);
 //			sigemptyset(&new_action.sa_mask);
 		}
 		if (!line)
 		{
-			write(0, "exit\n", 5);
+			write(1, "exit\n", 5);
 			break ;
 		}
 		free(line);
