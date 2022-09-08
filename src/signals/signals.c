@@ -19,9 +19,13 @@ static void	ctrlc_handler_heredoc(int sig)
 {
 	if (sig == SIGINT)
 	{
-		printf("\n");
 		g_master->exit_code = 130;
-		exit_gnl(g_master, g_master->heredoc_line, 0);
+		printf("\n");
+		//exit_gnl(g_master, g_master->heredoc_line, 0);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		close(0);
+		//rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
 	{

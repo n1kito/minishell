@@ -47,7 +47,7 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 	}
 	if (waitpid(heredoc_process, &g_master->exit_code, 0) == -1)
 		return (err_msg("waitpid() failed [setup_heredocs()]", 0, master));
-	g_master->exit_code = WIFEXITED(g_master->exit_code);
+	g_master->exit_code = WEXITSTATUS(g_master->exit_code);
 	setup_signals(*master->sa, &signal_handler);
 	if (g_master->exit_code == 0 || g_master->exit_code == 130 || g_master->exit_code == 131)
 	{
@@ -90,6 +90,8 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 	{
 		g_master->heredoc_line = readline("> ");
 		//g_master->heredoc_line = get_next_line(0);
+		if (g_master->exit_code == 130)
+			exit(g_master->exit_code);
 		if (!g_master->heredoc_line || (!ft_strncmp(g_master->heredoc_line, delimiter, ft_strlen(delimiter))
 				&& ft_strlen(g_master->heredoc_line) == ft_strlen(delimiter)))
 		{
