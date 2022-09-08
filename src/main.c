@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/08 15:13:50 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/08 15:18:26 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	read_prompt(t_master *master)
 	while (1)
 	{
 		line = readline("mini🔥hell \033[0;31m>\033[0;39m ");
-		if (line && ft_strcmp("\n", line) == 0)
+		if (line)
 		{
 			printf("FOUND A LINE\n");
 			add_history(line);
