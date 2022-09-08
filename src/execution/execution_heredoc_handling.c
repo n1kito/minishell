@@ -66,6 +66,7 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 int	exit_gnl(t_master *master, char *line, int return_code)
 {
 	free(line);
+	// add rl_clear_history here ?
 	close_and_unlink_heredocs(master);
 	clean_env(&master->env, 0);
 	free_master(master, 0);
@@ -78,20 +79,27 @@ int	exit_gnl(t_master *master, char *line, int return_code)
 void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 {
 	char	*line;
+	char	*tmp;
 	char	*delimiter;
 	int		should_expand;
 
 	delimiter = token->next->token;
+	line = NULL;
+	tmp = NULL;
 	check_if_heredoc_should_expand(token->next, &should_expand);
 	while (1)
 	{
 		line = readline("> ");
+		tmp = line;
+		line = ft_strjoin(tmp, "\n");
+		free(tmp);
 		if (g_minishexit == 130)
 		{
 			exit_gnl(master, line, 0);
 			exit(g_minishexit);
 		}
-		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(line))))
+		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
+			&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
 		{
 			print_heredoc_warning(line, delimiter);
 			free(line);
@@ -105,7 +113,7 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 		if (!heredoc_file_access(master, i, line))
 			exit(exit_gnl(master, line, 0) || free_master(master, 0));
 		write(cmd_node->heredoc_fd, line, ft_strlen(line));
-		write(cmd_node->heredoc_fd, "\n", 1);
+		//write(cmd_node->heredoc_fd, "\n", 1);
 		free(line);
 		line = NULL;
 	}

@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/08 15:18:26 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/08 16:53:52 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,8 @@ void	read_prompt(t_master *master)
 	while (1)
 	{
 		line = readline("mini🔥hell \033[0;31m>\033[0;39m ");
-		if (line)
+		if (line && line[0])
 		{
-			printf("FOUND A LINE\n");
 			add_history(line);
 			init_master_structure(master);
 			//if (!execute_command(line, master))
@@ -80,5 +79,5 @@ int	main(int argc, char **argv, char **envp)
 	get_env(envp, &master);
 	init_master_structure(&master);
 	read_prompt(&master);
-	return (free_master(&master, 0) && clean_env(&master.env, 0));
+	return (clean_env(&master.env,0) && free_master(&master, 0));
 }

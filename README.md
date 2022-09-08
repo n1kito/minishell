@@ -13,34 +13,42 @@ You will learn a lot about processes and file descriptors.
 # To-do
 
 - [ ] Ajouter clear_history functions a la fin de minishell et dans les fonctions d'exit
-- [ ] Leaks quand je fais juste `enter` dans la command line
-- [ ] Attention jái des putains de segault si je `CTRL + D` sans avoir rien run dans minishell. Essaye de free des trucs qui sont meme pas initialises. 
-  - Si j'init master dans le main avant le prompt ca me fait des `still reachable`
-  - En fait j'ai des trucs qui sont pas free dans le fork du heredoc je pense quand j'exit en cas derreur, ou de `CTRL + C`. A voir parce que la c'est le mega bordel.u
+- [ ] Leak quand je echo $? et exit
 - [ ] `CTRL+C`in cat process has to exit with code `130`
+    - Teste par mj et ne marche pas
 - [ ] `segfault` when `unset` is ran with no env.
+    - Toujours vrai si je lance minishell depuis bash env -i et que j'unset meme une variable qui est dedans
+        - ALors en fait unset fonctionne avec SHLVL mais si j'essaie d'unset PWD ca segault
 - [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
 - [ ] builtins: rajouter messages d'erreur malloc (pas urgent)
 - [ ] builtins: proteger tous les strjoin & cie
 - [ ] `env` : print err message when two many arguments
+      apparemment non pas dans bash --posix je sais pas d'ou je sors ca
 - [ ] `export` : bug lors des assignamtions
 - [ ] `export` `+=` ne fonctionne pas
 - [ ] `cd` suppression du dossier parent: voir erreurs de bash
 - [ ] Protext all open() and close() calls
 - [ ] Do a bunch of `heredoc` + `chmod 0` tests
-- [ ] `CTRL + C` from minishell should print out `\n`?
 - [ ] `CTRL + C` from heredo leaves current heredoc and exec ?
-- [ ] If the program is launched with a empty env, hard code the 3 basic variables
     - Actually, when `./minishell` is launched, env is checked and if the three variables in question are not in there, they are added.
-- [ ] Increment `$SHLVL` when the program is lauched
 - [ ] Check exit errors codes when passed invalid arguments
-- [ ] Test commands with empty sections (token that only has quotes between two `|`)
+    - [x] Exiting with letters instead of number ok returns `2`
+    - [ ] Returning with INT>MAX returns `191` when it should return `2`and print an error. Check at school. 
+    - Ca a láir ok
 - [ ] `unset` all variables and see if it craches
 - [ ] `top -bn1` et grep le process qu'on veut pour verifier qu'il n'y a pas des process qu'on a pas close
-- [ ] env -i les chemins absolus doivent fonctionner quand meme
 - [ ] Write the easiest tester possible
 - [ ] Fix norminette problem in Makefile ! (not urgent)
+- [z] If the program is launched with a empty env, hard code the 3 basic variables
+- [x] `CTRL + C` from minishell should print out `\n`?
+- [x] Test commands with empty sections (token that only has quotes between two `|`)
+- [x] env -i les chemins absolus doivent fonctionner quand meme
+- [x] Leaks quand je fais juste `enter` dans la command line
 - [x] move heredoc writing to child processes. source: Shells Use Temp Files to Implement Here Documents (from oilshell.org)
+- [z] Increment `$SHLVL` when the program is lauched
+- [x] Attention jái des putains de segault si je `CTRL + D` sans avoir rien run dans minishell. Essaye de free des trucs qui sont meme pas initialises. 
+  - Si j'init master dans le main avant le prompt ca me fait des `still reachable`
+  - En fait j'ai des trucs qui sont pas free dans le fork du heredoc je pense quand j'exit en cas derreur, ou de `CTRL + C`. A voir parce que la c'est le mega bordel.u
 - [x] Exit exits only with the code of the latest command ran in minishell
 - [x] if I run an unknown command but a file with the same name is in the directory, no error is thrown [command_error_check()]
 - [x] if I run a command that only has quotes, there is no error message (command not found) [command_error_check()]
