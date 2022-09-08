@@ -46,12 +46,18 @@ int	exec_loop(t_master *master)
 		if (master->processes[i] == -1)
 			return (err_msg("fork failed [exec_loop]", 0, master));
 		if (master->processes[i] == 0)
+		{
+			setup_signals(*master->sa, &set_command_signal);
 			launch_exec(master, i);
+		}
+		else
+			signal(SIGINT, SIG_IGN);
 		i++;
 	}
 	if (!close_pipes(master)
 		|| !close_heredocs(master)
 		|| !process_waiter(master))
 		return (0);
+	setup_signals(*master->sa, &signal_handler);
 	return (1);
 }
