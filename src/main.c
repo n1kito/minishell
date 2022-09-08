@@ -55,11 +55,11 @@ void	read_prompt(t_master *master)
 			//clean_master_memory(master);
 			execute_command(line, master);
 //			free_master(master, 1);
-			//rl_redisplay();
+//			sigemptyset(&new_action.sa_mask);
 		}
 		if (!line)
 		{
-			write(1, "exit\n", 5);
+			write(0, "exit\n", 5);
 			break ;
 		}
 		free(line);
@@ -77,6 +77,7 @@ int	main(int argc, char **argv, char **envp)
 	master.env = NULL;
 	master.sa = &sa;
 	setup_signals(sa, &signal_handler);
+	get_env(envp, &master);
 	init_master_structure(&master);
 	read_prompt(&master);
 	return (free_master(&master, 0) && clean_env(&master.env, 0));
