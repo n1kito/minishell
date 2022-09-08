@@ -62,8 +62,12 @@ typedef struct s_master
 	int					tmp_stdin;
 	int					tmp_stdout;
 	struct sigaction	*sa;
+	int					exit_code;
+	char				*heredoc_line;
 }	t_master;
 
+extern t_master *g_master; // TODO see if this needs to be somewhere else. It needs to know the t_master stuct at least.
+						   //
 // Operator Characters
 # define PIPE 124
 # define L_CHEVRON 60

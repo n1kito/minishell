@@ -9,7 +9,7 @@ static void	ctrlc_handler(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_minishexit = 130;
+		g_master->exit_code = 130;
 	}
 	else if (sig == SIGQUIT)
 		printf("\b\b  \b\b");
@@ -20,14 +20,14 @@ static void	ctrlc_handler_heredoc(int sig)
 	if (sig == SIGINT)
 	{
 		printf("\n");
-		g_minishexit = 130;
-		exit(g_minishexit);
+		g_master->exit_code = 130;
+		exit_gnl(g_master, g_master->heredoc_line, 0);
 	}
 	else if (sig == SIGQUIT)
 	{
 		ft_putstr_fd("Quit (Core Dumped)\n", 2);
-		g_minishexit = 131;
-		exit(g_minishexit);
+		g_master->exit_code = 131;
+		exit(g_master->exit_code);
 	}
 }
 

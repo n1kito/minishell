@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 14:00:42 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/08 07:21:02 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	ft_echo(char **arg)
 	int	i;
 	int	ret;
 
-	g_minishexit = 0;
+	g_master->exit_code = 0;
 	ret = 0;
 	i = 1;
 	if (arg[i])
@@ -54,8 +54,8 @@ int	ft_echo(char **arg)
 	if (!option_n && ret >= 0)
 		ret = write(1, "\n", 1);
 	if (ret < 0)
-		g_minishexit = 1;
-	if (g_minishexit)
+		g_master->exit_code = 1;
+	if (g_master->exit_code)
 		return (0);
 	return (1);
 }

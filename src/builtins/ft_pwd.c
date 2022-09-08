@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/15 14:29:06 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 14:20:33 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/08 07:23:15 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,13 @@ int	ft_pwd(void)
 	if (getcwd(buffer, PATH_MAX))
 	{
 		printf("%s\n", buffer);
-		g_minishexit = 0;
+		g_master->exit_code = 0;
 		return (0);
 	}
 	else
 	{
 		perror("Error: pwd: ");
-		g_minishexit = 1;
+		g_master->exit_code = 1;
 		return (1);
 	}
 }

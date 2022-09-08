@@ -13,7 +13,7 @@
 
 #include "minishell.h"
 
-int	g_minishexit = 0;
+t_master *g_master;
 
 int	execute_command(char *command_line, t_master *master)
 {
@@ -70,13 +70,15 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_master			master;
 	struct sigaction	sa;
-
+	
 	(void)argc;
 	(void)argv;
+	g_master = &master;
 	master.env_array = envp;
 	master.env = NULL;
 	master.sa = &sa;
 	setup_signals(sa, &signal_handler);
+	get_env(master.env_array, g_master);
 	//init_master_structure(&master);
 	read_prompt(&master);
 	return (free_master(&master, 0) && clean_env(&master.env, 0));

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/07 15:27:32 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/08 07:27:54 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,11 +116,11 @@ int	ft_export(t_env **env, char **variable)
 
 	i = 1;
 	ret = 0;
-	g_minishexit = 0;
+	g_master->exit_code = 0;
 	if (!variable[1])
 	{
 		print_env_by_alphabetical_order(*env);
-		g_minishexit = 0;
+		g_master->exit_code = 0;
 		return (1);
 	}
 	while (variable[i])
@@ -137,7 +137,7 @@ int	ft_export(t_env **env, char **variable)
 			write (2, "Export: Error: ", 14);
 			write (2, variable[i], ft_strlen(variable[i]));
 			write (2, " not a valid identifier\n", 24);
-			g_minishexit = 1;
+			g_master->exit_code = 1;
 		}
 		i++;
 	}

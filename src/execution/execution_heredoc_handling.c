@@ -33,7 +33,6 @@ int	setup_heredocs(t_master *master)
  * moved to process to allow for signal handling. */
 int	heredoc_process(t_master *master, t_tokens *current, int i)
 {
-	int			heredoc_success;
 	int			heredoc_process;
 
 	heredoc_process = fork();
@@ -46,10 +45,11 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 		setup_signals(*master->sa, &set_heredoc_signal);
 		read_heredoc(current, master->commands[i], master, i);
 	}
-	if (waitpid(heredoc_process, &heredoc_success, 0) == -1)
+	if (waitpid(heredoc_process, &g_master->exit_code, 0) == -1)
 		return (err_msg("waitpid() failed [setup_heredocs()]", 0, master));
+	g_master->exit_code = WIFEXITED(g_master->exit_code);
 	setup_signals(*master->sa, &signal_handler);
-	if (heredoc_success == 0)
+	if (g_master->exit_code == 0 || g_master->exit_code == 130 || g_master->exit_code == 131)
 	{
 		close_and_unlink_heredocs(master);
 		return (0);
@@ -65,20 +65,22 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
  * then knows to go back to the prompt. */
 int	exit_gnl(t_master *master, char *line, int return_code)
 {
-	free(line);
-	get_next_line(-1);
+	(void)master;
+	(void)line;
+	(void)return_code;
 	close_and_unlink_heredocs(master);
-	clean_env(&master->env, 0);
-	free_master(master, 0);
-	return (return_code);
+	rl_clear_history();
+	clean_env(&g_master->env, 0);
+	free_master(g_master, 0);
+	exit(g_master->exit_code);
 }
 
 /* The heredoc read loop. Will continually get_next_line until line
  * is either only the delimiter, or is completely empty, meaning an
  * EOL character was found. */
+// TODO: remplacer par readline parce que c'est vraiment trop la merde gnl
 void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 {
-	char	*line;
 	char	*delimiter;
 	int		should_expand;
 
@@ -86,23 +88,25 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 	check_if_heredoc_should_expand(token->next, &should_expand);
 	while (1)
 	{
-		write(1, "> \r", 2);
-		line = get_next_line(0);
-		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
-				&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
+		g_master->heredoc_line = readline("> ");
+		//g_master->heredoc_line = get_next_line(0);
+		if (!g_master->heredoc_line || (!ft_strncmp(g_master->heredoc_line, delimiter, ft_strlen(delimiter))
+				&& ft_strlen(g_master->heredoc_line) == ft_strlen(delimiter)))
 		{
-			print_heredoc_warning(line, delimiter);
-			free(line);
-			get_next_line(-1);
+			print_heredoc_warning(g_master->heredoc_line, delimiter);
+			free(g_master->heredoc_line);
+			g_master->heredoc_line = NULL;
+			rl_clear_history();
 			close_heredocs(master);
 			exit(clean_env(&master->env, 1) && free_master(master, 1));
 		}
-		if (should_expand && !expand_heredoc_line(&line, master))
-			exit(exit_gnl(master, line, 0) || free_master(master, 0)); // pas sur des return codes ici... a tester !!!
-		if (!heredoc_file_access(master, i, line))
-			exit(exit_gnl(master, line, 0) || free_master(master, 0));
-		write(cmd_node->heredoc_fd, line, ft_strlen(line));
-		free(line);
+		if (should_expand && !expand_heredoc_line(&g_master->heredoc_line, master))
+			exit(exit_gnl(master, g_master->heredoc_line, 0) || free_master(master, 0)); // pas sur des return codes ici... a tester !!!
+		if (!heredoc_file_access(master, i, g_master->heredoc_line))
+			exit(exit_gnl(master, g_master->heredoc_line, 0) || free_master(master, 0));
+		write(cmd_node->heredoc_fd, g_master->heredoc_line, ft_strlen(g_master->heredoc_line));
+		free(g_master->heredoc_line);
+		g_master->heredoc_line = NULL;
 	}
 }
 
@@ -151,7 +155,7 @@ void	print_heredoc_warning(char *line, char *delimiter)
 	if (line)
 		return ;
 	// TODO protext strjoini
-	tmp_message = ft_strjoin("\nmini(s)hell: warning: here-document \
+	tmp_message = ft_strjoin("mini(s)hell: warning: here-document \
 delimited by end-of-file (wanted '", delimiter);
 	warning = ft_strjoin(tmp_message, "')\n");
 	free (tmp_message);

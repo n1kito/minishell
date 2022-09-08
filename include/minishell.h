@@ -12,8 +12,6 @@ typedef struct s_master
 }	t_master;
 */
 
-extern int g_minishexit;
-
 typedef struct s_env {
 	char			*name;
 	char			*variable;

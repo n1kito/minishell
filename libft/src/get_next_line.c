@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 11:11:24 by mjallada          #+#    #+#             */
-/*   Updated: 2022/08/28 20:40:54 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/08 08:15:10 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,11 +17,13 @@ char	*get_next_line(int fd)
 	static t_gnl	*stash = NULL;
 	char			*line;
 
+	ft_printf_fd(1, "fd is: %d\n", fd);
 	if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, &line, 0) < 0)
 	{
+		ft_printf_fd(1, "exiting gnl\n");
 		if (stash)
-			free(stash->content);
-		free(stash);
+			free_stash(stash);
+		//free(stash);
 		stash = NULL;
 		return (NULL);
 	}

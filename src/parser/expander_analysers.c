@@ -67,7 +67,7 @@ int	add_exp_node(t_master *master, char *token, int i)
 	new_expand->name_end = i + new_expand->name_len;
 	new_expand->name = token + new_expand->name_start;
 	if (token[i + 1] == '?')
-		new_expand->value = ft_itoa(g_minishexit);
+		new_expand->value = ft_itoa(g_master->exit_code);
 	else
 		new_expand->value = search_env(master->env, new_expand->name,
 				new_expand->name_len);

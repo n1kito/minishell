@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/05 14:17:30 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/08 07:18:39 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,7 +145,7 @@ int	ft_cd(char **path, t_env *env)
 		if (path[2])
 		{
 			ft_putstr_fd("Minishell: cd: too many arguments\n", 2);
-			g_minishexit = 1;
+			g_master->exit_code = 1;
 		}
 		if (!path[1])
 			ret = find_home(env);
@@ -155,15 +155,15 @@ int	ft_cd(char **path, t_env *env)
 			ft_update_pwd(start, buffer);
 		if (ret != 0)
 			perror("Error: cd: ");
-		ret = g_minishexit;
-		if (g_minishexit)
+		ret = g_master->exit_code;
+		if (g_master->exit_code)
 			return (0);
 		return (1);
 	}
 	else
 	{
 		perror("Error: cd: ");
-		g_minishexit = 0;
+		g_master->exit_code = 0;
 		return (0);
 	}
 }

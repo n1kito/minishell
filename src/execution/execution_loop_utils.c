@@ -97,15 +97,15 @@ int	close_and_unlink_heredocs(t_master *master)
 }
 
 /* Waits for all processes one by one and stores the exit code of the
- * latest function in the global g_minishexit variable. */
+ * latest function in the global master variable. */
 int	process_waiter(t_master *master)
 {
 	int	i;
 
 	i = -1;
 	while (++i < master->cmd_count)
-		if (waitpid(master->processes[i], &g_minishexit, 0) == -1)
+		if (waitpid(master->processes[i], &g_master->exit_code, 0) == -1)
 			return (err_msg("waitpid() failed [process_waiter()]", 0, master));
-	g_minishexit = WEXITSTATUS(g_minishexit);
+	g_master->exit_code = WEXITSTATUS(g_master->exit_code);
 	return (1);
 }

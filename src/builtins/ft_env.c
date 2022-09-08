@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/07 11:47:51 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/08 07:21:24 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ int	ft_env(t_env *env)
 		}
 		tmp = tmp->next;
 	}
-	g_minishexit = 0;
+	g_master->exit_code = 0;
 	return (1);
 }

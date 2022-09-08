@@ -22,7 +22,7 @@ int	allocate_file_descriptors(t_master *master)
 		master->commands[i]->fds
 			= malloc(sizeof(int) * master->commands[i]->redirections_count);
 		if (!master->commands[i]->fds)
-			return (err_msg("malloc failed [open_file_descriptors()]",
+			return (err_msg("malloc failed [allocate_file_descriptors()]",
 					0, master));
 		j = 0;
 		while (j < master->commands[i]->redirections_count)
