@@ -35,7 +35,9 @@ void	set_heredoc_signal(int sig, siginfo_t *siginfo, void *context)
 	(void)siginfo;
 	if (sig == SIGINT)
 	{
+		printf("\n");
 		rl_on_new_line();
+		//rl_replace_line("", 0);
 		g_minishexit = 130;
 		close(0);
 	}

@@ -33,7 +33,6 @@ int	setup_heredocs(t_master *master)
  * moved to process to allow for signal handling. */
 int	heredoc_process(t_master *master, t_tokens *current, int i)
 {
-	int			heredoc_success;
 	int			heredoc_process;
 
 	heredoc_process = fork();
@@ -46,10 +45,11 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 		setup_signals(*master->sa, &set_heredoc_signal);
 		read_heredoc(current, master->commands[i], master, i);
 	}
-	if (waitpid(heredoc_process, &heredoc_success, 0) == -1)
+	if (waitpid(heredoc_process, &g_minishexit, 0) == -1)
 		return (err_msg("waitpid() failed [setup_heredocs()]", 0, master));
 	setup_signals(*master->sa, &signal_handler);
-	if (heredoc_success == 0)
+	g_minishexit = WEXITSTATUS(g_minishexit);
+	if (g_minishexit == 0 || g_minishexit == 130 || g_minishexit == 131)
 	{
 		close_and_unlink_heredocs(master);
 		return (0);
@@ -66,7 +66,6 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 int	exit_gnl(t_master *master, char *line, int return_code)
 {
 	free(line);
-	get_next_line(-1);
 	close_and_unlink_heredocs(master);
 	clean_env(&master->env, 0);
 	free_master(master, 0);
@@ -86,14 +85,18 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 	check_if_heredoc_should_expand(token->next, &should_expand);
 	while (1)
 	{
-		write(1, "> \r", 2);
-		line = get_next_line(0);
-		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
-				&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
+		line = readline("> ");
+		if (g_minishexit == 130)
+		{
+			exit_gnl(master, line, 0);
+			exit(g_minishexit);
+		}
+		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(line))))
 		{
 			print_heredoc_warning(line, delimiter);
 			free(line);
-			get_next_line(-1);
+			line = NULL;
+			rl_clear_history(); // TODO check if this is necessary
 			close_heredocs(master);
 			exit(clean_env(&master->env, 1) && free_master(master, 1));
 		}
@@ -102,7 +105,9 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 		if (!heredoc_file_access(master, i, line))
 			exit(exit_gnl(master, line, 0) || free_master(master, 0));
 		write(cmd_node->heredoc_fd, line, ft_strlen(line));
+		write(cmd_node->heredoc_fd, "\n", 1);
 		free(line);
+		line = NULL;
 	}
 }
 
