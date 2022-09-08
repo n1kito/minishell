@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/07 15:27:32 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/08 17:02:50 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,22 +51,24 @@ static int	add_elem_to_env(t_env *env, char *str)
 	t_env	*new;
 
 	i = 0;
-	while (env->next)
+	while (env && env->next)
 		env = env->next;
-	while (str[i] && str[i - 1] != '=')
+	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	new = ft_calloc(sizeof(t_env), 1);
 	if (!new)
 		return (0);
-	if (str[i])
+	if (str[i] == '=' || (str[i] == '+' && str[i + 1] == '='))
 		new->is_env = 1;
 	new->name = malloc(sizeof(char) * (i + 1));
 	if (!new->name)
 		return (0);
-	ft_strlcpy(new->name, str, i);
-	if (str[i])
+	ft_strlcpy(new->name, str, i + 1);
+	if (str[i] == '+')
+		i++;
+	if (str[i + 1])
 	{
-		new->variable = ft_strdup(&str[i]);
+		new->variable = ft_strdup(&str[i + 1]);
 		if (!new->variable)
 			return (0);
 	}
@@ -79,11 +81,12 @@ static int	check_if_in_env(t_env *env, char *str)
 	size_t	i;
 
 	i = 0;
-	while (str[i] && (str[i] != '=' || str[i] != '+'))
+	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	while (env)
 	{
-		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0)
+		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0 \
+			&& ft_strlen(env->name) == i)
 			return (1);
 		env = env->next;
 	}
@@ -100,8 +103,10 @@ int	arg_is_ok_for_env(char const *str)
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (1);
 	i++;
-	while (str[i] && ((str[i] != '=') && (str[i] != '+' && str[i + 1] != '=')))
+	while (str[i])
 	{
+		if (str[i] == '=' || (str[i] == '+' && str[i + 1] == '='))
+			return (0);
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (1);
 		i++;
