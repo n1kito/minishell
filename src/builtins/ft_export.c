@@ -6,12 +6,32 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/08 17:02:50 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/09 00:13:05 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
+
+char	*update_env_plus(char *initial_value, char *added_value)
+{
+	char	*tmp;
+
+	tmp = NULL;
+	if (!added_value || !added_value[0])
+		return (initial_value);
+	if (!initial_value)
+		initial_value = ft_strdup(added_value);
+	else
+	{
+		tmp = initial_value;
+		initial_value = ft_strjoin(initial_value, added_value);
+		free(tmp);
+	}
+	if (!initial_value)
+		return (NULL);
+	return (initial_value);
+}
 
 static int	update_env(t_env *env, char *str)
 {
@@ -20,24 +40,26 @@ static int	update_env(t_env *env, char *str)
 
 	i = 0;
 	tmp = NULL;
-	while (ft_strncmp(env->name, str, ft_strlen(env->name)) != 0)
-		env = env->next;
-	while (str[i] && str[i - 1] != '=')
+	while (str && str[i] && str[i - 1] != '=')
 		i++;
-	if (str[i])
-		tmp = env->variable;
-	env->is_env = 1;
-	if (str[i] && str[i - 2] && str[i - 2] == '+' && str[i - 1] == '=')
+	while (env)
 	{
-		if (env->variable)
-			env->variable = ft_strjoin(env->variable, &str[i]);
-		else
-			env->variable = ft_strdup(&str[i]);
+		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0 \
+			&& ft_strlen(env->name) == i)
+			break;
+		env = env->next;
 	}
-	else if (str[i] && str[i - 1] && str[i - 1] == '=')
-		env->variable = ft_strdup(&str[i]);
-	else
-		return (free(env->variable), env->variable = NULL, 1);
+	env->is_env = 1;
+	if (str[i] && str[i - 1] == '=' && str[i - 2] == '+')
+		env->variable = update_env_plus(env->variable, &str[i]);
+	else if (str[i - 1] == '=' && str[i - 2] != '+')
+	{
+		tmp = env->variable;
+		if (str[i])
+			env->variable = ft_strdup(&str[i]);
+		else
+			env->variable = ft_strdup("");
+	}
 	if (tmp)
 		free(tmp);
 	if (!env->variable)
@@ -64,7 +86,7 @@ static int	add_elem_to_env(t_env *env, char *str)
 	if (!new->name)
 		return (0);
 	ft_strlcpy(new->name, str, i + 1);
-	if (str[i] == '+')
+	if (str[i] && str[i] == '+')
 		i++;
 	if (str[i + 1])
 	{
@@ -86,7 +108,7 @@ static int	check_if_in_env(t_env *env, char *str)
 	while (env)
 	{
 		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0 \
-			&& ft_strlen(env->name) == i)
+				&& ft_strlen(env->name) == i)
 			return (1);
 		env = env->next;
 	}
