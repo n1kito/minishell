@@ -13,6 +13,7 @@ You will learn a lot about processes and file descriptors.
 # To-do
 
 - [ ] Ajouter clear_history functions a la fin de minishell et dans les fonctions d'exit
+- [ ] Leaks quand je fais juste `enter` dans la command line
 - [ ] Attention jái des putains de segault si je `CTRL + D` sans avoir rien run dans minishell. Essaye de free des trucs qui sont meme pas initialises. 
   - Si j'init master dans le main avant le prompt ca me fait des `still reachable`
   - En fait j'ai des trucs qui sont pas free dans le fork du heredoc je pense quand j'exit en cas derreur, ou de `CTRL + C`. A voir parce que la c'est le mega bordel.u
