@@ -156,10 +156,15 @@ void	print_heredoc_warning(char *line, char *delimiter)
 	if (line)
 		return ;
 	// TODO protext strjoini
-	tmp_message = ft_strjoin("mini(s)hell: warning: here-document \
+	if (g_minishexit != 130)
+	{
+		tmp_message = ft_strjoin("mini(s)hell: warning: here-document \
 delimited by end-of-file (wanted '", delimiter);
-	warning = ft_strjoin(tmp_message, "')\n");
-	free (tmp_message);
-	ft_printf_fd(1, "%s", warning);
-	free(warning);
+		warning = ft_strjoin(tmp_message, "')\n");
+		free (tmp_message);
+		ft_printf_fd(1, "%s", warning);
+		free(warning);
+	}
+	else
+		printf("\n");
 }
