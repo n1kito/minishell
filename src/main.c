@@ -80,5 +80,5 @@ int	main(int argc, char **argv, char **envp)
 	get_env(envp, &master);
 	init_master_structure(&master);
 	read_prompt(&master);
-	return (free_master(&master, 0) && clean_env(&master.env, 0));
+	return (clean_env(&master.env, 0) && free_master(&master, 0));
 }

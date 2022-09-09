@@ -54,8 +54,8 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 		close_and_unlink_heredocs(master);
 		return (0);
 	}
-	else
-		close_heredocs(master);
+	//else
+		//close_heredocs(master);
 	return (1);
 }
 

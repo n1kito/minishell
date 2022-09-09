@@ -66,7 +66,7 @@ int			setup_process_array(t_master *master);
 int			setup_pipes(t_master *master);
 
 // execution_utils.c
-void		close_pipes_and_files(t_master *master, int i);
+void		close_pipes_and_files(t_master *master, int i);;
 int			close_pipes(t_master *master);
 int			close_files(t_master *master, int i);
 int			is_builtin_function(char *name);

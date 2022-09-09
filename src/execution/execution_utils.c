@@ -15,10 +15,14 @@ int	close_pipes(t_master *master)
 	i = 0;
 	while (i < master->cmd_count - 1)
 	{
-		if (close(master->pipes[i][0]) == -1
-			|| close(master->pipes[i][1]) == -1)
-			return (err_msg("could not close pipes [close_pipes()]",
-					0, master));
+		if (master->pipes[i][0] >= 0)
+			if (close(master->pipes[i][0]) == -1)
+				return (err_msg("could not close pipes [close_pipes()]",
+						0, master));
+		if (master->pipes[i][1] >= 0)
+			if (close(master->pipes[i][1]) == -1)
+				return (err_msg("could not close pipes [close_pipes()]",
+						0, master));
 		i++;
 	}
 	if (master->tmp_stdin >= 0)

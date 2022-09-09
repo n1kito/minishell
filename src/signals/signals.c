@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 10:24:37 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/08 16:13:22 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/09 14:02:50 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	setup_signals(struct sigaction sa, void (*f)(int, siginfo_t*, void*))
 	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = f;
 	sa.sa_flags = SA_RESTART;
+	//signal(SIGPIPE, SIG_IGN); // added by mj to be able to handle SIGPIPES, mais pense qu'on doit quand mem les eviter.
 	sigaction(SIGINT, &sa, NULL);
 	sigaction(SIGQUIT, &sa, NULL);
 }
