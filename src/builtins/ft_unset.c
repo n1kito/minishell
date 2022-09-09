@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/06 14:07:56 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/09 18:25:57 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,14 @@ static int	ft_print_error(char *variable)
 
 static t_env	*unset_middle(t_env *env, t_env *start)
 {
-	while (start->next != env)
+	while (start && start->next != env)
 		start = start->next;
-	start->next = env->next;
-	free(env->name);
+	if (env->next)
+		start->next = env->next;
+	else
+		start->next = NULL;
+	if (env->name)
+		free(env->name);
 	if (env->variable)
 		free(env->variable);
 	env->is_env = 0;
@@ -44,39 +48,46 @@ static t_env	*unset_middle(t_env *env, t_env *start)
 	return (start);
 }
 
-static void	ft_swap(t_env *start, t_env *env, char *arg)
+static t_env	*ft_swap(t_env *env)
 {
-	while (check_match(start->name, arg) && env)
-	{
-		start = start->next;
-		env->next = start->next;
-		start->next = env;
-		env = unset_middle(env, start);
-	}
+	t_env	*tmp;
+	t_env	*start;
+
+	start = env->next;
+	tmp = env;
+	while (env && env->next)
+		env = env->next;
+	env->next = tmp;
+	tmp->next = NULL;
+	return (start);
 }
 
-int	ft_unset(t_env *env, char **arg)
+int	ft_unset(t_env **env, char **arg)
 {
 	int		i;
 	t_env	*start;
 
 	i = 1;
-	start = env;
+	start = *env;
 	g_minishexit = 0;
-	while (arg[i] && env)
+	while (arg[i] && *env)
 	{
-		if (arg_is_ok_for_env(arg[i]) == 0 && env)
+		if (arg_is_ok_for_env(arg[i]) == 0 && *env)
 		{
-			ft_swap(start, env, arg[i]);
-			while (env && !check_match(env->name, arg[i]))
-				env = env->next;
-			if (env)
-				env = unset_middle(env, start);
+			while (check_match((*env)->name, arg[i]))
+			{
+				start = ft_swap(start);
+				*env = start;
+			}
+			while (*env && !check_match((*env)->name, arg[i]))
+				*env = (*env)->next;
+			if (*env)
+				*env = unset_middle(*env, start);
 		}
-		else if (arg_is_ok_for_env(arg[i]) == 1 && env)
+		else if (arg_is_ok_for_env(arg[i]))
 			g_minishexit = ft_print_error(arg[i]);
 		i++;
-		env = start;
+		*env = start;
 	}
 	return (1);
 }

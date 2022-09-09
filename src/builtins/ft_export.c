@@ -6,14 +6,14 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/09 00:13:05 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/09 16:27:07 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-char	*update_env_plus(char *initial_value, char *added_value)
+static char	*update_env_plus(char *initial_value, char *added_value)
 {
 	char	*tmp;
 
@@ -35,35 +35,23 @@ char	*update_env_plus(char *initial_value, char *added_value)
 
 static int	update_env(t_env *env, char *str)
 {
-	char	*tmp;
-	size_t	i;
-
-	i = 0;
-	tmp = NULL;
-	while (str && str[i] && str[i - 1] != '=')
-		i++;
-	while (env)
+	if (str[0] == '+' && str[1] == '=')
 	{
-		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0 \
-			&& ft_strlen(env->name) == i)
-			break;
-		env = env->next;
+		env->variable = update_env_plus(env->variable, str + 2);
+		if (!env->variable)
+			return (0);
 	}
-	env->is_env = 1;
-	if (str[i] && str[i - 1] == '=' && str[i - 2] == '+')
-		env->variable = update_env_plus(env->variable, &str[i]);
-	else if (str[i - 1] == '=' && str[i - 2] != '+')
+	if (str[0] == '=')
 	{
-		tmp = env->variable;
-		if (str[i])
-			env->variable = ft_strdup(&str[i]);
+		if (env->variable)
+			free(env->variable);
+		if (*(str + 1))
+			env->variable = ft_strdup(str + 1);
 		else
 			env->variable = ft_strdup("");
+		if (!env->variable)
+			return (0);
 	}
-	if (tmp)
-		free(tmp);
-	if (!env->variable)
-		return (0);
 	return (1);
 }
 
@@ -73,46 +61,50 @@ static int	add_elem_to_env(t_env *env, char *str)
 	t_env	*new;
 
 	i = 0;
-	while (env && env->next)
-		env = env->next;
 	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	new = ft_calloc(sizeof(t_env), 1);
 	if (!new)
 		return (0);
-	if (str[i] == '=' || (str[i] == '+' && str[i + 1] == '='))
+	if (str[i] == '=' || str[i] == '+')
 		new->is_env = 1;
 	new->name = malloc(sizeof(char) * (i + 1));
-	if (!new->name)
-		return (0);
-	ft_strlcpy(new->name, str, i + 1);
+	if (new->name)
+		ft_strlcpy(new->name, str, i + 1);
 	if (str[i] && str[i] == '+')
 		i++;
 	if (str[i + 1])
-	{
 		new->variable = ft_strdup(&str[i + 1]);
-		if (!new->variable)
-			return (0);
-	}
+	else
+		new->variable = ft_strdup("");
+	if (!new->name || !new->variable)
+		return (free(new), 0);
 	env->next = new;
+	printf("%s=%s\n", new->name, new->variable);
 	return (1);
 }
 
 static int	check_if_in_env(t_env *env, char *str)
 {
 	size_t	i;
+	int		check;
 
 	i = 0;
+	check = 0;
 	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	while (env)
 	{
 		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0 \
 				&& ft_strlen(env->name) == i)
-			return (1);
+			return (update_env(env, &str[i]));
+		if (!env->next)
+			break;
 		env = env->next;
 	}
-	return (0);
+	while (str[i] && str[i] != '=')
+		i++;
+	return(add_elem_to_env(env, str));
 }
 
 int	arg_is_ok_for_env(char const *str)
@@ -120,7 +112,7 @@ int	arg_is_ok_for_env(char const *str)
 	int	i;
 
 	i = 0;
-	if (ft_strlen(str) == 1 && str[0] == '_')
+	if (str[0] == '_' && (str[1] == '+' || str[1] == '='))
 		return (2);
 	if (!ft_isalpha(str[i]) && str[i] != '_')
 		return (1);
@@ -147,19 +139,13 @@ int	ft_export(t_env **env, char **variable)
 	if (!variable[1])
 	{
 		print_env_by_alphabetical_order(*env);
-		g_minishexit = 0;
 		return (1);
 	}
 	while (variable[i])
 	{
 		if (arg_is_ok_for_env(variable[i]) == 0)
-		{
-			if (check_if_in_env(*env, variable[i]))
-				ret = update_env(*env, variable[i]);
-			else
-				ret = add_elem_to_env(*env, variable[i]);
-		}
-		else
+			ret = (check_if_in_env(*env, variable[i]));
+		else if (arg_is_ok_for_env(variable[i]) == 2)
 		{
 			write (2, "Export: Error: ", 14);
 			write (2, variable[i], ft_strlen(variable[i]));
