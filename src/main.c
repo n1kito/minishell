@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/10 14:45:52 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/10 17:30:14 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	execute_command(char *command_line, t_master *master)
 		|| !syntax_checker(master)
 		|| !prep_execution_resources(master))
 			return (0);
-	if (g_minishexit == 130 || g_minishexit == 131) //if we exited out of heredocs
+	if (heredoc_found(master) && (g_minishexit == 130 || g_minishexit == 131)) //if we exited out of heredocs
 	{
 		if (!unlink_heredocs(master))
 			return (0);

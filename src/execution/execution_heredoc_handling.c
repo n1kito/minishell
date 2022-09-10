@@ -6,7 +6,6 @@ int	setup_heredocs(t_master *master)
 	t_tokens	*current;
 	int			i;
 
-	//g_minishexit = 0;
 	i = 0;
 	current = master->tokens;
 	while (current)
@@ -16,7 +15,6 @@ int	setup_heredocs(t_master *master)
 		else if (current->token_type == HERE_DOC)
 		{
 			if (!set_heredoc_path(master, i))
-				//|| !open_heredoc(master, i))
 				return (0);
 			if (!heredoc_process(master, current, i))
 				return (0);

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/10 11:21:55 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/10 16:39:14 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	ft_echo(char **arg)
 	if (!option_n && ret >= 0)
 		ret = write(1, "\n", 1);
 	if (ret < 0)
+		g_minishexit = 1;
+	if (g_minishexit)
 		return (0);
 	return (1);
 }

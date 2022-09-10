@@ -62,6 +62,7 @@ void		plug_middle_cmd(t_master *master, int i, int infile, int outfile);
 void		plug_last_cmd(t_master *master, int i, int infile, int outfile);
 
 // execution_setup.c
+int			heredoc_found(t_master *master);
 int			prep_execution_resources(t_master *master);
 int			setup_process_array(t_master *master);
 int			setup_pipes(t_master *master);

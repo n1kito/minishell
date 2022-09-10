@@ -25,9 +25,6 @@ void	launch_exec(t_master *master, int i)
 	int	input_redirection;
 	int	output_redirection;
 
-	//TODO: create free all 
-	//
-	//printf("%s is process %d\n", master->commands[i]->cmd_array[0], getpid());
 	if (!open_file_descriptors(master, i) || !process_open_heredoc(master, i))
 		exit(free_all(master, 1));
 	if (!is_builtin_function(master->commands[i]->cmd_array[0]))
@@ -43,10 +40,11 @@ void	launch_exec(t_master *master, int i)
 		plug_middle_cmd(master, i, input_redirection, output_redirection);
 	close_pipes_and_files(master, i);
 	//close(2);// TODO  hides the broken pipe error when SIGPIPE happens.
-	if (!master->commands[i]->cmd_array[0]
-		|| (is_builtin_function(master->commands[i]->cmd_array[0])
-			&& !run_builtin(master, i)))
+	if (!master->commands[i]->cmd_array[0])
 		exit(free_all(master, 0));
+	if (is_builtin_function(master->commands[i]->cmd_array[0]))
+		if (run_builtin(master, i))
+			exit(free_all(master, 0));
 	if (!is_builtin_function(master->commands[i]->cmd_array[0])
 		&& env_for_exe(master))
 		execve(master->commands[i]->cmd_path,
