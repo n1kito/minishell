@@ -163,7 +163,7 @@ int	ft_cd(char **path, t_env *env)
 	else
 	{
 		perror("Error: cd: ");
-		g_minishexit = 0;
+		g_minishexit = 1;
 		return (0);
 	}
 }
