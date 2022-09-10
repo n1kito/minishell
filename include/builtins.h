@@ -16,7 +16,7 @@ int		ft_pwd(void);
 int		ft_env(t_env *env);
 int		ft_echo(char **arg);
 int		ft_cd(char **path, t_env *env);
-int		ft_unset(t_env *env, char **arg);
+int		ft_unset(t_env **env, char **arg);
 int		ft_export(t_env **env, char **variable);
 int		ft_exit(t_master *master, int cmd_index);
 

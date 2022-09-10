@@ -86,8 +86,13 @@ void	print_env_by_alphabetical_order(t_env *list)
 	while (sorting_table[++i])
 	{
 		printf("export %s", sorting_table[i]->name);
-		if (sorting_table[i]->variable)
-			printf("=\"%s\"", sorting_table[i]->variable);
+		if (sorting_table[i]->is_env)
+		{
+			printf("=\"");
+			if (sorting_table[i]->variable && sorting_table[i]->variable[0])
+				printf("%s", sorting_table[i]->variable);
+			printf("\"");
+		}
 		printf("\n");
 	}
 	free(sorting_table);

@@ -39,7 +39,7 @@ int	run_builtin(t_master *master, int cmd_index)
 	if ((ft_strcmp(command, "export") == 0
 			&& !ft_export(&master->env, arguments))
 		|| (ft_strcmp(command, "unset") == 0
-			&& !ft_unset(master->env, arguments))
+			&& !ft_unset(&master->env, arguments))
 		|| (ft_strcmp(command, "echo") == 0
 			&& !ft_echo(arguments))
 		|| (ft_strcmp(command, "exit") == 0
