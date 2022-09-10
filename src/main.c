@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -7,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/02 12:56:18 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/10 06:13:44 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +79,5 @@ int	main(int argc, char **argv, char **envp)
 	get_env(envp, &master);
 	init_master_structure(&master);
 	read_prompt(&master);
-	return (free_master(&master, 0) && clean_env(&master.env, 0));
+	return (clean_env(&master.env, 0) && free_master(&master, 0));
 }
