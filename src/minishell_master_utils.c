@@ -1,5 +1,14 @@
 #include "minishell.h"
 
+int	free_all(t_master *master, int return_code)
+{
+	clean_env(&master->env, 0);
+	free_master(master, 0);
+	free(master->exit_code);
+	rl_clear_history();
+	return (return_code);
+}
+
 /* Goes through the tokens and frees every node. */
 void	free_tokens_structure(t_master *master)
 {
@@ -46,12 +55,13 @@ void	free_commands_structure(t_master *master)
 			&& master->commands[i])
 	{
 		// TODO maybe remove this one I dont know but if not at least protect it
-		if (master->commands[i]->heredoc_fd)
+		if (master->commands[i]->heredoc_fd >= 0)
 			close(master->commands[i]->heredoc_fd);
 		if (master->commands[i]->cmd_path
 			&& master->commands[i]->cmd_path != master->commands[i]->cmd_array[0])
 			free(master->commands[i]->cmd_path);
 		free(master->commands[i]->cmd_array);
+		/*
 		if (master->commands[i]->heredoc_fd)
 		{
 			if (access(master->commands[i]->heredoc_path, F_OK | W_OK))
@@ -59,6 +69,8 @@ void	free_commands_structure(t_master *master)
 					err_msg("could not remove heredoc_file [free_command_structures()]", 0, master); // sometimes it removes the files even if they are chmod 0, I have no idea what is the fuck.
 			free (master->commands[i]->heredoc_path);
 		}
+		*/
+		free(master->commands[i]->heredoc_path);
 		if (master->commands[i]->fds)
 			free(master->commands[i]->fds);
 		free(master->commands[i++]);

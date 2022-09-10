@@ -7,8 +7,11 @@ int	prep_execution_resources(t_master *master)
 {
 	if (!generate_command_structure(master)
 		|| !assign_command_paths(master)
-		|| !setup_file_descriptors(master)
-		|| !setup_process_array(master)
+		|| !setup_file_descriptors(master))
+		return (0);
+	if (g_minishexit == 130) // did we CTRL + C out of heredocs ?
+		return (1);
+	if (!setup_process_array(master)
 		|| !setup_pipes(master))
 /*		|| !convert_env_to_array(master))*/ // this is done in exec actually
 		return (0);

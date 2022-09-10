@@ -61,6 +61,7 @@ typedef struct s_master
 	int					printed_error_msg;
 	int					tmp_stdin;
 	int					tmp_stdout;
+	char				*exit_code;
 	struct sigaction	*sa;
 }	t_master;
 

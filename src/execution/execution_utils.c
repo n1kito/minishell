@@ -32,14 +32,12 @@ int	close_files(t_master *master, int i)
 {
 	int	j;
 
-	j = -1;
-	// need to close all heredocs in the master structure
 	// TODO: do I need to unlink the heredocs too ?
-	while (++j < master->cmd_count)
-		if (master->commands[j]->heredoc_fd)
-			if (close(master->commands[j]->heredoc_fd) == -1)
-				return (err_msg("close() failed [close_files()][1]",
-						0, master));
+	// no because I still need to read from them
+	if (master->commands[i]->heredoc_path)
+		if (close(master->commands[i]->heredoc_fd) == -1)
+			return (err_msg("heredoc close() failed [close_files()][1]",
+				0, master));
 	if (master->commands[i]->redirections_count == 0)
 		return (1);
 	j = 0;

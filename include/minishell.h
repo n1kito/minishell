@@ -51,6 +51,7 @@ int		free_master(t_master *master, int return_value);
 int		err_msg(char *error, int error_code, t_master *master);
 
 // minishell_master_utils.c
+int		free_all(t_master *master, int return_code);
 void	free_tokens_structure(t_master *master);
 void	clean_master_memory(t_master *master);
 void	free_commands_structure(t_master *master);

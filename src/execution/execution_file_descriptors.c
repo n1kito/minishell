@@ -59,6 +59,17 @@ int	open_file_descriptors(t_master *master, int i)
 			}
 			j++;
 		}	
+		/*
+		else if (current->token_type == HERE_DOC)
+		{
+			master->commands[i]->heredoc_fd = open(master->commands[i]->heredoc_path, O_RDONLY);
+			if (master->commands[i]->heredoc_fd == -1)
+			{
+				perror(master->commands[i]->heredoc_path);
+				return (0);
+			}
+		}
+		*/
 		current = current->next;
 	}
 	return (1);

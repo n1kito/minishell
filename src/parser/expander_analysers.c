@@ -52,6 +52,19 @@ int	log_expansions(char *token, t_master *master)
 	return (1);
 }
 
+void	expand_exit_code(t_master *master, t_expand *new_expand)
+{
+	free(master->exit_code);
+	master->exit_code = ft_itoa(g_minishexit);
+	if (!master->exit_code)
+	{
+		free(new_expand);	
+		exit(err_msg("itoa() failed [expand_exit_code()]", 1, master)
+			&& free_all(master, 1));
+	}
+	new_expand->value = master->exit_code;
+}
+
 /* Logs new node in expansion structure to track expansions, their positions and
  * values (if found in env). Note that they are added LIFO. */
 int	add_exp_node(t_master *master, char *token, int i)
@@ -67,7 +80,7 @@ int	add_exp_node(t_master *master, char *token, int i)
 	new_expand->name_end = i + new_expand->name_len;
 	new_expand->name = token + new_expand->name_start;
 	if (token[i + 1] == '?')
-		new_expand->value = ft_itoa(g_minishexit);
+		expand_exit_code(master, new_expand);
 	else
 		new_expand->value = search_env(master->env, new_expand->name,
 				new_expand->name_len);
