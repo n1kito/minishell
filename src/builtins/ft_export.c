@@ -80,7 +80,6 @@ static int	add_elem_to_env(t_env *env, char *str)
 	if (!new->name || !new->variable)
 		return (free(new), 0);
 	env->next = new;
-	printf("%s=%s\n", new->name, new->variable);
 	return (1);
 }
 
