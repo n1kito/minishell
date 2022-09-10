@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/09 16:27:07 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/10 18:16:17 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,8 @@ static int	add_elem_to_env(t_env *env, char *str)
 static int	check_if_in_env(t_env *env, char *str)
 {
 	size_t	i;
-	int		check;
 
 	i = 0;
-	check = 0;
 	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	while (env)
