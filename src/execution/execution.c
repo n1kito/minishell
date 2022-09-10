@@ -59,9 +59,9 @@ int	exec_loop(t_master *master)
 			launch_exec(master, i);
 		i++;
 	}
-	 if (!process_waiter(master)
-		|| !close_pipes(master)
-		|| !close_heredocs(master))
+	if (!close_pipes(master)
+		|| !close_heredocs(master)
+		|| !process_waiter(master))
 		return (0);
 	setup_signals(*master->sa, &signal_handler);
 	return (1);
