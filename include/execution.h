@@ -45,7 +45,7 @@ int			last_output_fd(t_master *master, int i);
 int			setup_heredocs(t_master *master);
 int			heredoc_process(t_master *master, t_tokens *tokens, int i);
 void		read_heredoc(t_tokens *heredoc_token, t_command *command_node, t_master *master, int i);
-int			expand_heredoc_line(char **line, t_master *master);
+int			expand_heredoc_line(char **line, t_master *master, int tmp_minishexit);
 void		print_heredoc_warning(char *line, char *delimiter);
 
 // execution_heredoc_handling_utils.c
@@ -53,7 +53,8 @@ int			set_heredoc_path(t_master *master, int i);
 int			open_heredoc(t_master *master, int i);
 int			log_heredoc_expansions(char *line, t_master *master);
 void		check_if_heredoc_should_expand(t_tokens *delimiter, int *should_expand);
-int			heredoc_file_access(t_master *master, int cmd_index, char *line);
+int			heredoc_file_access(t_master *master, int cmd_index);
+int			unlink_heredocs(t_master *master);
 
 // execution_pipe_utils.c
 void		plug_first_cmd(t_master *master, int i, int infile, int outfile);
@@ -61,6 +62,7 @@ void		plug_middle_cmd(t_master *master, int i, int infile, int outfile);
 void		plug_last_cmd(t_master *master, int i, int infile, int outfile);
 
 // execution_setup.c
+int			heredoc_found(t_master *master);
 int			prep_execution_resources(t_master *master);
 int			setup_process_array(t_master *master);
 int			setup_pipes(t_master *master);

@@ -1,5 +1,21 @@
 #include "minishell.h"
 
+// TODO move somewhere else
+/* Checks the current tokens for a heredoc token. */
+int	heredoc_found(t_master *master)
+{
+	t_tokens	*current;
+
+	current = master->tokens;
+	while (current)
+	{
+		if (current->token_type == HERE_DOC)
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
+
 /* Takes master structer and converts command lines
  * and environment structures to arrays to be used
  * during execution. */
@@ -7,8 +23,11 @@ int	prep_execution_resources(t_master *master)
 {
 	if (!generate_command_structure(master)
 		|| !assign_command_paths(master)
-		|| !setup_file_descriptors(master)
-		|| !setup_process_array(master)
+		|| !setup_file_descriptors(master))
+		return (0);
+	if (heredoc_found(master) && g_minishexit == 130) // did we CTRL + C out of heredocs ?
+		return (1);
+	if (!setup_process_array(master)
 		|| !setup_pipes(master))
 /*		|| !convert_env_to_array(master))*/ // this is done in exec actually
 		return (0);

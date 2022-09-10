@@ -75,6 +75,7 @@ int	close_heredocs(t_master *master)
 	return (1);
 }
 
+//TODO not sure I'm using this one
 int	close_and_unlink_heredocs(t_master *master)
 {
 	int		i;

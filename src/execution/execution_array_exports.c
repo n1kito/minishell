@@ -34,7 +34,7 @@ int	create_command_structures(t_master *master, int cmd_count)
 		master->commands[i]->cmd_path = NULL;
 		master->commands[i]->error_code = 0;
 		master->commands[i]->fds = NULL;
-		master->commands[i]->heredoc_fd = 0;
+		master->commands[i]->heredoc_fd = -1;
 		master->commands[i]->heredoc_path = NULL;
 		i++;
 	}
