@@ -18,7 +18,7 @@ static int	echo_option_check(char *str)
 
 	i = 0;
 	if (!str[i])
-		retrun (0);
+		return (0);
 	if (str[i] == '-')
 	{
 		i++;
