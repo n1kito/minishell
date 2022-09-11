@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/11 23:06:22 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/11 23:20:28 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	read_prompt(t_master *master)
 		if (g_minishexit == 0)
 			line = readline("🔥 mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
 		else
-			line = readline("☠️ mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
+			line = readline("☠️  mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
 		if (line && line[0])
 		{
 			add_history(line);
@@ -107,5 +107,5 @@ int	main(int argc, char **argv, char **envp)
 	get_env(envp, &master);
 	init_master_structure(&master);
 	read_prompt(&master);
-	return (free_all(&master, 0));
+	return (free_all(&master, g_minishexit));
 }
