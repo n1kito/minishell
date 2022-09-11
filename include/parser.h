@@ -65,7 +65,6 @@ t_tokens	*get_next_unsplitted_token(t_tokens *current);
 int			get_next_non_blank_char(char *str);
 void		set_tokens_as_words(t_tokens *token);
 
-
 // to remove before pushing it's in the libft
 int		ft_isdigit(int checkme);
 #endif

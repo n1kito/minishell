@@ -13,7 +13,10 @@ int	expander(t_master *master)
 		if (current->token_type != DELIMITER)
 			if (!expand_token(current, master))
 				return (0);
-		if (token_has_unquoted_blanks(current)
+		if (!current->token[0] && current->token_type == WORD
+			&& !current->token_had_quotes)
+			current->token_type = INVISIBLE;
+		else if (token_has_unquoted_blanks(current)
 			&& !process_for_word_splitting(&current, master))
 			return (0);
 		else
@@ -21,7 +24,7 @@ int	expander(t_master *master)
 				return (0);
 		current = get_next_unsplitted_token(current);
 	}
-	check_for_invisible_tokens(master->tokens);
+	//check_for_invisible_tokens(master->tokens);
 	return (1);
 }
 
