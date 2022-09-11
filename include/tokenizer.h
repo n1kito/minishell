@@ -9,6 +9,8 @@ typedef struct s_tokens
 	char				*token;
 	int					token_type;
 	int					token_had_quotes;
+	int					word_splitted;
+	int					was_expanded;
 	struct s_tokens		*next;
 	struct s_tokens		*previous;
 }	t_tokens;
@@ -28,6 +30,7 @@ typedef struct s_expand
 	int					name_start;
 	int					name_len;
 	int					name_end;
+	int					quoting_status;
 	char				*name;
 	char				*value;
 	struct s_expand		*next;
@@ -106,6 +109,7 @@ void		start_operator_token(t_tokenizer_helpers *t, t_master *master);
 void		close_operator_token(t_tokenizer_helpers *t, t_master *master);
 
 // tokenizer_test_utils.c
-void		print_tokens(t_tokens *tokens);
+//void		print_tokens(t_tokens *token);
+void		print_tokens(t_master *master);
 
 #endif

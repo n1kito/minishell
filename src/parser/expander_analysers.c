@@ -22,6 +22,7 @@ char	*search_env(t_env *env, char *name, int name_len)
 }
 
 /* Goes through token and logs expandable variables in a special structure. */
+// TODO add "is quoted" in the expansion node.
 int	log_expansions(char *token, t_master *master)
 {
 	int	i;

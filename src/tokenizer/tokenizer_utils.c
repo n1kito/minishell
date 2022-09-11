@@ -34,6 +34,8 @@ void	init_token_values(t_tokens *token)
 {
 	token->token_had_quotes = 0;
 	token->token_type = 0;
+	token->word_splitted = 0;
+	token->was_expanded = 0;
 	token->next = NULL;
 	token->previous = NULL;
 }

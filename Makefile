@@ -60,6 +60,8 @@ SRC_FILES		:= 	main\
 					parser/expander\
 					parser/expander_analysers\
 					parser/expander_utils\
+					parser/expander_word_splitting\
+					parser/expander_word_splitting_utils\
 					parser/parser\
 					parser/parser_syntax_checker\
 					execution/execution\
