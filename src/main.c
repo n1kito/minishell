@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/10 17:30:14 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/11 18:01:08 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,32 @@
 
 int	g_minishexit = 0;
 
+/* Goes through all tokens and returns 0 if an unclosed quote was found. */
+int	found_open_quotes(t_master *master)
+{
+	t_tokens *current;
+
+	current = master->tokens;
+	while (current)
+	{
+		if (has_solitary_quote(current->token, master))
+			return (1);
+		current = current->next;
+	}
+	return (0);
+}
+
 int	execute_command(char *command_line, t_master *master)
 {
 	if (command_line == NULL)
 		return (0);
 	init_tokenizer_helpers(&master->helpers, command_line);
 	if (!tokenizer(command_line, master, &master->helpers)
-		|| !parser(&master->tokens)
-		|| !expander(master)
+		|| !parser(&master->tokens))
+		return (0);
+	if (found_open_quotes(master))
+		return (1);
+	if (!expander(master)
 		|| !syntax_checker(master)
 		|| !prep_execution_resources(master))
 			return (0);
@@ -56,8 +74,6 @@ void	read_prompt(t_master *master)
 			init_master_structure(master);
 			if (!execute_command(line, master))
 				exit(free_all(master, 1));
-			//clean_master_memory(master);
-			//execute_command(line, master);
 			free_master(master, 1);
 //			sigemptyset(&new_action.sa_mask);
 		}

@@ -10,7 +10,7 @@ int	extract_token(t_master *master, char *token_start, char *token_end)
 	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
-		return (err_msg("expand_token() [1]", --master->malloc_ok, master));
+		return (err_msg("extract_token() [1]", --master->malloc_ok, master));
 	init_token_values(new_token);
 	if (master->tokens == NULL)
 		master->tokens = new_token;
@@ -21,7 +21,7 @@ int	extract_token(t_master *master, char *token_start, char *token_end)
 	}
 	new_token->token = malloc(sizeof(char) * (token_len + 1));
 	if (!new_token->token)
-		return (err_msg("expand_token() [2]", --master->malloc_ok, master));
+		return (err_msg("extract_token() [2]", --master->malloc_ok, master));
 	i = -1;
 	while (++i < token_len)
 		new_token->token[i] = token_start[i];

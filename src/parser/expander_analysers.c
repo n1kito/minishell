@@ -22,7 +22,6 @@ char	*search_env(t_env *env, char *name, int name_len)
 }
 
 /* Goes through token and logs expandable variables in a special structure. */
-// TODO add "is quoted" in the expansion node.
 int	log_expansions(char *token, t_master *master)
 {
 	int	i;
@@ -31,15 +30,14 @@ int	log_expansions(char *token, t_master *master)
 
 	is_single_quoting = 0;
 	is_double_quoting = 0;
-	i = 0;
-	while (token[i])
+	i = -1;
+	while (token[++i])
 	{
-		if (token[i] == '$'
-			&& token[i + 1]
+		if (token[i] == '$' && token[i + 1] && !is_single_quoting
 			&& !is_blank_char(token[i + 1])
-			&& (ft_isalpha(token[i + 1]) || token[i + 1] == '_' || token[i + 1] == '?')
-			&& !is_single_quoting
-			&& !(is_quote_character(token [i + 1]) && is_double_quoting))
+			&& !(is_quote_character(token [i + 1]) && is_double_quoting)
+			&& (ft_isalpha(token[i + 1])
+				|| token[i + 1] == '_' || token[i + 1] == '?'))
 		{
 			if (!add_exp_node(master, token, i))
 				return (0);
@@ -48,18 +46,19 @@ int	log_expansions(char *token, t_master *master)
 			toggle_quoting(&is_double_quoting);
 		else if (token[i] == SINGLE_QUOTE && !is_double_quoting)
 			toggle_quoting(&is_single_quoting);
-		i++;
 	}
 	return (1);
 }
 
+/* Expands the value of the global g_minishesit code variable and stores it
+ * in the master structure so it can be freed later. */
 void	expand_exit_code(t_master *master, t_expand *new_expand)
 {
 	free(master->exit_code);
 	master->exit_code = ft_itoa(g_minishexit);
 	if (!master->exit_code)
 	{
-		free(new_expand);	
+		free(new_expand);
 		exit(err_msg("itoa() failed [expand_exit_code()]", 1, master)
 			&& free_all(master, 1));
 	}
@@ -94,27 +93,4 @@ int	add_exp_node(t_master *master, char *token, int i)
 		master->expansions = new_expand;
 	}
 	return (1);
-}
-
-/* Checks that there is no quote without a matching quote. */
-int	has_solitary_quote(char *token, t_master *master)
-{
-	int	i;
-	int	matching_quote;
-
-	i = 0;
-	while (token && token[i])
-	{
-		if (token[i] == SINGLE_QUOTE || token[i] == DOUBLE_QUOTE)
-		{
-			matching_quote = find_matching_quote(&token[i]);
-			if (matching_quote)
-				i += matching_quote + 1;
-			else
-				return (err_msg("open quote", 1, master));
-		}
-		else
-			i++;
-	}
-	return (0);
 }

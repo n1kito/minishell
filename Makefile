@@ -59,8 +59,10 @@ SRC_FILES		:= 	main\
 					tokenizer/tokenizer_utils\
 					parser/expander\
 					parser/expander_analysers\
+					parser/expander_analysers2\
 					parser/expander_utils\
 					parser/expander_word_splitting\
+					parser/expander_word_splitting_analyser\
 					parser/expander_word_splitting_utils\
 					parser/parser\
 					parser/parser_syntax_checker\
