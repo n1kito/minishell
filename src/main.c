@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/11 18:01:08 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/11 18:08:46 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ int	found_open_quotes(t_master *master)
 	while (current)
 	{
 		if (has_solitary_quote(current->token, master))
+		{
+			g_minishexit = 1;
 			return (1);
+		}
 		current = current->next;
 	}
 	return (0);
