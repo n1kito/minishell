@@ -10,24 +10,21 @@ int	expander(t_master *master)
 	current = master->tokens;
 	while (current)
 	{
-		if (has_solitary_quote(current->token, master))
-			return (0);
 		if (current->token_type != DELIMITER)
-		{
-			if (!log_expansions(current->token, master))
-				return (err_msg("failed to log expansions [expander()]",
-						0, master));
-			if (master->expansions)
-				if (!expand_line(&current->token, master->expansions))
-					return (err_msg("failed to expand [expander()]",
-							0, master));
-		}
-		free_expansions(&master->expansions);
-		if (!process_and_remove_quotes(current, master))
+			if (!expand_token(current, master))
+				return (0);
+		if (!current->token[0] && current->token_type == WORD
+			&& !current->token_had_quotes)
+			current->token_type = INVISIBLE;
+		else if (token_has_unquoted_blanks(current)
+			&& !process_for_word_splitting(&current, master))
 			return (0);
-		check_for_invisible_token(current);
-		current = current->next;
+		else
+			if (!process_and_remove_quotes(current, master))
+				return (0);
+		current = get_next_unsplitted_token(current);
 	}
+	//check_for_invisible_tokens(master->tokens);
 	return (1);
 }
 
@@ -112,10 +109,17 @@ int	expand_line(char **line, t_expand *expansions)
 /* If the token passed as parameter is of type WORD, is empty
  * and did not initially have empty quotes in it, it will be 
  * typed as INVISIBLE. */
-void	check_for_invisible_token(t_tokens *token)
+void	check_for_invisible_tokens(t_tokens *token)
 {
-	if (token->token_type == WORD
-		&& token->token[0] == '\0'
-		&& !token->token_had_quotes)
-		token->token_type = INVISIBLE;
+	t_tokens *current;
+
+	current = token;
+	while (current)
+	{
+		if (token->token_type == WORD
+			&& token->token[0] == '\0'
+			&& !token->token_had_quotes)
+			token->token_type = INVISIBLE;
+		current = current->next;
+	}
 }

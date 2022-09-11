@@ -1,4 +1,4 @@
-#include "../../include/minishell.h"
+#include "minishell.h"
 
 /* Joins two strings of characters. Will still work if either is NULL. */
 char	*str_join(char *token1, char *token2)
@@ -22,26 +22,6 @@ char	*str_join(char *token1, char *token2)
 		new_token[i++] = token2[j++];
 	new_token[i] = '\0';
 	return (new_token);
-}
-
-/* When sent a $ char, returns the length of the name following that char.
- * Returns 0 if there is no name following it. */
-int	expansion_name_len(char *expansion)
-{
-	int	i;
-
-	expansion++;
-	i = 0;
-	if (expansion[i] == '?')
-		return (1);
-	while (expansion[i]
-		&& !is_blank_char(expansion[i])
-		&& (ft_isalnum(expansion[i]) || expansion[i] == '_')
-		&& !is_quote_character(expansion[i])
-		&& expansion[i] != '\n'
-		&& expansion[i] != '$')
-		i++;
-	return (i);
 }
 
 /* Toggles quoting_status depending on current value. */
@@ -83,5 +63,26 @@ int	free_expansions(t_expand **expansions)
 		current = next;
 	}
 	*expansions = NULL;
+	return (1);
+}
+
+/* Logs all expansions in a token and inserts them one by one
+ * starting from the end of the token. */
+int	expand_token(t_tokens *token, t_master *master)
+{
+	t_tokens	*current;
+
+	current = token;
+	if (!log_expansions(current->token, master))
+		return (err_msg("failed to log expansions [expander()]",
+				0, master));
+	if (master->expansions)
+	{
+		if (!expand_line(&current->token, master->expansions))
+			return (err_msg("failed to expand [expander()]",
+					0, master));
+		current->was_expanded = 1;
+	}
+	free_expansions(&master->expansions);
 	return (1);
 }
