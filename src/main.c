@@ -73,7 +73,7 @@ void	read_prompt(t_master *master)
 		if (g_minishexit == 0)
 			line = readline("🔥 mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
 		else
-			line = readline("X mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
+			line = readline("☠️ mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
 		if (line && line[0])
 		{
 			add_history(line);
