@@ -70,9 +70,8 @@ int	exec_loop(t_master *master)
 			launch_exec(master, i);
 		i++;
 	}
-	if (!close_pipes(master)
-		|| !process_waiter(master))
-		return (0);
+	close_pipes(master);
+	process_waiter(master);
 	setup_signals(*master->sa, &signal_handler);
 	return (1);
 }

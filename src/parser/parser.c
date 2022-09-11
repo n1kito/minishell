@@ -1,7 +1,7 @@
 #include "../../include/minishell.h"
 
 /* Goes through tokens and attributes the correct type for each. */
-int	parser(t_tokens **tokens)
+void	parser(t_tokens **tokens)
 {
 	t_tokens	*current;
 
@@ -13,7 +13,6 @@ int	parser(t_tokens **tokens)
 				identify_token_type(current);
 		current = current->next;
 	}
-	return (1);
 }
 
 /* Checks if current token is only numbers

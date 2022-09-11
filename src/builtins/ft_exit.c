@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/07 13:05:08 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/11 23:09:26 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,5 @@ int	ft_exit(t_master *master, int cmd_index)
 	}
 	else if (variable[1])
 		g_minishexit = ft_atoi(variable[1]);
-	clean_env(&master->env, 0);
-	exit(free_master(master, g_minishexit));
+	exit(free_all(master, g_minishexit));
 }

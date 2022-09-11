@@ -15,16 +15,11 @@ int	execute_single_builtin(t_master *master)
 	out_redir = last_output_fd(master, 0);
 	//TODO proteger tmp_stdin et tmp_stdout
 	// et les set dans le setup_sing_builtin en passant les pointeurs sur int
-	if (!set_builtin_redir(in_redir, out_redir, &master->tmp_stdin, &master->tmp_stdout))
-		return (err_msg("redirection setup error [execute_single_builtin()]",
-				0, master));
+	set_builtin_redir(in_redir, out_redir, master);
 	if (!run_builtin(master, 0))
 		return (0);
-	if (!reset_builtin_redir(in_redir, out_redir, master->tmp_stdin, master->tmp_stdout))
-		return (err_msg("redirection reset error [execute_single_builtin()]",
-				0, master));
-	if (!close_files(master, 0))
-		return (err_msg("could not close files", 0, master));
+	reset_builtin_redir(in_redir, out_redir, master);
+	close_files(master, 0);
 	return (1);
 }
 
@@ -55,37 +50,41 @@ int	run_builtin(t_master *master, int cmd_index)
 }
 
 /* Sets up FDs for file/heredoc redirections with single builtins. */
-int	set_builtin_redir(int infile, int outfile, int *tmp_stdin, int *tmp_stdout)
+void	set_builtin_redir(int infile, int outfile, t_master *master)
 {
 	if (infile)
 	{
-		*tmp_stdin = dup(STDIN_FILENO);
-		if (*tmp_stdin == -1
+		master->tmp_stdin = dup(STDIN_FILENO);
+		if (master->tmp_stdin == -1
 			|| dup2(infile, STDIN_FILENO) == -1)
-			return (0);
+			exit(err_msg("dup/dup2 error [set_builtin_redir()[1]", 1, master)
+				&& free_master(master, 1));
 	}
 	if (outfile)
 	{
-		*tmp_stdout = dup(STDOUT_FILENO);
-		if (*tmp_stdout == -1
+		master->tmp_stdout = dup(STDOUT_FILENO);
+		if (master->tmp_stdout == -1
 			|| dup2(outfile, STDOUT_FILENO) == -1)
-			return (0);
+			exit(err_msg("dup/dup2 error [set_builtin_redir()[2]", 1, master)
+				&& free_master(master, 1));
 	}
-	return (1);
 }
 
 /* Resets FDs after the single builtin function has been used. */
-int	reset_builtin_redir(int infile, int outfile, int tmp_stdin, int tmp_stdout)
+void	reset_builtin_redir(int infile, int outfile, t_master *master)
 {
 	if (infile)
 	{
-		if (dup2(tmp_stdin, STDIN_FILENO) == -1 || close (tmp_stdin) == -1)
-			return (0);
+		if (dup2(master->tmp_stdin, STDIN_FILENO) == -1
+			|| close(master->tmp_stdin) == -1)
+			exit(err_msg("dup/dup2 error [reset_builtin_redir()[1]", 1, master)
+				&& free_master(master, 1));
 	}
 	if (outfile)
 	{
-		if (dup2(tmp_stdout, STDOUT_FILENO) == -1 || close(tmp_stdout) == -1)
-			return (0);
+		if (dup2(master->tmp_stdout, STDOUT_FILENO) == -1
+			|| close(master->tmp_stdout) == -1)
+			exit(err_msg("dup/dup2 error [reset_builtin_redir()[2]", 1, master)
+				&& free_master(master, 1));
 	}
-	return (1);
 }

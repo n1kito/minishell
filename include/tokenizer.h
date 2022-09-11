@@ -60,8 +60,8 @@ typedef struct s_master
 	char				**env_array;
 	char				**env_for_exec;
 	t_tokens			*next_command_start;
-	int					malloc_ok;
 	int					printed_error_msg;
+	int					ez_err;
 	int					tmp_stdin;
 	int					tmp_stdout;
 	char				*exit_code;
@@ -78,10 +78,10 @@ typedef struct s_master
 # define DOUBLE_QUOTE 34
 
 // tokenizer.c && tokenizer_for_debugging.c
-int			tokenizer(char *line, t_master *master, t_tokenizer_helpers *t);
+void		tokenizer(char *line, t_master *master, t_tokenizer_helpers *t);
 
 // tokenizer_utils.c
-int			extract_token(t_master *master,
+void		extract_token(t_master *master,
 				char *token_start, char *token_end);
 void		init_token_values(t_tokens *token);
 void		init_tokenizer_helpers(t_tokenizer_helpers *t, char *line);

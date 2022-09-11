@@ -73,14 +73,12 @@ int	expand_token(t_tokens *token, t_master *master)
 	t_tokens	*current;
 
 	current = token;
-	if (!log_expansions(current->token, master))
-		return (err_msg("failed to log expansions [expander()]",
-				0, master));
+	log_expansions(current->token, master);
 	if (master->expansions)
 	{
-		if (!expand_line(&current->token, master->expansions))
-			return (err_msg("failed to expand [expander()]",
-					0, master));
+		if (!expand_line(&current->token, master))
+			exit(err_msg("failed to expand token [expander()]",
+					1, master));
 		current->was_expanded = 1;
 	}
 	free_expansions(&master->expansions);

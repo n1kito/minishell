@@ -3,7 +3,6 @@
 /* Initialises the master structure with correct values. */
 void	init_master_structure(t_master *master)
 {
-	//clean_master_memory(master);
 	master->cmd_count = 0;
 	master->tokens = NULL;
 	master->expansions = NULL;
@@ -12,8 +11,8 @@ void	init_master_structure(t_master *master)
 	master->pipes = NULL;
 	master->env_for_exec = NULL;
 	master->next_command_start = NULL;
-	master->malloc_ok = 1;
 	master->printed_error_msg = 0;
+	master->ez_err = 0;
 	master->tmp_stdin = -1;
 	master->tmp_stdout = -1;
 }
