@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 16:34:01 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 17:33:20 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	echo_option_check(char *str)
 	i = 0;
 	if (!str[i])
 		return (0);
-	if (str[i] == '-')
+	if (str[i] == '-' && str[i + 1])
 	{
 		i++;
 		while (str[i] && str[i] == 'n')

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 16:49:11 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 18:33:17 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,11 @@ void	ft_cd(t_master *master, char **path)
 			ret = chdir(path[1]);
 		if (ret == 0)
 			ft_update_pwd(master, buffer);
-		else
-			perror("Error: cd: ");
+		if (ret == -1)
+		{
+			ft_printf_fd(2, "Error: cd: \'%s\': ", path[1]);
+			perror("");
+		}
 	}
 	else
 		perror("Error: cd: ");

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 10:24:37 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/11 23:21:34 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/12 18:14:31 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,8 @@ void	set_command_signal(int sig, siginfo_t *siginfo, void *context)
 	(void)siginfo;
 	if (sig == SIGINT)
 	{
-		ft_putstr_fd("\n", 1);
 		g_minishexit = 130;
+		ft_putstr_fd("\n", 1);
 	}
 	else if (sig == SIGQUIT)
 	{
