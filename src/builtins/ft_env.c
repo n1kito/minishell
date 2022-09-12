@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 16:57:59 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 17:19:50 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ void	ft_env(t_env *env, char **arg)
 	{
 		ft_putstr_fd("env: '", 2);
 		ft_putstr_fd(arg[1], 2);
-		ft_putstr_fd("': No such file or directory\n ", 2);
-		g_minishexit = 127;
+		ft_putstr_fd("': Unexpected argument\n ", 2);
+		g_minishexit = 1;
 	}
 	else
 	{

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 16:14:01 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 17:14:11 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,9 +116,9 @@ int	arg_is_ok_for_env(char const *str)
 	i = 0;
 	if (!str[0])
 		return (2);
-	if (str[0] == '_' && (str[1] == '+' || str[1] == '='))
+	if ((str[0] == '_' && (str[1] == '+' || str[1] == '=')))
 		return (2);
-	if (!ft_isalpha(str[i]) && str[i] != '_')
+	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (1);
 	i++;
 	while (str[i])
@@ -146,11 +146,11 @@ void	ft_export(t_master *master, char **variable)
 	{
 		if (arg_is_ok_for_env(variable[i]) == 0)
 			check_if_in_env(master, save, variable[i]);
-		else if (arg_is_ok_for_env(variable[i]) == 2)
+		else if (arg_is_ok_for_env(variable[i]) == 1)
 		{
-			write (2, "Export: Error: ", 14);
+			write (2, "Export: Error: '", 16);
 			write (2, variable[i], ft_strlen(variable[i]));
-			write (2, " not a valid identifier\n", 24);
+			write (2, "' not a valid identifier\n", 25);
 			g_minishexit = 1;
 		}
 		i++;
