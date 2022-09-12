@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/10 18:16:17 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/12 10:37:19 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ int	arg_is_ok_for_env(char const *str)
 	int	i;
 
 	i = 0;
+	if (!arg[0])
+		return (2);
 	if (str[0] == '_' && (str[1] == '+' || str[1] == '='))
 		return (2);
 	if (!ft_isalpha(str[i]) && str[i] != '_')
