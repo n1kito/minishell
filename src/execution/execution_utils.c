@@ -72,19 +72,46 @@ int	is_builtin_function(char *name)
 
 /* Checks for errors with command in passed segment and
  * prints out corresponding error. */
-int	command_error_check(t_command *command)
+// TODO protect stdjoin
+int	command_error_check(t_command *command, t_master *master)
 {
-	char		*command_not_found;
+	int			is_directory;
+	char		*error_message;
 
-	if (!command->cmd_path && ((command->cmd_array[0]
-				&& access(command->cmd_array[0], X_OK) == -1)
-			|| !command->cmd_array))
+	is_directory = 0;
+	if (command->cmd_array && command->cmd_array[0])
+		is_directory = open(command->cmd_array[0], O_DIRECTORY);
+	if (!command->cmd_path
+		&& ((command->cmd_array[0] && access(command->cmd_array[0], X_OK) == -1)
+			|| !command->cmd_array
+			|| ft_strcmp(command->cmd_array[0], ".") == 0
+			|| ft_strcmp(command->cmd_array[0], "..") == 0
+			|| (command->cmd_array && is_directory && !ft_strchr(command->cmd_array[0], '/'))))
 	{
-		command_not_found
+		close(is_directory);
+		error_message
 			= ft_strjoin(command->cmd_array[0], ": command not found\n");
-		ft_printf_fd(2, "%s", command_not_found);
-		free(command_not_found);
+		if (!error_message)
+		{
+			err_msg("malloc fail [command_error_check()][1]", 0, master);
+			exit(free_all(master, 42));
+		}
+		ft_printf_fd(2, "%s", error_message);
+		free(error_message);
 		command->error_code = 127;
+	}
+	else if (is_directory != -1)
+	{
+		close(is_directory);
+		error_message = ft_strjoin(command->cmd_array[0], ": Is a directory\n");
+		if (!error_message)
+		{
+			err_msg("malloc fail [command_error_check()][2]", 0, master);
+			exit(free_all(master, 42));
+		}
+		ft_printf_fd(2, "%s", error_message);
+		free(error_message);
+		command->error_code = 126;
 	}
 	else if (command->cmd_path && access(command->cmd_path, F_OK) == -1)
 	{

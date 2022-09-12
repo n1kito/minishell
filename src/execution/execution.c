@@ -27,19 +27,14 @@ void	launch_exec(t_master *master, int i)
 
 	if (!open_file_descriptors(master, i) || !process_open_heredoc(master, i))
 		exit(free_all(master, 1));
-	if (!is_builtin_function(master->commands[i]->cmd_array[0]))
-		if (!command_error_check(master->commands[i]))
-			exit(free_all(master, master->commands[i]->error_code));
+	if (master->commands[i]->cmd_array[0])
+		if (!is_builtin_function(master->commands[i]->cmd_array[0]))
+			if (!command_error_check(master->commands[i], master))
+				exit(free_all(master, master->commands[i]->error_code));
 	input_redirection = last_input_fd(master, i);
 	output_redirection = last_output_fd(master, i);
-	if (i == 0)
-		plug_first_cmd(master, i, input_redirection, output_redirection);
-	else if (i == master->cmd_count - 1)
-		plug_last_cmd(master, i, input_redirection, output_redirection);
-	else
-		plug_middle_cmd(master, i, input_redirection, output_redirection);
+	plug_pipes(master, i, input_redirection, output_redirection);
 	close_pipes_and_files(master, i);
-	//close(2);// TODO  hides the broken pipe error when SIGPIPE happens.
 	if (!master->commands[i]->cmd_array[0])
 		exit(free_all(master, 0));
 	if (is_builtin_function(master->commands[i]->cmd_array[0]))
