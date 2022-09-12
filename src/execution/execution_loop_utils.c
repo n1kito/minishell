@@ -58,7 +58,8 @@ int	last_output_fd(t_master *master, int i)
 
 /* Loops through all heredocs in the command line, closes them and unlinks
  * the files. */
-int	close_heredocs(t_master *master)
+// TODO DOUBLE CHECK BUT I THINK THIS ONE IS NOT USED ANYWHERE
+void	close_heredocs(t_master *master)
 {
 	int		i;
 
@@ -68,11 +69,10 @@ int	close_heredocs(t_master *master)
 		if (master->commands[i]->heredoc_fd)
 		{
 			if (close(master->commands[i]->heredoc_fd) == -1)
-				return (err_msg("could not close heredoc [close_heredocs()]",
-						0, master));
+				exit(err_msg("could not close heredoc [close_heredocs()]",
+						1, master) && free_all(master, 1));
 		}
 	}
-	return (1);
 }
 
 //TODO not sure I'm using this one
@@ -99,14 +99,14 @@ int	close_and_unlink_heredocs(t_master *master)
 
 /* Waits for all processes one by one and stores the exit code of the
  * latest function in the global g_minishexit variable. */
-int	process_waiter(t_master *master)
+void	process_waiter(t_master *master)
 {
 	int	i;
 
 	i = -1;
 	while (++i < master->cmd_count)
 		if (waitpid(master->processes[i], &g_minishexit, 0) == -1)
-			return (err_msg("waitpid() failed [process_waiter()]", 0, master));
+			exit(err_msg("waitpid() failed [process_waiter()]", 1, master)
+				&& free_master(master, 1));
 	g_minishexit = WEXITSTATUS(g_minishexit);
-	return (1);
 }

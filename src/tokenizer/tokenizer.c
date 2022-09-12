@@ -2,10 +2,9 @@
 
 /* The tokenizer() function strictly follows the bash guidelines.
 See README for more information. */
-// TODO try to change while condition with while(line[t->position])
-int	tokenizer(char *line, t_master *master, t_tokenizer_helpers *t)
+void	tokenizer(char *line, t_master *master, t_tokenizer_helpers *t)
 {
-	while (t->position <= (int)ft_strlen(line) && master->malloc_ok == 1)
+	while (t->position <= (int)ft_strlen(line))
 	{
 		if (line[t->position] == '\0')
 			handle_end_of_line(t, master);
@@ -28,5 +27,4 @@ int	tokenizer(char *line, t_master *master, t_tokenizer_helpers *t)
 		else
 			t->token_start = t->position++;
 	}
-	return (master->malloc_ok);
 }

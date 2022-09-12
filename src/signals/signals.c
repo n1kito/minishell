@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 10:24:37 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/10 15:52:59 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/11 23:21:34 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ void	signal_handler(int sig, siginfo_t *siginfo, void *context)
 	(void)siginfo;
 	if (sig == SIGINT)
 	{
+		g_minishexit = 130;
 		printf("\n");
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_minishexit = 130;
 	}
 	else if (sig == SIGQUIT)
 		printf("\b\b  \b\b");

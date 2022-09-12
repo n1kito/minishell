@@ -14,8 +14,7 @@ int	setup_heredocs(t_master *master)
 			i++;
 		else if (current->token_type == HERE_DOC)
 		{
-			if (!set_heredoc_path(master, i))
-				return (0);
+			set_heredoc_path(master, i);
 			if (!heredoc_process(master, current, i))
 				return (0);
 			if (g_minishexit == 130)
@@ -34,24 +33,25 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 
 	heredoc_process = fork();
 	if (heredoc_process == -1)
-		return (err_msg("fork failed [setup_heredocs()]", 0, master));
+		exit(err_msg("fork failed [setup_heredocs()]", 1, master)
+			&& free_all(master, 1));
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	if (heredoc_process == 0)
 	{
 		setup_signals(*master->sa, &set_heredoc_signal);
-		if (!open_heredoc(master, i))
-			exit (0);
+		open_heredoc(master, i);
 		read_heredoc(current, master->commands[i], master, i);
 	}
 	if (waitpid(heredoc_process, &g_minishexit, 0) == -1)
-		return (err_msg("waitpid() failed [setup_heredocs()]", 0, master));
+		exit(err_msg("waitpid() failed [setup_heredocs()]", 1, master)
+			&& free_all(master, 1));
 	setup_signals(*master->sa, &signal_handler);
 	g_minishexit = WEXITSTATUS(g_minishexit);
 	if (g_minishexit == 1)
 	{
 		unlink_heredocs(master);
-		return (0);
+		exit(free_all(master, 1));
 	}
 	return (1);
 }
@@ -103,11 +103,11 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
 					&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
 		{
-			print_heredoc_warning(line, delimiter);
+			print_heredoc_warning(line, i, delimiter, master);
 			exit_heredoc(master, line, i, 0);
 		}
-		if (should_expand && !expand_heredoc_line(&line, master, tmp_minishexit))
-			exit_heredoc(master, line, i, 1); // pas sur des return codes ici... a tester !!!
+		if (should_expand)
+			expand_heredoc_line(&line, master, i, tmp_minishexit);
 		if (!heredoc_file_access(master, i))
 			exit_heredoc(master, line, i, 1);
 		write(cmd_node->heredoc_fd, line, ft_strlen(line));
@@ -117,24 +117,24 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 }
 
 /* Will process the expansions in the line passed as parameter. */
-int	expand_heredoc_line(char **line, t_master *master, int tmp_minishexit)
+void	expand_heredoc_line(char **line, t_master *master, int cmd_index, int tmp_minishexit)
 {
 	int	tmp;
 
 	tmp = g_minishexit;
 	g_minishexit = tmp_minishexit;
-	if (!log_heredoc_expansions(*line, master))
-		return (err_msg("failed to log HERE_DOC expansions", 0, master));
-	if (master->expansions)
-		if (!expand_line(line, master->expansions))
-			return (err_msg("failed to expand HERE_DOC", 0, master));
+	log_heredoc_expansions(*line, cmd_index, master);
+	if (master->expansions && !expand_line(line, master))
+	{
+		err_msg("failed to expand HERE_DOC", 0, master);
+		exit_heredoc(master, *line, cmd_index, 1);
+	}
 	free_expansions(&master->expansions);
 	g_minishexit = tmp;
-	return (1);
 }
 
 /* Goes through heredoc line and logs all candidates for expansion. */
-int	log_heredoc_expansions(char *line, t_master *master)
+int	log_heredoc_expansions(char *line, int cmd_index, t_master *master)
 {
 	int	i;
 
@@ -148,6 +148,11 @@ int	log_heredoc_expansions(char *line, t_master *master)
 			&& line[i + 1] != '\n')
 		{
 			if (!add_exp_node(master, line, i))
+			{
+				err_msg("failed to log HERE_DOC expansions\
+					[log_heredoc_expansions()]", 0, master);
+				exit_heredoc(master, line, cmd_index, 1);
+			}
 				return (0);
 		}
 		i++;
@@ -157,20 +162,24 @@ int	log_heredoc_expansions(char *line, t_master *master)
 
 /* Prints out warning when a heredoc is not delimited by the delimiter
  * but by an EOF (CTRL + D). */
-// TODO: check that this warning does print out to stdout and not stderr
-void	print_heredoc_warning(char *line, char *delimiter)
+void	print_heredoc_warning(char *line, int cmd_index, char *delimiter, t_master *master)
 {
 	char	*tmp_message;
 	char	*warning;
 
 	if (line)
 		return ;
-	// TODO protext strjoini
 	if (g_minishexit != 130)
 	{
 		tmp_message = ft_strjoin("mini(s)hell: warning: here-document \
 delimited by end-of-file (wanted '", delimiter);
 		warning = ft_strjoin(tmp_message, "')\n");
+		if (!tmp_message || !warning)
+		{
+			err_msg("malloc fail [print_heredoc_warning()]",
+					0, master);
+			exit_heredoc(master, line, cmd_index, 1);
+		}
 		free (tmp_message);
 		ft_printf_fd(1, "%s", warning);
 		free(warning);

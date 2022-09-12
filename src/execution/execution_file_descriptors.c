@@ -1,15 +1,6 @@
 #include "minishell.h"
 
-int	setup_file_descriptors(t_master *master)
-{
-	if (!allocate_file_descriptors(master)
-		|| !setup_heredocs(master))
-		return (0);
-	return (1);
-}
-
-// should I init at -1 ? that's what I wrote in tokenizer.h
-int	allocate_file_descriptors(t_master *master)
+void	allocate_file_descriptors(t_master *master)
 {
 	int			i;
 	int			j;
@@ -22,14 +13,13 @@ int	allocate_file_descriptors(t_master *master)
 		master->commands[i]->fds
 			= malloc(sizeof(int) * master->commands[i]->redirections_count);
 		if (!master->commands[i]->fds)
-			return (err_msg("malloc failed [open_file_descriptors()]",
-					0, master));
+			exit(free_all(master, 1)
+				&& err_msg("malloc failed [open_file_descriptors()]", 1, master));
 		j = 0;
 		while (j < master->commands[i]->redirections_count)
 			master->commands[i]->fds[j++] = -1;
 		i++;
 	}
-	return (1);
 }
 
 /* This function opens file descriptors and checks them immediately.
@@ -59,17 +49,6 @@ int	open_file_descriptors(t_master *master, int i)
 			}
 			j++;
 		}	
-		/*
-		else if (current->token_type == HERE_DOC)
-		{
-			master->commands[i]->heredoc_fd = open(master->commands[i]->heredoc_path, O_RDONLY);
-			if (master->commands[i]->heredoc_fd == -1)
-			{
-				perror(master->commands[i]->heredoc_path);
-				return (0);
-			}
-		}
-		*/
 		current = current->next;
 	}
 	return (1);

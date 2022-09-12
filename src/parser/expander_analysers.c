@@ -22,7 +22,7 @@ char	*search_env(t_env *env, char *name, int name_len)
 }
 
 /* Goes through token and logs expandable variables in a special structure. */
-int	log_expansions(char *token, t_master *master)
+void	log_expansions(char *token, t_master *master)
 {
 	int	i;
 	int	is_single_quoting;
@@ -35,19 +35,21 @@ int	log_expansions(char *token, t_master *master)
 	{
 		if (token[i] == '$' && token[i + 1] && !is_single_quoting
 			&& !is_blank_char(token[i + 1])
-			&& !(is_quote_character(token [i + 1]) && is_double_quoting)
+			&& !(is_quote_character(token[i + 1]) && is_double_quoting)
 			&& (ft_isalpha(token[i + 1])
-				|| token[i + 1] == '_' || token[i + 1] == '?'))
+				|| token[i + 1] == '_' || token[i + 1] == '?'
+				|| token[i + 1] == DOUBLE_QUOTE))
 		{
 			if (!add_exp_node(master, token, i))
-				return (0);
+				exit(free_all(master, 1) 
+					&& err_msg("failed to log expansions [log_expansions()]",
+						1, master));
 		}
 		else if (token[i] == DOUBLE_QUOTE && !is_single_quoting)
 			toggle_quoting(&is_double_quoting);
 		else if (token[i] == SINGLE_QUOTE && !is_double_quoting)
 			toggle_quoting(&is_single_quoting);
 	}
-	return (1);
 }
 
 /* Expands the value of the global g_minishesit code variable and stores it

@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 /* Adds the characters between token_start & token_end to the tokens struct. */
-int	extract_token(t_master *master, char *token_start, char *token_end)
+void	extract_token(t_master *master, char *token_start, char *token_end)
 {
 	int			token_len;
 	t_tokens	*new_token;
@@ -10,7 +10,7 @@ int	extract_token(t_master *master, char *token_start, char *token_end)
 	token_len = (token_end - token_start) + 1;
 	new_token = malloc(sizeof(t_tokens));
 	if (!new_token)
-		return (err_msg("extract_token() [1]", --master->malloc_ok, master));
+		exit(err_msg("malloc fail [extract_token()][1]", 1, master));
 	init_token_values(new_token);
 	if (master->tokens == NULL)
 		master->tokens = new_token;
@@ -21,12 +21,11 @@ int	extract_token(t_master *master, char *token_start, char *token_end)
 	}
 	new_token->token = malloc(sizeof(char) * (token_len + 1));
 	if (!new_token->token)
-		return (err_msg("extract_token() [2]", --master->malloc_ok, master));
+		exit(err_msg("malloc fail [extract_token()][2]", 1, master));
 	i = -1;
 	while (++i < token_len)
 		new_token->token[i] = token_start[i];
 	new_token->token[i] = '\0';
-	return (1);
 }
 
 /* Initializes the values of the token structure passed as parameter. */

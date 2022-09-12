@@ -2,13 +2,11 @@
 
 void	close_pipes_and_files(t_master *master, int i)
 {
-	if (!close_pipes(master))
-		exit(free_master(master, 1));
-	if (!close_files(master, i))
-		exit(free_master(master, 1));
+	close_pipes(master);
+	close_files(master, i);
 }
 
-int	close_pipes(t_master *master)
+void	close_pipes(t_master *master)
 {
 	int	i;
 
@@ -17,39 +15,39 @@ int	close_pipes(t_master *master)
 	{
 		if (close(master->pipes[i][0]) == -1
 			|| close(master->pipes[i][1]) == -1)
-			return (err_msg("could not close pipes [close_pipes()]",
-					0, master));
+			exit(err_msg("could not close pipes [close_pipes()]",
+					1, master) && free_all(master, 1));
 		i++;
 	}
 	if (master->tmp_stdin >= 0)
-		close (master->tmp_stdin);
+		if (close(master->tmp_stdin) == -1)
+			exit(err_msg("could not close tmp_stdin [close_pipes()]",
+					1, master) && free_all(master, 1));
 	if (master->tmp_stdout >= 0)
-		close (master->tmp_stdout);
-	return (1);
+		if (close(master->tmp_stdout) == -1)
+			exit(err_msg("could not close tmp_stdout [close_pipes()]",
+					1, master) && free_all(master, 1));
 }
 
-int	close_files(t_master *master, int i)
+void	close_files(t_master *master, int i)
 {
 	int	j;
 
-	// TODO: do I need to unlink the heredocs too ?
-	// no because I still need to read from them
 	if (master->commands[i]->heredoc_path)
 		if (close(master->commands[i]->heredoc_fd) == -1)
-			return (err_msg("heredoc close() failed [close_files()][1]",
-				0, master));
+			exit(err_msg("heredoc close() failed [close_files()][1]",
+				1, master) && free_all(master, 1));
 	if (master->commands[i]->redirections_count == 0)
-		return (1);
+		return ;
 	j = 0;
 	while (j < master->commands[i]->redirections_count)
 	{
 		if (master->commands[i]->fds[j])
 			if (close(master->commands[i]->fds[j]) == -1)
-				return (err_msg("close() failed [close_files()][2]",
-						0, master));
+				exit(err_msg("close() failed [close_files()][2]",
+						1, master) && free_all(master, 1));
 		j++;
 	}
-	return (1);
 }
 
 /* Checks if the string passed as parameter matches

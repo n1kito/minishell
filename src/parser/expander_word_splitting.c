@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	process_for_word_splitting(t_tokens **token_ptr, t_master *master_ptr)
+void	process_for_word_splitting(t_tokens **token_ptr, t_master *master_ptr)
 {
 	t_master	tmp_master;
 	char		*token;
@@ -17,9 +17,8 @@ int	process_for_word_splitting(t_tokens **token_ptr, t_master *master_ptr)
 	{
 		if (token[position] == '\0')
 		{
-			if (!extract_token(&tmp_master,
-					&token[token_start], &token[position - 1]))
-				return (0);
+			extract_token(&tmp_master, &token[token_start],
+							&token[position - 1]);
 			position++;
 			get_last_token(tmp_master.tokens)->word_splitted = 1;
 			get_last_token(tmp_master.tokens)->was_expanded = expansion_status;
@@ -28,9 +27,8 @@ int	process_for_word_splitting(t_tokens **token_ptr, t_master *master_ptr)
 			position += find_matching_quote(&token[position]) + 1;
 		else if (is_blank_char(token[position]))
 		{
-			if (!extract_token(&tmp_master,
-					&token[token_start], &token[position - 1]))
-				return (0);
+			extract_token(&tmp_master, &token[token_start],
+							&token[position - 1]);
 			position += get_next_non_blank_char(&token[position]);
 			token_start = position;
 			get_last_token(tmp_master.tokens)->word_splitted = 1;
@@ -40,7 +38,6 @@ int	process_for_word_splitting(t_tokens **token_ptr, t_master *master_ptr)
 			position++;
 	}
 	insert_tokens(token_ptr, &tmp_master, master_ptr);
-	return (1);
 }
 
 void	insert_tokens(t_tokens **token_ptr, t_master *tmp_m, t_master *og_m)

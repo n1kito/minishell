@@ -3,35 +3,34 @@
 /* Sets the path of the heredoc file. Each command segment has a single
  * heredoc path that will be opened for each heredoc in the segment.
  * Different segments paths do not share a heredoc file. */
-int	set_heredoc_path(t_master *master, int i)
+void	set_heredoc_path(t_master *master, int i)
 {
 	char	*heredoc_index;
 
 	if (master->commands[i]->heredoc_path)
-		return (1);
+		return ;
 	heredoc_index = ft_itoa(i);
 	master->commands[i]->heredoc_path
 		= ft_strjoin("/tmp/.heredoc", heredoc_index);
 	if (!master->commands[i]->heredoc_path)
-		return (err_msg("malloc failed [set_heredoc_path()]",
-				0, master));
+		exit(err_msg("malloc failed [set_heredoc_path()]",
+				1, master) && free_all(master, 1));
 	free(heredoc_index);
-	return (1);
 }
 
 /* Closes heredoc fd before opening it again for write. */
-int	open_heredoc(t_master *master, int i)
+void	open_heredoc(t_master *master, int i)
 {
 	if (master->commands[i]->heredoc_fd >= 0)
 		if (close(master->commands[i]->heredoc_fd) == -1)
-			return (err_msg("could not close fd [open_heredoc()]",
-					0, master));
+			exit(err_msg("could not close fd [open_heredoc()]",
+					1, master) && free_all(master, 1));
 	master->commands[i]->heredoc_fd
 		= open(master->commands[i]->heredoc_path,
 			O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (master->commands[i]->heredoc_fd == -1)
-		return (err_msg("open() failed [open_heredoc()]", 0, master));
-	return (1);
+		exit(err_msg("open() failed [open_heredoc()]", 1, master)
+			&& free_all(master, 1));
 }
 
 /* Checks if heredoc delimiter had quotes in it before quotes removal.

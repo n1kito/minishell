@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/11 18:08:46 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/12 09:43:11 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	found_open_quotes(t_master *master)
 	{
 		if (has_solitary_quote(current->token, master))
 		{
-			g_minishexit = 1;
+			g_minishexit = 2;
 			return (1);
 		}
 		current = current->next;
@@ -37,14 +37,14 @@ int	execute_command(char *command_line, t_master *master)
 	if (command_line == NULL)
 		return (0);
 	init_tokenizer_helpers(&master->helpers, command_line);
-	if (!tokenizer(command_line, master, &master->helpers)
-		|| !parser(&master->tokens))
-		return (0);
+	tokenizer(command_line, master, &master->helpers);
+	parser(&master->tokens);
 	if (found_open_quotes(master))
 		return (1);
-	if (!expander(master)
-		|| !syntax_checker(master)
-		|| !prep_execution_resources(master))
+	expander(master);
+	if (!syntax_checker(master->tokens, master, master->ez_err))
+		return (1);
+	if (!prep_execution_resources(master))
 			return (0);
 	if (heredoc_found(master) && (g_minishexit == 130 || g_minishexit == 131)) //if we exited out of heredocs
 	{
@@ -70,7 +70,10 @@ void	read_prompt(t_master *master)
 	line = NULL;
 	while (1)
 	{
-		line = readline("mini🔥hell \033[0;31m>\033[0;39m ");
+		if (g_minishexit == 0)
+			line = readline("🔥 mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
+		else
+			line = readline("☠️  mini\033[2ms\033[0mhell \033[0;31m>\033[0;39m ");
 		if (line && line[0])
 		{
 			add_history(line);
@@ -94,6 +97,8 @@ int	main(int argc, char **argv, char **envp)
 	t_master			master;
 	struct sigaction	sa;
 
+	if (argc != 1)
+		return (1);
 	(void)argc;
 	(void)argv;
 	master.env_array = envp;
@@ -104,5 +109,5 @@ int	main(int argc, char **argv, char **envp)
 	get_env(envp, &master);
 	init_master_structure(&master);
 	read_prompt(&master);
-	return (free_all(&master, 0));
+	return (free_all(&master, g_minishexit));
 }

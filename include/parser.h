@@ -15,7 +15,7 @@
 # define INVISIBLE 10
 
 // parser.c
-int			parser(t_tokens **tokens);
+void		parser(t_tokens **tokens);
 int			is_file_name_token(t_tokens *token);
 int			is_operator_token(t_tokens *tokens);
 void		print_parsed_tokens(t_tokens *tokens);
@@ -24,20 +24,19 @@ void		print_parsed_tokens(t_tokens *tokens);
 void		identify_token_type(t_tokens *token);
 
 // parser_syntax_checker.c
-int			syntax_checker(t_master *master);
+int			syntax_checker(t_tokens *tokens, t_master *master, int err);
 
 // expander.c
-int			expander(t_master *master);
-int			remove_quotes(t_tokens **token_node, int first_quote,
+void		expander(t_master *master);
+void		remove_quotes(t_tokens **token_node, int first_quote,
 			int second_quote, t_master *master);
-int			process_and_remove_quotes(t_tokens *token_node, t_master *master);
-int			expand_line(char **line, t_expand *expansions);
+void		process_and_remove_quotes(t_tokens *token_node, t_master *master);
+int			expand_line(char **line, t_master *master);
 void		check_for_invisible_tokens(t_tokens	*token);
-int			process_for_word_splitting(t_tokens **token_ptr, t_master *master);
 
 // expander_analysers.c
 char		*search_env(t_env *env, char *name, int name_len);
-int			log_expansions(char *token, t_master *master);
+void		log_expansions(char *token, t_master *master);
 void		expand_exit_code(t_master *master, t_expand *new_expand);
 int			add_exp_node(t_master *master, char *token, int i);
 
@@ -53,7 +52,7 @@ int			free_expansions(t_expand **expansions);
 int			expand_token(t_tokens *token, t_master *master);
 
 // expander_word_splitting.c
-int			process_for_word_splitting(t_tokens **tokens_ptr, t_master *master_ptr);
+void		process_for_word_splitting(t_tokens **tokens_ptr, t_master *master_ptr);
 void		insert_tokens(t_tokens **token_ptr, t_master *tmp_m, t_master *og_m);
 
 // expander_word_splitting_analyser.c

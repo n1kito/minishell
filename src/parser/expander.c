@@ -3,7 +3,7 @@
 /* Goes through tokens, checks that there are no single quotes.
  * If there are not, identifies variables to expand and expands them.
  * Then removes all removable quotes. */
-int	expander(t_master *master)
+void	expander(t_master *master)
 {
 	t_tokens	*current;
 
@@ -11,25 +11,21 @@ int	expander(t_master *master)
 	while (current)
 	{
 		if (current->token_type != DELIMITER)
-			if (!expand_token(current, master))
-				return (0);
+			expand_token(current, master);
 		if (!current->token[0] && current->token_type == WORD
 			&& !current->token_had_quotes)
 			current->token_type = INVISIBLE;
 		else if (token_has_unquoted_blanks(current)
-			&& !process_for_word_splitting(&current, master))
-			return (0);
+			&& current->token_type == WORD)
+			process_for_word_splitting(&current, master);
 		else
-			if (!process_and_remove_quotes(current, master))
-				return (0);
+			process_and_remove_quotes(current, master);
 		current = get_next_unsplitted_token(current);
 	}
-	//check_for_invisible_tokens(master->tokens);
-	return (1);
 }
 
 /* Goes through token and removes pairs of quotes. */
-int	process_and_remove_quotes(t_tokens *token_node, t_master *master)
+void	process_and_remove_quotes(t_tokens *token_node, t_master *master)
 {
 	int		i;
 	int		matching_quote_pos;
@@ -44,18 +40,16 @@ int	process_and_remove_quotes(t_tokens *token_node, t_master *master)
 			if (token_node->token_had_quotes == 0)
 				token_node->token_had_quotes = 1;
 			matching_quote_pos = find_matching_quote(token_node->token + i);
-			if (!remove_quotes(&token_node, i, matching_quote_pos, master))
-				return (0);
+			remove_quotes(&token_node, i, matching_quote_pos, master);
 			i += matching_quote_pos - 1;
 		}
 		else
 			i++;
 	}
-	return (1);
 }
 
 /* Removes quote pairs from current token. */
-int	remove_quotes(t_tokens **token_node, int quote1, int quote2, t_master *m)
+void	remove_quotes(t_tokens **token_node, int quote1, int quote2, t_master *m)
 {
 	char	*concatenate_me;
 	char	*tmp_token;
@@ -64,27 +58,26 @@ int	remove_quotes(t_tokens **token_node, int quote1, int quote2, t_master *m)
 	(*token_node)->token[quote1 + quote2] = '\0';
 	tmp_token = str_join((*token_node)->token, concatenate_me);
 	if (!tmp_token)
-		return (err_msg("malloc() failed [remove_quotes()][1]", 0, m));
+		exit(err_msg("malloc() failed [remove_quotes()][1]", 1, m));
 	free((*token_node)->token);
 	(*token_node)->token = tmp_token;
 	concatenate_me = (*token_node)->token + quote1 + 1;
 	(*token_node)->token[quote1] = '\0';
 	tmp_token = str_join((*token_node)->token, concatenate_me);
 	if (!tmp_token)
-		return (err_msg("malloc() failed [remove_quotes()][2]", 0, m));
+		exit(err_msg("malloc() failed [remove_quotes()][2]", 1, m));
 	free((*token_node)->token);
 	(*token_node)->token = tmp_token;
-	return (1);
 }
 
 /* Expands all expansions, back to front. */
-int	expand_line(char **line, t_expand *expansions)
+int	expand_line(char **line, t_master *master)
 {
 	char		*tmp_token;
 	char		*new_token;
 	t_expand	*exp;
 
-	exp = expansions;
+	exp = master->expansions;
 	while (exp)
 	{
 		tmp_token = str_join(exp->value, *line + exp->name_end + 1);
