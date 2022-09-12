@@ -10,14 +10,13 @@ int	execute_single_builtin(t_master *master)
 	//
 	// TODO check what happens if there is an error opening file descriptors with single builtin	
 	if (!open_file_descriptors(master, 0))
-		return (0);
+		return (1);
 	in_redir = last_input_fd(master, 0);
 	out_redir = last_output_fd(master, 0);
 	//TODO proteger tmp_stdin et tmp_stdout
 	// et les set dans le setup_sing_builtin en passant les pointeurs sur int
 	set_builtin_redir(in_redir, out_redir, master);
-	if (!run_builtin(master, 0))
-		return (0);
+	run_builtin(master, 0);
 	reset_builtin_redir(in_redir, out_redir, master);
 	close_files(master, 0);
 	return (1);
