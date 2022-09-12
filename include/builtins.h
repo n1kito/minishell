@@ -12,13 +12,13 @@
 # define BUILTINS_H
 
 //fonctions our les builtins
-int		ft_pwd(void);
-int		ft_env(t_env *env);
-int		ft_echo(char **arg);
+void	ft_pwd(void);
+void	ft_env(t_env *env);
+void	ft_echo(char **arg);
 void	ft_cd(t_master *master, char **path);
-int		ft_unset(t_env **env, char **arg);
+void	ft_unset(t_env **env, char **arg);
 void	ft_export(t_master *master, char **variable);
-int		ft_exit(t_master *master, int cmd_index);
+void	ft_exit(t_master *master, int cmd_index);
 
 //utils pour les builtins
 void	print_env_by_alphabetical_order(t_env *list);

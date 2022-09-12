@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 16:11:13 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 16:34:32 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	ft_is_num(char	*str)
 	return (1);
 }
 
-int	ft_exit(t_master *master, int cmd_index)
+void	ft_exit(t_master *master, int cmd_index)
 {
 	char	**variable;
 
@@ -45,7 +45,7 @@ int	ft_exit(t_master *master, int cmd_index)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_minishexit = 1;
-		return (1);
+		return ;
 	}
 	else if (variable[1])
 		g_minishexit = ft_atoi(variable[1]);

@@ -6,13 +6,13 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 13:52:13 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 16:33:25 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_env(t_env *env)
+void	ft_env(t_env *env)
 {
 	t_env	*tmp;
 
@@ -32,5 +32,4 @@ int	ft_env(t_env *env)
 		tmp = tmp->next;
 	}
 	g_minishexit = 0;
-	return (1);
 }
