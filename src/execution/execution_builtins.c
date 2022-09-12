@@ -40,7 +40,7 @@ int	run_builtin(t_master *master, int cmd_index)
 	else if (ft_strcmp(command, "exit") == 0)
 		ft_exit(master, cmd_index);
 	else if (ft_strcmp(command, "env") == 0)
-			ft_env(master->env);
+			ft_env(master->env, arguments);
 	else if (ft_strcmp(command, "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(command, "cd") == 0)

@@ -13,7 +13,7 @@
 
 //fonctions our les builtins
 void	ft_pwd(void);
-void	ft_env(t_env *env);
+void	ft_env(t_env *env, char **arg);
 void	ft_echo(char **arg);
 void	ft_cd(t_master *master, char **path);
 void	ft_unset(t_env **env, char **arg);
