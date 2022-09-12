@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/08 10:24:37 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 18:14:31 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/13 00:19:25 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	signal_handler(int sig, siginfo_t *siginfo, void *context)
 		rl_redisplay();
 	}
 	else if (sig == SIGQUIT)
-		printf("\b\b  \b\b");
+		ft_putstr_fd("\b\b  \b\b", 0);
 }
 
 void	set_heredoc_signal(int sig, siginfo_t *siginfo, void *context)
@@ -52,13 +52,12 @@ void	set_command_signal(int sig, siginfo_t *siginfo, void *context)
 	if (sig == SIGINT)
 	{
 		g_minishexit = 130;
-		ft_putstr_fd("\n", 1);
+		printf("\n");
 	}
-	else if (sig == SIGQUIT)
-	{
-		ft_putstr_fd("Quit (Core Dumped)\n", 2);
+	if (sig == SIGQUIT)
 		g_minishexit = 131;
-	}
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }
 
 void	setup_signals(struct sigaction sa, void (*f)(int, siginfo_t*, void*))

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 18:33:17 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 21:43:42 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,21 @@ static void	ft_update_old(t_master *master, char *buffer)
 	{
 		if (ft_strncmp(env->name, "OLDPWD", 6) == 0 \
 				&& ft_strlen(env->name) == 6)
-			old = master->env;
-		master->env = master->env->next;
+			old = env;
+		env = env->next;
 	}
-	if (!old)
-		return ;
-	if (old->variable)
-		free(old->variable);
-	if (old->is_env == 1)
-		old->is_env = 0;
-	else
+	if (old)
 	{
-		old->is_env = 2;
-		old->variable = ft_strdup(buffer);
-		check_malloc_in_builtin(master, old, "cd");
+		if (old->variable)
+			free(old->variable);
+		if (old->is_env == 1)
+			old->is_env = 0;
+		else
+		{
+			old->is_env = 2;
+			old->variable = ft_strdup(buffer);
+			check_malloc_in_builtin(master, old, "cd");
+		}
 	}
 }
 
@@ -116,24 +117,24 @@ static void	ft_update_pwd(t_master *master, char *buffer)
 
 static void	find_home(t_env *env)
 {
-	t_env	*home;
 	int		ret;
 
-	home = NULL;
+	ret = 0;
 	while (env)
 	{
-		if (ft_strncmp(env->name, "HOME", 4) == 0 \
-				&& ft_strlen(env->variable) == 4)
-			home = env;
+		if (ft_strncmp("HOME", env->name, 4) == 0 && ft_strlen(env->name) == 4)
+		{
+			if (env->variable && env->variable[0])
+			{
+				ret = chdir(env->variable);
+				break;
+			}
+		}
 		env = env->next;
 	}
-	if (home)
-	{
-		ret = chdir(home->variable);
-		if (ret == 0)
-			perror("Error: cd: ");
-	}
-	else
+	if (ret == -1)
+		perror("Error: cd: ");
+	if (!env)
 		ft_putstr_fd("Minishell: cd: HOME not set\n", 2);
 }
 
@@ -146,22 +147,20 @@ static void	find_home(t_env *env)
 
 void	ft_cd(t_master *master, char **path)
 {
-	t_env	*start;
 	int		ret;
 	char	buffer[PATH_MAX + 1];
 
 	g_minishexit = 1;
-	start = master->env;
 	ret = 0;
 	if (getcwd(buffer, PATH_MAX))
 	{
-		if (path[2])
+		if (!path[1])
+			find_home(master->env);
+		else if (path[2])
 		{
 			ft_putstr_fd("Minishell: cd: too many arguments\n", 2);
 			return ;
 		}
-		if (!path[1])
-			find_home(start);
 		else
 			ret = chdir(path[1]);
 		if (ret == 0)

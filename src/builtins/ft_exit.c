@@ -6,29 +6,65 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 18:24:12 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/13 01:30:22 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+static int	is_above_atoll(char const *str, int neg)
+{
+	int		ret;
+	char	*max_int;
+
+	ret = 0;
+	max_int = "9223372036854775807";
+	if (ft_strlen(str) > ft_strlen(max_int))
+		ret = 1;
+	if (ft_strlen(str) < ft_strlen(max_int))
+		return (0);
+	while (ret == 0 && *(max_int + 1))
+	{
+		if (*str < *max_int)
+			ret = 0;
+		if (*str > *max_int)
+			ret = 1;
+		if (*str < *max_int || *str > *max_int)
+			break;
+		str++;
+		max_int++;
+	}
+	if (neg && ret == 0 && *str > 8)
+		ret = 1;
+	if (!neg && ret == 0 && *str > 7)
+		ret = 1;
+	return (ret);
+}
+
 static void	check_arg1_is_valid(char *variable)
 {
 	int	i;
+	int	neg;
 
+	neg = 0;
 	i = 0;
-	while (variable[i] == ' ' || (variable[i] >= 9 && variable[i] <= 13))
-		i++;
-	if (variable[i] == '=' || variable[i] == '-')
-		i++;
+	while (*variable == ' ' || (*variable >= 9 && *variable <= 13))
+		variable++;
+	if (*variable == '=' || *variable == '-')
+	{
+		if (*variable == '-')
+			neg = 1;
+		variable++;
+	}
 	while (variable[i] <= '9' && variable[i] >= '0')
 		i++;
-	if (variable[i])
+	if (variable[i] || is_above_atoll(variable, neg))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
 		ft_putstr_fd(variable, 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		g_minishexit = 2;
+		exit(2);
 	}
 }
 
@@ -70,16 +106,14 @@ void	ft_exit(t_master *master, int cmd_index)
 		close_pipes(master);
 	}
 	if (variable[1])
-	{
 		check_arg1_is_valid(variable[1]);
-	}
-	if (variable[1] && variable[2])
+	else if (variable[1] && variable[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_minishexit = 1;
 		return ;
 	}
 	else if (variable[1])
-		g_minishexit = ft_atoll(variable[1]);
+		exit(ft_atoll(variable[1]));
 	exit(free_all(master, g_minishexit));
 }
