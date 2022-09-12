@@ -11,12 +11,14 @@ int	assign_command_paths(t_master *master)
 	int			i;
 
 	paths = ft_split(get_path_variable(master->env), ':');
-	if (!paths)
+	if (get_path_variable(master->env) && !paths)
 		exit(err_msg("malloc fail [assign_command_paths()][1]", 1, master)
 			&& free_all(master, 1));
 	i = -1;
 	while (master->commands[++i])
 	{
+		if (is_builtin_function(master->commands[i]->cmd_array[0]))
+			continue ;
 		if (master->commands[i]->cmd_array)
 		{
 			if (ft_strchr(master->commands[i]->cmd_array[0], '/')
