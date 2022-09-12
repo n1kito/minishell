@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/27 13:45:28 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/11 23:20:28 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/12 09:43:11 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ int	main(int argc, char **argv, char **envp)
 	t_master			master;
 	struct sigaction	sa;
 
+	if (argc != 1)
+		return (1);
 	(void)argc;
 	(void)argv;
 	master.env_array = envp;
