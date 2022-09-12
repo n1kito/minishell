@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 00:56:41 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/07 11:47:51 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/12 13:52:13 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	ft_env(t_env *env)
 	tmp = env;
 	while (tmp)
 	{
-		if (tmp->is_env == 1)
+		if (tmp->is_env)
 		{
 			if (tmp->name)
 			{
