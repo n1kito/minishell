@@ -85,7 +85,8 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 	if (open(current->token, O_DIRECTORY) != -1)
 	{
 		error_message = ft_strjoin(current->token, ": Is a directory\n");
-		//TODO protect strjoin
+		if (!error_message)
+			exit(err_msg("malloc failed [check_output_file()]", 1, master));
 		ft_printf_fd(2, "%s", error_message);
 		free(error_message);
 		g_minishexit = 1;

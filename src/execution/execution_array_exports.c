@@ -44,21 +44,20 @@ void	create_command_structures(t_master *master, int cmd_count)
 void	populate_command_structures(t_master *master, int cmd_count)
 {
 	int	i;
-	int	word_count;
+	int	words;
 
 	master->next_command_start = master->tokens;
 	i = 0;
 	while (i < cmd_count)
 	{
-		word_count = count_words_in_segment(master);
-		master->commands[i]->cmd_array = malloc(
-				sizeof(char *) * (word_count + 1));
+		words = count_words_in_segment(master);
+		master->commands[i]->cmd_array = malloc(sizeof(char *) * (words + 1));
 		if (!master->commands[i]->cmd_array)
 			exit(err_msg("malloc failed [populate_command_structures()]",
 					1, master));
-		while (word_count >= 0)
-			master->commands[i]->cmd_array[word_count--] = NULL;
-		if (word_count)
+		while (words >= 0)
+			master->commands[i]->cmd_array[words--] = NULL;
+		if (words)
 			populate_nth_command_structure(master, i);
 		i++;
 	}
