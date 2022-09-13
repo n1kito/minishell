@@ -57,16 +57,19 @@ int	exec_loop(t_master *master)
 	i = 0;
 	while (i < master->cmd_count)
 	{
-		setup_signals(*master->sa, &set_command_signal);
 		master->processes[i] = fork();
 		if (master->processes[i] == -1)
 			return (err_msg("fork failed [exec_loop]", 0, master));
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		if (master->processes[i] == 0)
+		{
+			setup_signals(*master->sa, &set_command_signal);
 			launch_exec(master, i);
+		}
 		i++;
 	}
 	close_pipes(master);
 	process_waiter(master);
-	setup_signals(*master->sa, &signal_handler);
 	return (1);
 }

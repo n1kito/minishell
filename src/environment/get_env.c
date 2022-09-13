@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_env.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/13 17:52:43 by vrigaudy          #+#    #+#             */
+/*   Updated: 2022/09/13 18:01:46 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 // This function initializes the 2 pointers used to store the name and the var
@@ -6,29 +18,7 @@
 // the first string called NAME takes the beggininning of the string until the =
 // the second string VARIABLE takes the rest of the string
 
-int	clean_env(t_env **env, int return_code)
-{
-	t_env	*tmp;
-	t_env	*lst;
-
-	tmp = NULL;
-	lst = *env;
-	while (lst)
-	{
-		tmp = lst;
-		lst = lst->next;
-		if (tmp->name)
-			free(tmp->name);
-		if (tmp->variable)
-			free(tmp->variable);
-		if (tmp)
-			free(tmp);
-	}
-	*env = NULL;
-	return (return_code);
-}
-
-static t_env	*env_init(char *envp)
+static t_env	*env_init(char *envp, t_master *master)
 {
 	int		equal;
 	int		len;
@@ -44,8 +34,7 @@ static t_env	*env_init(char *envp)
 		new->variable = ft_itoa(ft_atoi(&envp[equal + 1]) + 1);
 	else
 		new->variable = malloc(sizeof(char) * len - equal);
-	if (!new || !new->name)
-		return (NULL);
+	check_malloc_in_builtin(master, new);
 	new->is_env = 1;
 	new->next = NULL;
 	ft_strlcpy(new->name, envp, equal + 1);
@@ -57,7 +46,7 @@ static t_env	*env_init(char *envp)
 // This function initializes the linked list
 // This list will be used to store the environment
 
-static int	list_init(t_env **env, char **envp)
+static int	list_init(t_env **env, char **envp, t_master *master)
 {
 	int		i;
 	t_env	*lst;
@@ -66,17 +55,13 @@ static int	list_init(t_env **env, char **envp)
 	i = 0;
 	if (!(*env))
 	{
-		lst = env_init(envp[i]);
+		lst = env_init(envp[i], master);
 		i++;
-		if (!lst)
-			return (0);
 		*env = lst;
 	}
 	while (envp[i])
 	{
-		tmp = env_init(envp[i]);
-		if (!tmp)
-			return (0);
+		tmp = env_init(envp[i], master);
 		lst->next = tmp;
 		lst = lst->next;
 		i++;
@@ -84,42 +69,16 @@ static int	list_init(t_env **env, char **envp)
 	return (1);
 }
 
-static int	is_in_env(t_env *env, char *name)
-{
-	t_env	*tmp;
-
-	tmp = env;
-	if (!tmp)
-		return (0);
-	while (tmp)
-	{
-		if (!ft_strncmp(tmp->name, name, ft_strlen(name)))
-			return (1);
-		tmp = tmp->next;
-	}
-	return (0);
-}
-
-static t_env	*get_env_last(t_env *env)
-{
-	while (env && env->next)
-		env = env->next;
-	return (env);
-}
-
 static int	add_to_env(t_master *master, char *name, char *variable)
 {
 	t_env	*new_node;
 
 	new_node = malloc(sizeof(t_env));
-	if (!new_node)
-		return (err_msg("malloc fail [add_to_env()][1]", 0, master));
 	new_node->name = ft_strdup(name);
 	new_node->variable = ft_strdup(variable);
 	new_node->is_env = 1;
 	new_node->next = NULL;
-	if (!new_node->name || !new_node->variable)
-		return (err_msg("malloc fail [add_to_env()][2]", 0, master));
+	check_malloc_in_builtin(master, new_node);
 	if (!master->env)
 		master->env = new_node;
 	else
@@ -163,7 +122,7 @@ int	get_env(char **envp, t_master *master)
 
 	ret = 1;
 	if (envp && *envp)
-		ret = list_init(&master->env, envp);
+		ret = list_init(&master->env, envp, master);
 	if (!ret)
 		return (clean_env(&master->env, 0));
 	if (!add_missing_variables_to_env(master))

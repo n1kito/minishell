@@ -30,21 +30,20 @@ int	run_builtin(t_master *master, int cmd_index)
 
 	command = master->commands[cmd_index]->cmd_array[0];
 	arguments = master->commands[cmd_index]->cmd_array;
-	if ((ft_strcmp(command, "export") == 0
-			&& !ft_export(&master->env, arguments))
-		|| (ft_strcmp(command, "unset") == 0
-			&& !ft_unset(&master->env, arguments))
-		|| (ft_strcmp(command, "echo") == 0
-			&& !ft_echo(arguments))
-		|| (ft_strcmp(command, "exit") == 0
-			&& !ft_exit(master, cmd_index))
-		|| (ft_strcmp(command, "env") == 0
-			&& !ft_env(master->env))
-		|| (ft_strcmp(command, "pwd") == 0
-			&& !ft_pwd())
-		|| (ft_strcmp(command, "cd") == 0
-			&& !ft_cd(arguments, master->env)))
-		return (0);
+	if (ft_strcmp(command, "export") == 0)
+		ft_export(master, arguments);
+	else if (ft_strcmp(command, "unset") == 0)
+		ft_unset(&master->env, arguments);
+	else if (ft_strcmp(command, "echo") == 0)
+		ft_echo(arguments, master);
+	else if (ft_strcmp(command, "exit") == 0)
+		ft_exit(master, cmd_index);
+	else if (ft_strcmp(command, "env") == 0)
+			ft_env(master->env, arguments);
+	else if (ft_strcmp(command, "pwd") == 0)
+		ft_pwd();
+	else if (ft_strcmp(command, "cd") == 0)
+		ft_cd(master, arguments);
 	return (1);
 }
 

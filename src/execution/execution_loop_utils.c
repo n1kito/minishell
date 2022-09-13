@@ -1,4 +1,5 @@
 #include "minishell.h"
+#include <sys/wait.h>
 
 /* Looks through a command segment and returns the index
  * of the lastest input redirection node in the tokens. */
@@ -112,15 +113,24 @@ int	close_and_unlink_heredocs(t_master *master)
 void	process_waiter(t_master *master)
 {
 	int	i;
+	int	status;
 
+	status = 0;
 	i = -1;
 	while (++i < master->cmd_count)
 	{
 		if (waitpid(master->processes[i], &g_minishexit, 0) == -1)
 			exit(err_msg("waitpid() failed [process_waiter()]", 1, master)
 				&& free_master(master, 1));
-		if (WEXITSTATUS(g_minishexit) == 42)
-			exit(free_master(master, 1));
+	if (WIFEXITED(status))
+		g_minishexit = WEXITSTATUS(g_minishexit);
+	else if (WIFSIGNALED(status))
+	{
+		g_minishexit = WTERMSIG(g_minishexit) + 128;
+		if (g_minishexit == 130)
+			printf("\n");
+		if (g_minishexit == 131)
+			ft_putstr_fd("Quit (Core Dumped)\n", 2);
 	}
-	g_minishexit = WEXITSTATUS(g_minishexit);
+	setup_signals(*master->sa, &signal_handler);
 }

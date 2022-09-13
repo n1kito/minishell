@@ -80,6 +80,7 @@ SRC_FILES		:= 	main\
 					execution/execution_utils\
 					environment/env_for_exe\
 					environment/get_env\
+					environment/env_utils\
 					signals/signals
 OBJ_FILES		:=	$(addprefix $(BIN_DIR)/, $(addsuffix .o, $(SRC_FILES)))
 

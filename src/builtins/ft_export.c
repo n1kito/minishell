@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 10:43:15 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:01:16 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,13 @@ static char	*update_env_plus(char *initial_value, char *added_value)
 	return (initial_value);
 }
 
-static int	update_env(t_env *env, char *str)
+static void	update_env(t_master *master, t_env *env, char *str)
 {
+	int	command;
+
+	command = master->cmd_count;
 	if (str[0] == '+' && str[1] == '=')
-	{
 		env->variable = update_env_plus(env->variable, str + 2);
-		if (!env->variable)
-			return (0);
-	}
 	if (str[0] == '=')
 	{
 		if (env->variable)
@@ -49,13 +48,18 @@ static int	update_env(t_env *env, char *str)
 			env->variable = ft_strdup(str + 1);
 		else
 			env->variable = ft_strdup("");
-		if (!env->variable)
-			return (0);
 	}
-	return (1);
+	if (!env || !env->variable || !env->name)
+	{
+		write(2, "Minishell failure: malloc error in builtin: export\n", 52);
+		free_all(master, g_minishexit);
+		if (command > 1)
+			exit(42);
+		exit(1);
+	}
 }
 
-static int	add_elem_to_env(t_env *env, char *str)
+static void	add_elem_to_env(t_master *master, t_env *save, char *str)
 {
 	int		i;
 	t_env	*new;
@@ -64,8 +68,7 @@ static int	add_elem_to_env(t_env *env, char *str)
 	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	new = ft_calloc(sizeof(t_env), 1);
-	if (!new)
-		return (0);
+	check_malloc_in_builtin(master, save);
 	if (str[i] == '=' || str[i] == '+')
 		new->is_env = 1;
 	new->name = malloc(sizeof(char) * (i + 1));
@@ -77,31 +80,35 @@ static int	add_elem_to_env(t_env *env, char *str)
 		new->variable = ft_strdup(&str[i + 1]);
 	else
 		new->variable = ft_strdup("");
-	if (!new->name || !new->variable)
-		return (free(new), 0);
-	env->next = new;
-	return (1);
+	check_malloc_in_builtin(master, save);
+	save->next = new;
 }
 
-static int	check_if_in_env(t_env *env, char *str)
+static void	check_if_in_env(t_master *master, t_env *save, char *str)
 {
 	size_t	i;
 
 	i = 0;
 	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
-	while (env)
+	while (save)
 	{
-		if (ft_strncmp(str, env->name, ft_strlen(env->name)) == 0 \
-				&& ft_strlen(env->name) == i)
-			return (update_env(env, &str[i]));
-		if (!env->next)
+		if (ft_strncmp(str, save->name, ft_strlen(save->name)) == 0 \
+				&& ft_strlen(save->name) == i)
+		{
+			update_env(master, save, &str[i]);
+			return ;
+		}
+		if (!save->next)
 			break;
-		env = env->next;
+		save = save->next;
 	}
-	while (str[i] && str[i] != '=')
-		i++;
-	return(add_elem_to_env(env, str));
+	if (!save->next)
+	{
+		while (str[i] && str[i] != '=')
+			i++;
+		add_elem_to_env(master, save, str);
+	}
 }
 
 int	arg_is_ok_for_env(char const *str)
@@ -111,9 +118,9 @@ int	arg_is_ok_for_env(char const *str)
 	i = 0;
 	if (!str[0])
 		return (2);
-	if (str[0] == '_' && (str[1] == '+' || str[1] == '='))
+	if ((str[0] == '_' && (str[1] == '+' || str[1] == '=')))
 		return (2);
-	if (!ft_isalpha(str[i]) && str[i] != '_')
+	if (!ft_isalpha(str[0]) && str[0] != '_')
 		return (1);
 	i++;
 	while (str[i])
@@ -127,31 +134,27 @@ int	arg_is_ok_for_env(char const *str)
 	return (0);
 }
 
-int	ft_export(t_env **env, char **variable)
+void	ft_export(t_master *master, char **variable)
 {
-	int	i;
-	int	ret;
+	int		i;
+	t_env	*save;
 
+	save = master->env;
 	i = 1;
-	ret = 0;
 	g_minishexit = 0;
 	if (!variable[1])
-	{
-		print_env_by_alphabetical_order(*env);
-		return (1);
-	}
+		print_env_by_alphabetical_order(master->env);
 	while (variable[i])
 	{
 		if (arg_is_ok_for_env(variable[i]) == 0)
-			ret = (check_if_in_env(*env, variable[i]));
-		else if (arg_is_ok_for_env(variable[i]) == 2)
+			check_if_in_env(master, save, variable[i]);
+		else if (arg_is_ok_for_env(variable[i]) == 1)
 		{
-			write (2, "Export: Error: ", 14);
+			write (2, "Export: Error: '", 16);
 			write (2, variable[i], ft_strlen(variable[i]));
-			write (2, " not a valid identifier\n", 24);
+			write (2, "' not a valid identifier\n", 25);
 			g_minishexit = 1;
 		}
 		i++;
 	}
-	return (ret);
 }
