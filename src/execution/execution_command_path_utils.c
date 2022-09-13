@@ -11,11 +11,14 @@ int	assign_command_paths(t_master *master)
 	int			i;
 
 	paths = ft_split(get_path_variable(master->env), ':');
-	if (!paths)
-		return (err_msg("malloc fail [assign_command_paths()]", 0, master));
+	if (get_path_variable(master->env) && !paths)
+		exit(err_msg("malloc fail [assign_command_paths()][1]", 1, master)
+			&& free_all(master, 1));
 	i = -1;
 	while (master->commands[++i])
 	{
+		if (is_builtin_function(master->commands[i]->cmd_array[0]))
+			continue ;
 		if (master->commands[i]->cmd_array)
 		{
 			if (ft_strchr(master->commands[i]->cmd_array[0], '/')
@@ -41,6 +44,10 @@ int	get_cmd_path(char **cmd_path, char *command, char **paths, t_master *master)
 	char	*full_path;
 
 	i = 0;
+	if (command &&
+		(ft_strcmp(command, ".") == 0
+		|| ft_strcmp(command, "..") == 0))
+		return (1);
 	while (command && command[0] && paths && paths[i])
 	{
 		tmp_path = ft_strjoin(paths[i], "/");

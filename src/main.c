@@ -44,9 +44,8 @@ int	execute_command(char *command_line, t_master *master)
 	expander(master);
 	if (!syntax_checker(master->tokens, master, master->ez_err))
 		return (1);
-	if (!prep_execution_resources(master))
-			return (0);
-	if (heredoc_found(master) && (g_minishexit == 130 || g_minishexit == 131)) //if we exited out of heredocs
+	prep_execution_resources(master);
+	if (heredoc_found(master) && (g_minishexit == 130)) //if we exited out of heredocs
 	{
 		if (!unlink_heredocs(master))
 			return (0);
@@ -54,10 +53,7 @@ int	execute_command(char *command_line, t_master *master)
 	}
 	if (master->cmd_count == 1
 			&& is_builtin_function(master->commands[0]->cmd_array[0]))
-	{
-		if(!execute_single_builtin(master))
-			return (0);
-	}
+		execute_single_builtin(master);
 	else if (!exec_loop(master))
 		return (0);
 	return (1);

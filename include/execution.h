@@ -34,8 +34,9 @@ int			open_file_descriptors(t_master *master, int i);
 int			check_output_file(t_master *master, t_tokens *current, int i, int j);
 
 // execution_loop_utils.c
-void		close_heredocs(t_master *master);
-int			close_and_unlink_heredocs(t_master *master);
+// not used I think void		close_heredocs(t_master *master);
+// not used either I think		 int			close_and_unlink_heredocs(t_master *master);
+void		plug_pipes(t_master *master, int i, int infile, int outfile);
 void		process_waiter(t_master *master);
 int			last_input_fd(t_master *master, int i);
 int			last_output_fd(t_master *master, int i);
@@ -62,7 +63,7 @@ void		plug_last_cmd(t_master *master, int i, int infile, int outfile);
 
 // execution_setup.c
 int			heredoc_found(t_master *master);
-int			prep_execution_resources(t_master *master);
+void		prep_execution_resources(t_master *master);
 void		setup_process_array(t_master *master);
 void		setup_pipes(t_master *master);
 
@@ -74,7 +75,7 @@ int			is_builtin_function(char *name);
 //
 //int			is_special_builtin(char *name);
 int			execute_builtin(t_master *master);
-int			command_error_check(t_command *command);
+int			command_error_check(t_command *command, t_master *master);
 int			check_input_file(t_master *master, t_tokens *current, int i, int j);
 
 #endif

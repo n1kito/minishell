@@ -19,7 +19,7 @@ int	heredoc_found(t_master *master)
 /* Takes master structer and converts command lines
  * and environment structures to arrays to be used
  * during execution. */
-int	prep_execution_resources(t_master *master)
+void	prep_execution_resources(t_master *master)
 {
 	generate_command_structure(master);
 	if (!assign_command_paths(master))
@@ -27,10 +27,10 @@ int	prep_execution_resources(t_master *master)
 	allocate_file_descriptors(master);
 	setup_heredocs(master);
 	if (heredoc_found(master) && g_minishexit == 130) // did we CTRL + C out of heredocs ?
-		return (1);
+		return ;
 	setup_process_array(master);
 	setup_pipes(master);
-	return (1);
+	return ;
 }
 
 /* Allocates memory for the int array used to

@@ -62,12 +62,14 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 	if (access(current->token, F_OK) == -1)
 	{
 		perror(current->token);
+		g_minishexit = 1;
 		return (0);
 	}
 	else if (access(current->token, F_OK) == 0
 		&& access(current->token, R_OK) == -1)
 	{
 		perror(current->token);
+		g_minishexit = 1;
 		return (0);
 	}
 	return (1);
@@ -83,8 +85,10 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 	if (open(current->token, O_DIRECTORY) != -1)
 	{
 		error_message = ft_strjoin(current->token, ": Is a directory\n");
+		//TODO protect strjoin
 		ft_printf_fd(2, "%s", error_message);
-		free (error_message);
+		free(error_message);
+		g_minishexit = 1;
 		return (0);
 	}
 	else if (current->previous->token_type == REDIRECT_TO)
@@ -97,6 +101,7 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 		&& access(current->token, W_OK) == -1)
 	{
 		perror(current->token);
+		g_minishexit = 1;
 		return (0);
 	}
 	return (1);

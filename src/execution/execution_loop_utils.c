@@ -57,6 +57,16 @@ int	last_output_fd(t_master *master, int i)
 	return (0);
 }
 
+void	plug_pipes(t_master *master, int i, int infile, int outfile)
+{
+	if (i == 0)
+		plug_first_cmd(master, i, infile, outfile);
+	else if (i == master->cmd_count - 1)
+		plug_last_cmd(master, i, infile, outfile);
+	else
+		plug_middle_cmd(master, i, infile, outfile);
+}
+
 /* Loops through all heredocs in the command line, closes them and unlinks
  * the files. */
 // TODO DOUBLE CHECK BUT I THINK THIS ONE IS NOT USED ANYWHERE
@@ -108,6 +118,7 @@ void	process_waiter(t_master *master)
 	status = 0;
 	i = -1;
 	while (++i < master->cmd_count)
+	{
 		if (waitpid(master->processes[i], &g_minishexit, 0) == -1)
 			exit(err_msg("waitpid() failed [process_waiter()]", 1, master)
 				&& free_master(master, 1));
