@@ -51,6 +51,7 @@ SRC_FILES		:= 	main\
 					builtins/ft_exit\
 					builtins/ft_cd\
 					builtins/ft_pwd\
+					builtins/builtins_utils\
 					tokenizer/tokenizer\
 					tokenizer/tokenizer_analysers\
 					tokenizer/tokenizer_analysers_2\
