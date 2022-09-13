@@ -113,18 +113,17 @@ int	close_and_unlink_heredocs(t_master *master)
 void	process_waiter(t_master *master)
 {
 	int	i;
-	int	status;
 
-	status = 0;
 	i = -1;
 	while (++i < master->cmd_count)
 	{
 		if (waitpid(master->processes[i], &g_minishexit, 0) == -1)
 			exit(err_msg("waitpid() failed [process_waiter()]", 1, master)
 				&& free_master(master, 1));
-	if (WIFEXITED(status))
+	}
+	if (WIFEXITED(g_minishexit))
 		g_minishexit = WEXITSTATUS(g_minishexit);
-	else if (WIFSIGNALED(status))
+	else if (WIFSIGNALED(g_minishexit))
 	{
 		g_minishexit = WTERMSIG(g_minishexit) + 128;
 		if (g_minishexit == 130)
