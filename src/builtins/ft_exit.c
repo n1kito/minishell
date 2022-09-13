@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 01:30:22 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/13 11:45:33 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,54 +14,53 @@
 
 static int	is_above_atoll(char const *str, int neg)
 {
-	int		ret;
+	int		i;
 	char	*max_int;
 
-	ret = 0;
+	i = 0;
 	max_int = "9223372036854775807";
 	if (ft_strlen(str) > ft_strlen(max_int))
-		ret = 1;
+		return (1);
 	if (ft_strlen(str) < ft_strlen(max_int))
 		return (0);
-	while (ret == 0 && *(max_int + 1))
+	while (max_int[i + 1] && max_int[i])
 	{
-		if (*str < *max_int)
-			ret = 0;
-		if (*str > *max_int)
-			ret = 1;
-		if (*str < *max_int || *str > *max_int)
-			break;
-		str++;
-		max_int++;
+		if (str[i] < max_int[i])
+			return(0);
+		if (str[i] > max_int[i])
+			return(1);
+		i++;
 	}
-	if (neg && ret == 0 && *str > 8)
-		ret = 1;
-	if (!neg && ret == 0 && *str > 7)
-		ret = 1;
-	return (ret);
+	if (neg == 1 && str[i] > '8')
+		return (1);
+	if (neg == 0 && str[i] > '7')
+		return (1);
+	return (0);
 }
 
-static void	check_arg1_is_valid(char *variable)
+static void	check_arg1_is_valid(char *var)
 {
 	int	i;
+	int	j;
 	int	neg;
 
 	neg = 0;
 	i = 0;
-	while (*variable == ' ' || (*variable >= 9 && *variable <= 13))
-		variable++;
-	if (*variable == '=' || *variable == '-')
+	j = 0;
+	while (*(var + j) == ' ' || (*(var + j) >= 9 && *(var + j) <= 13))
+		j++;
+	if (*(var + j) == '=' || *(var + j) == '-')
 	{
-		if (*variable == '-')
+		if (*(var + j) == '-')
 			neg = 1;
-		variable++;
+		j++;
 	}
-	while (variable[i] <= '9' && variable[i] >= '0')
+	while ((var + j)[i] <= '9' && (var + j)[i] >= '0')
 		i++;
-	if (variable[i] || is_above_atoll(variable, neg))
+	if ((var + j)[i] || is_above_atoll((var + j), neg))
 	{
 		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(variable, 2);
+		ft_putstr_fd(var, 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		g_minishexit = 2;
 		exit(2);
@@ -107,13 +106,11 @@ void	ft_exit(t_master *master, int cmd_index)
 	}
 	if (variable[1])
 		check_arg1_is_valid(variable[1]);
-	else if (variable[1] && variable[2])
+	if (variable[1] && variable[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_minishexit = 1;
-		return ;
 	}
 	else if (variable[1])
 		exit(ft_atoll(variable[1]));
-	exit(free_all(master, g_minishexit));
 }
