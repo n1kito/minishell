@@ -1,8 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_for_exe.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/13 17:52:28 by vrigaudy          #+#    #+#             */
+/*   Updated: 2022/09/13 17:57:29 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
+
+static void	check_malloc_fo_env_exe(t_master *master, char **array, int depth)
+{
+	int	command;
+
+	command = master->cmd_count;
+	if (!array)
+	{
+		write(2, "Minishell failure: malloc error in env_for_exe\n", 48);
+		free_all(master, g_minishexit);
+		if (command > 1)
+			exit(42);
+		exit(1);
+	}
+	if (!(*array) && depth)
+	{
+		write(2, "Minishell failure: malloc error in env_for_exe\n", 48);
+		free_all(master, g_minishexit);
+		if (command > 1)
+			exit(42);
+		exit(1);
+	}
+}
 
 /* This function destroys the char** that has been created for the excutiom
  * This function is noly executed if there is a malloc problem. */
-void ft_destroy_env(t_master *master)
+void	ft_destroy_env(t_master *master)
 {
 	char	**env_array;
 	int		i;
@@ -41,28 +76,23 @@ int	env_for_exe(t_master *master)
 {
 	int		i;
 	char	*tmp;
-	int		len;
 	t_env	*env;
 	char	**array;
 
 	i = 0;
 	env = master->env;
-	len = count_env(env);
-	array = ft_calloc(len + 1, sizeof(char *));
-	if (!array)
-		return (0);
+	array = ft_calloc(count_env(env) + 1, sizeof(char *));
+	check_malloc_fo_env_exe(master, array, 0);
 	while (env)
 	{
 		if (env->is_env)
 		{
 			array[i] = ft_strjoin(env->name, "=");
-			if (!array[i])
-				return (0);
+			check_malloc_fo_env_exe(master, &array[i], 1);
 			tmp = array[i];
 			array[i] = ft_strjoin(array[i], env->variable);
 			free(tmp);
-			if (!array[i])
-				return (0);
+			check_malloc_fo_env_exe(master, &array[i], 1);
 		}
 		env = env->next;
 		i++;

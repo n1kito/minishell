@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 21:43:42 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:03:22 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,24 @@
 
 //this function updates OLDPWD if PWD has been unset
 
-void	check_malloc_in_builtin(t_master *master, t_env *env, char *builtin)
+void	check_malloc_in_builtin(t_master *master, t_env *env)
 {
-	if (!env)
+	int command;
+
+	command = master->cmd_count;
+	if (!env || !env->name || !env->variable)
 	{
-		ft_putstr_fd("Minishell failure: malloc error in builtin ", 2);
-		write(2, builtin, ft_strlen(builtin));
-		write(2, "\n", 1);
-		if (master->cmd_count > 1)
+		write(2, "Minishell failure: malloc error in builtin cd\n", 47);
+		free_all(master, g_minishexit);
+		if (command > 1)
+			exit(42);
+		exit(1);
+	}
+	if (env->is_env && !env->variable)
+	{
+		write(2, "Minishell failure: malloc error in builtin cd\n", 47);
+		free_all(master, g_minishexit);
+		if (command > 1)
 			exit(42);
 		exit(1);
 	}
@@ -51,7 +61,7 @@ static void	ft_update_old(t_master *master, char *buffer)
 		{
 			old->is_env = 2;
 			old->variable = ft_strdup(buffer);
-			check_malloc_in_builtin(master, old, "cd");
+			check_malloc_in_builtin(master, old);
 		}
 	}
 }
@@ -83,7 +93,7 @@ static void	ft_get_pwd(t_master *master)
 		old->variable = pwd->variable;
 	getcwd(buffer, PATH_MAX);
 	pwd->variable = ft_strdup(buffer);
-	check_malloc_in_builtin(master, pwd, "cd");
+	check_malloc_in_builtin(master, pwd);
 }
 
 //This function checks if PWD exists

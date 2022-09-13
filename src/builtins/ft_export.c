@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 17:14:11 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:01:16 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,9 @@ static char	*update_env_plus(char *initial_value, char *added_value)
 
 static void	update_env(t_master *master, t_env *env, char *str)
 {
+	int	command;
+
+	command = master->cmd_count;
 	if (str[0] == '+' && str[1] == '=')
 		env->variable = update_env_plus(env->variable, str + 2);
 	if (str[0] == '=')
@@ -48,10 +51,9 @@ static void	update_env(t_master *master, t_env *env, char *str)
 	}
 	if (!env || !env->variable || !env->name)
 	{
-		ft_putstr_fd("Minishell failure: malloc error in builtin ", 2);
-		write(2, "export", 6);
-		write(2, "\n", 1);
-		if (master->cmd_count > 1)
+		write(2, "Minishell failure: malloc error in builtin: export\n", 52);
+		free_all(master, g_minishexit);
+		if (command > 1)
 			exit(42);
 		exit(1);
 	}
@@ -66,7 +68,7 @@ static void	add_elem_to_env(t_master *master, t_env *save, char *str)
 	while (str[i] && str[i] != '=' && str[i] != '+')
 		i++;
 	new = ft_calloc(sizeof(t_env), 1);
-	check_malloc_in_builtin(master, save, "export");
+	check_malloc_in_builtin(master, save);
 	if (str[i] == '=' || str[i] == '+')
 		new->is_env = 1;
 	new->name = malloc(sizeof(char) * (i + 1));
@@ -78,7 +80,7 @@ static void	add_elem_to_env(t_master *master, t_env *save, char *str)
 		new->variable = ft_strdup(&str[i + 1]);
 	else
 		new->variable = ft_strdup("");
-	check_malloc_in_builtin(master, save, "export");
+	check_malloc_in_builtin(master, save);
 	save->next = new;
 }
 
