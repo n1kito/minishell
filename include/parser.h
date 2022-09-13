@@ -33,6 +33,10 @@ void		remove_quotes(t_tokens **token_node, int first_quote,
 void		process_and_remove_quotes(t_tokens *token_node, t_master *master);
 int			expand_line(char **line, t_master *master);
 void		check_for_invisible_tokens(t_tokens	*token);
+void		isolate_unquoted_expands(t_tokens *token_ptr, t_master *master);
+void		split_previous_token(t_tokens *token_to_split, int position, t_master *master);
+t_tokens	*split_expanded_token(t_tokens **token_ptr, t_master *master);
+void		merge_token_with_next(t_tokens *current);
 
 // expander_analysers.c
 char		*search_env(t_env *env, char *name, int name_len);
