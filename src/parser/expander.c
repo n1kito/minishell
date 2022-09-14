@@ -99,6 +99,21 @@ int	token_has_blank(char *token)
 	return (0);
 }
 
+int	is_only_blanks(char *str)
+{
+	int i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] != ' '
+			&& str[i] != '	'
+			&& str[i] != '\n')
+			return (0);
+	}
+	return (1);
+}
+
 /* Goes through tokens, checks that there are no single quotes.
  * If there are not, identifies variables to expand and expands them.
  * Then removes all removable quotes. */
@@ -146,7 +161,12 @@ void	expander(t_master *master)
 	while (current)
 	{
 		//split_at_unquoted_blanks(current, master);
-		if (current->token && current->token[0] && token_has_blank(current->token) && current->was_isolated && current->was_split == 0)
+		if (is_only_blanks(current->token))
+		{
+			free(current->token);
+			current->token = NULL;
+		}
+		else if (current->token && current->token[0] && token_has_blank(current->token) && current->was_isolated && current->was_split == 0)
 		{
 			split_tokens = split_expanded_token(&current, master);
 			if (current->next)
@@ -260,7 +280,6 @@ void	merge_token_with_next(t_tokens *current)
 		current->next->previous = current;
 	free(merged_token);
 }
-
 t_tokens *split_expanded_token(t_tokens **token_ptr, t_master *master)
 {
 	int			i;
@@ -268,7 +287,7 @@ t_tokens *split_expanded_token(t_tokens **token_ptr, t_master *master)
 	t_master	tmp_master;
 	t_tokens	*last_token;
 
-	divided_token = ft_split_max((*token_ptr)->token, " 	"); //split following spaces and tabs
+	divided_token = ft_split_max((*token_ptr)->token, " 	\n");
 	if (!divided_token)
 		exit(err_msg("malloc fail [split_expanded_token()]", 1, master) && free_all(master, 1));
 	tmp_master.tokens = NULL;
@@ -284,7 +303,9 @@ t_tokens *split_expanded_token(t_tokens **token_ptr, t_master *master)
 		last_token->token_id = (*token_ptr)->token_id;
 		last_token->token_type = (*token_ptr)->token_type;
 	}
-	//TODO free split
+	while (--i >= 0)
+		free(divided_token[i]);
+	free(divided_token);
 	return (tmp_master.tokens);	
 }
 
@@ -373,6 +394,7 @@ void	split_previous_token(t_tokens *token_to_split, int i, t_master *master)
 	new_token->token_type = WORD;
 	new_token->token_id = token_to_split->token_id;
 	new_token->token_type = token_to_split->token_type;
+	new_token->split_id = token_to_split->split_id;
 	new_token->was_split = 0;
 	new_token->quotes_removed = 0;
 	new_token->token_had_quotes = 0;
