@@ -176,8 +176,8 @@ delimited by end-of-file (wanted '", delimiter);
 		warning = ft_strjoin(tmp_message, "')\n");
 		if (!tmp_message || !warning)
 		{
-			err_msg("malloc fail [print_heredoc_warning()]",
-					0, master);
+			exit(err_msg("malloc fail [print_heredoc_warning()]",
+					1, master) && free_all(master, 1));
 			exit_heredoc(master, line, cmd_index, 1);
 		}
 		free (tmp_message);

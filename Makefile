@@ -79,6 +79,7 @@ SRC_FILES		:= 	main\
 					execution/execution_pipe_utils\
 					execution/execution_setup\
 					execution/execution_utils\
+					execution/execution_command_error_check\
 					environment/env_for_exe\
 					environment/get_env\
 					environment/env_utils\
