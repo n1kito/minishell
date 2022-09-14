@@ -34,11 +34,13 @@ void	log_expansions(char *token, t_master *master)
 	while (token[++i])
 	{
 		if (token[i] == '$' && token[i + 1] && !is_single_quoting
-			&& !is_blank_char(token[i + 1])
+			&& (expansion_name_len(&token[i]) 
+			|| (!is_double_quoting && is_quote_character(token[i + 1]))))
+			/*&& !is_blank_char(token[i + 1])
 			&& !(is_quote_character(token[i + 1]) && is_double_quoting)
 			&& (ft_isalpha(token[i + 1])
 				|| token[i + 1] == '_' || token[i + 1] == '?'
-				|| token[i + 1] == DOUBLE_QUOTE))
+				|| token[i + 1] == DOUBLE_QUOTE))*/
 		{
 			if (!add_exp_node(master, token, i))
 				exit(free_all(master, 1) 

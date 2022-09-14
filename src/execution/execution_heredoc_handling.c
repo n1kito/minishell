@@ -153,7 +153,6 @@ int	log_heredoc_expansions(char *line, int cmd_index, t_master *master)
 					[log_heredoc_expansions()]", 0, master);
 				exit_heredoc(master, line, cmd_index, 1);
 			}
-				return (0);
 		}
 		i++;
 	}

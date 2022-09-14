@@ -6,7 +6,7 @@
 #    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/04 09:49:28 by mjallada          #+#    #+#              #
-#    Updated: 2022/08/31 06:30:09 by mjallada         ###   ########.fr        #
+#    Updated: 2022/09/13 13:57:44 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -66,6 +66,7 @@ SRC_FILES		:=	ft_isalpha \
 					ft_strjoin \
 					ft_strtrim \
 					ft_split \
+					ft_split_max\
 					ft_itoa \
 					ft_strmapi \
 					ft_striteri \

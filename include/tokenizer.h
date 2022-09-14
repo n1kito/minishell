@@ -9,8 +9,13 @@ typedef struct s_tokens
 	char				*token;
 	int					token_type;
 	int					token_had_quotes;
-	int					word_splitted;
+	int					word_splitted; // old word splitting
 	int					was_expanded;
+	int					was_split;
+	int					was_isolated;
+	int					quotes_removed;
+	int					token_id;
+	int					split_id;
 	struct s_tokens		*next;
 	struct s_tokens		*previous;
 }	t_tokens;
