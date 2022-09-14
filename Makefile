@@ -74,6 +74,7 @@ SRC_FILES		:= 	main\
 					execution/execution_builtins\
 					execution/execution_file_descriptors\
 					execution/execution_heredoc_handling\
+					execution/execution_heredoc_handling_2\
 					execution/execution_heredoc_handling_utils\
 					execution/execution_loop_utils\
 					execution/execution_loop_utils_2\
