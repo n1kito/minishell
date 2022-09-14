@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:00:58 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 16:10:11 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 22:44:47 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	allocate_file_descriptors(t_master *master)
 			= malloc(sizeof(int) * master->commands[i]->redirections_count);
 		if (!master->commands[i]->fds)
 			exit(err_msg("malloc failed [open_file_descriptors()]", 1, master)
-				&& exit(free_all(master, 1)));
+				&& free_all(master, 1));
 		j = 0;
 		while (j < master->commands[i]->redirections_count)
 			master->commands[i]->fds[j++] = -1;

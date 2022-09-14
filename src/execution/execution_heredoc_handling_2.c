@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 18:19:34 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 18:23:27 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 23:14:04 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,17 +69,17 @@ int	heredoc_process(t_master *master, t_tokens *current, int i)
 }
 
 /* Will process the expansions in the line passed as parameter. */
-void	expand_heredoc_line(char **line, t_master *master, int cmd_i, int tmp_m)
+void	expand_heredoc_line(char **line, t_master *master, int cmi, int tmp_m)
 {
 	int	tmp;
 
 	tmp = g_minishexit;
 	g_minishexit = tmp_m;
-	log_heredoc_expansions(*line, cmd_i, master);
+	log_heredoc_expansions(*line, cmi, master);
 	if (master->expansions && !expand_line(line, master))
 	{
 		err_msg("failed to expand HERE_DOC", 0, master);
-		exit_heredoc(master, *line, cmd_index, 1);
+		exit_heredoc(master, *line, cmi, 1);
 	}
 	free_expansions(&master->expansions);
 	g_minishexit = tmp;

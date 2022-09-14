@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 21:14:23 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 23:21:38 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,8 @@ static char	*join_message_for_write(char **message, t_master *master)
 
 	command = master->cmd_count;
 	buffer = NULL;
+	if (!message || !*message)
+		return (NULL);
 	buffer = malloc(ft_strlen(*message) + 1);
 	if (!buffer)
 	{

@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 17:10:42 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 18:30:45 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 22:49:11 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	exit_heredoc(t_master *master, char *line, int cmd_index, int return_code)
 /* The heredoc read loop. Will continually get_next_line until line
  * is either only the delimiter, or is completely empty, meaning an
  * EOL character was found. */
-void	read_heredoc(t_tokens *tok, t_command *cmd_nd, t_master *master, int i)
+void	read_heredoc(t_tokens *token, t_command *cmi, t_master *master, int i)
 {
 	char	*line;
 	char	*tmp;
@@ -40,9 +40,9 @@ void	read_heredoc(t_tokens *tok, t_command *cmd_nd, t_master *master, int i)
 
 	tmp_minishexit = g_minishexit;
 	g_minishexit = 0;
-	delimiter = tok->next->tok;
+	delimiter = token->next->token;
 	line = NULL;
-	check_if_heredoc_should_expand(tok->next, &should_expand);
+	check_if_heredoc_should_expand(token->next, &should_expand);
 	rl_clear_history();
 	while (1)
 	{
@@ -50,10 +50,9 @@ void	read_heredoc(t_tokens *tok, t_command *cmd_nd, t_master *master, int i)
 		if (g_minishexit == 130)
 			exit_heredoc(master, line, i, g_minishexit);
 		if (tmp)
-		{
 			line = ft_strjoin(tmp, "\n");
+		if (tmp)
 			free(tmp);
-		}
 		else
 			line = tmp;
 		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter)) \
@@ -66,7 +65,7 @@ void	read_heredoc(t_tokens *tok, t_command *cmd_nd, t_master *master, int i)
 			expand_heredoc_line(&line, master, i, tmp_minishexit);
 		if (!heredoc_file_access(master, i))
 			exit_heredoc(master, line, i, 1);
-		write(cmd_nd->heredoc_fd, line, ft_strlen(line));
+		write(cmi->heredoc_fd, line, ft_strlen(line));
 		free(line);
 		line = NULL;
 	}
@@ -81,7 +80,7 @@ void	print_heredoc_warning(char *line, int cmdi, char *del, t_master *master)
 
 	if (line)
 		return ;
-	tmp_message = ft_strjoin("mini(s)hell: warning: here-document delimited by EOF (wanted '", \
+	tmp_message = ft_strjoin("Warning: heredoc delimited by EOF (wanted '", \
 		del);
 	if (g_minishexit != 130)
 	{
@@ -95,7 +94,7 @@ void	print_heredoc_warning(char *line, int cmdi, char *del, t_master *master)
 		ft_printf_fd(1, "%s", warning);
 		free(warning);
 	}
-	free (tmp_message);
 	else
 		printf("\n");
+	free (tmp_message);
 }

@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 15:25:52 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 16:00:08 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 22:05:17 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@ static int	error_command(t_master *master, t_command *com, int dir, int ret)
 {
 	char	*error_message;
 
-	close(dir);
+	if (dir >= 0)
+		close(dir);
 	if (ret == 127)
 		error_message = ft_strjoin(com->cmd_array[0], ": command not found\n");
 	else
