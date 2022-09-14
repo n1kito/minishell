@@ -108,8 +108,6 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 		}
 		if (should_expand)
 			expand_heredoc_line(&line, master, i, tmp_minishexit);
-		if (!heredoc_file_access(master, i))
-			exit_heredoc(master, line, i, 1);
 		write(cmd_node->heredoc_fd, line, ft_strlen(line));
 		free(line);
 		line = NULL;

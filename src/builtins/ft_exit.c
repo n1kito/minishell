@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 17:56:19 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 21:31:36 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,10 @@ void	ft_exit(t_master *master, int cmd_index)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_minishexit = 1;
+		return ;
 	}
 	else if (variable[1])
 		exit(ft_atoll(variable[1]));
-	exit(0);
+	if (g_minishexit != 2)
+		exit(g_minishexit);
 }
