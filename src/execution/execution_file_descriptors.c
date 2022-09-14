@@ -58,6 +58,8 @@ int	open_file_descriptors(t_master *master, int i)
  * does not exist or cannot be read. */
 int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 {
+	if(!current->token)
+		ft_printf_fd(2, "FILE HAS NO NAME\n");
 	master->commands[i]->fds[j] = open(current->token, O_RDONLY);
 	if (access(current->token, F_OK) == -1)
 	{

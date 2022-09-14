@@ -53,24 +53,100 @@ void	split_at_unquoted_blanks(t_tokens *token_ptr, t_master *master)
 	}
 }
 
+void	add_token_ids(t_tokens *token)
+{
+	int	i;
+
+	i = 0;
+	while (token)
+	{
+		token->token_id = i++;
+		token->split_id = 0;
+		token = token->next;
+	}
+}
+
+void	check_for_quotes(t_tokens *tokens)
+{
+	int 		i;
+	t_tokens	*current;
+
+	current = tokens;
+	i = 0;
+	while (current)
+	{
+		i = 0;
+		while (current->token[i])
+		{
+			if ((current->token[i] == SINGLE_QUOTE
+				|| current->token[i] == DOUBLE_QUOTE)
+				&& find_matching_quote(current->token + i))
+				current->token_had_quotes = 1;
+			i++;
+		}
+		current = current->next;
+	}
+}
+
+int	token_has_blank(char *token)
+{
+	int i;
+
+	i = -1;
+	while(token[++i])
+		if (is_blank_char(token[i]))
+			return (1);
+	return (0);
+}
+
 /* Goes through tokens, checks that there are no single quotes.
  * If there are not, identifies variables to expand and expands them.
  * Then removes all removable quotes. */
 void	expander(t_master *master)
 {
 	t_tokens	*current;
-	//t_tokens *split_tokens = NULL;
+	t_tokens *split_tokens = NULL;
 
+	add_token_ids(master->tokens);
 	current = master->tokens;
 	while (current)
 	{
-		//isolate_unquoted_expands(current, master);
-		expand_token(current, master);
-		split_at_unquoted_blanks(current, master);
-		if (!current->quotes_removed)
+		if (current->token_type != DELIMITER)
+			isolate_unquoted_expands(current, master);
+		current = current->next;
+	}
+	/*
+	current = master->tokens;
+	while (current)
+	{
+		printf("%s(%d)", current->token, current->token_had_quotes);
+		if (current->next)
+			printf("▒");
+		else
+			printf("\n");
+		current = current->next;
+	}
+	*/
+	check_for_quotes(master->tokens);
+	current = master->tokens;
+	while (current)
+	{
+		if (current->token_type != DELIMITER)
+			expand_token(current, master);
+		current = current->next;
+	}
+	current = master->tokens;
+	while (current)
+	{
+		if (!current->was_isolated)
 			process_and_remove_quotes(current, master);	
-		/*
-		if (current->token && current->token[0] && current->was_isolated == 1)
+		current = current->next;
+	}
+	current = master->tokens;
+	while (current)
+	{
+		//split_at_unquoted_blanks(current, master);
+		if (current->token && current->token[0] && token_has_blank(current->token) && current->was_isolated && current->was_split == 0)
 		{
 			split_tokens = split_expanded_token(&current, master);
 			if (current->next)
@@ -94,33 +170,67 @@ void	expander(t_master *master)
 				current = split_tokens;
 			}
 		}
-		if (current->was_split == 0)
-		*/
-		current = current->next;
-	}
-	current = master->tokens;
-	while (current)
-	{
-		printf("%s(%d)", current->token, current->quotes_removed);
-		if (current->next)
-			printf("▒");
-		else
-			printf("\n");
+		//if (current->was_split == 0)
 		current = current->next;
 	}
 	/*
 	current = master->tokens;
 	while (current)
 	{
-		if (current->next && (current->was_isolated && current->next->isolated)
-		   && (current->was_split != current->next->was_split))
-			merge_token_with_next(current);
+		printf("%s(i%d)[ID%d][S%dSID%d]", current->token, current->was_isolated, current->token_id, current->was_split, current->split_id);
+		if (current->next)
+			printf("▒");
+		else
+			printf("\n");
 		current = current->next;
 	}
+	*/
 	current = master->tokens;
 	while (current)
 	{
-		printf("%s(%d)", current->token, current->was_isolated);
+		//printf("[%s]\n", current->token);
+		if (current->next
+			&& (current->token_id == current->next->token_id)
+			&& (current->was_split != current->next->was_split
+				|| current->split_id > current->next->split_id))
+				merge_token_with_next(current);
+		else if (current->next
+				&& current->token_id == current->next->token_id
+				&& !current->was_split && !current->next->was_split)
+				merge_token_with_next(current);
+		else
+			current = current->next;
+	}
+	/*
+	current = master->tokens;
+	while (current)
+	{
+		printf("[%s][%d](len %d)", current->token, current->token_type, (int)ft_strlen(current->token));
+		if (current->next)
+			printf("|");
+		else
+			printf("\n");
+		current = current->next;
+	}
+	*/
+	check_for_invisible_tokens(master->tokens);
+	/*
+	current = master->tokens;
+	while (current)
+	{
+		printf("[%s][%d](len %d)", current->token, current->token_type, (int)ft_strlen(current->token));
+		if (current->next)
+			printf("|");
+		else
+			printf("\n");
+		current = current->next;
+	}
+	*/
+	/*
+	current = master->tokens;
+	while (current)
+	{
+		printf("%s(type: %d | had_quotes: %d)", current->token, current->token_type, current->token_had_quotes);
 		if (current->next)
 			printf("▒");
 		else
@@ -139,6 +249,10 @@ void	merge_token_with_next(t_tokens *current)
 	tmp_token = current->token;
 	merged_token = current->next;
 	current->token = ft_strjoin(current->token, merged_token->token);
+	current->was_isolated = merged_token->was_isolated;
+	current->split_id = merged_token->split_id; //not sure about this
+	current->was_split = merged_token->was_split;
+	current->token_had_quotes = merged_token->token_had_quotes;
 	free(tmp_token);
 	free(merged_token->token);
 	current->next = merged_token->next;
@@ -152,6 +266,7 @@ t_tokens *split_expanded_token(t_tokens **token_ptr, t_master *master)
 	int			i;
 	char		**divided_token;
 	t_master	tmp_master;
+	t_tokens	*last_token;
 
 	divided_token = ft_split_max((*token_ptr)->token, " 	"); //split following spaces and tabs
 	if (!divided_token)
@@ -161,9 +276,13 @@ t_tokens *split_expanded_token(t_tokens **token_ptr, t_master *master)
 	while (divided_token[++i])
 	{
 		extract_token(&tmp_master, divided_token[i], &divided_token[i][ft_strlen(divided_token[i])]);
-		get_last_token(tmp_master.tokens)->was_isolated = 1;
-		get_last_token(tmp_master.tokens)->was_split = 1;
-		get_last_token(tmp_master.tokens)->token_type = WORD;
+		last_token = get_last_token(tmp_master.tokens);
+		last_token->was_isolated = 1;
+		last_token->split_id = i;
+		last_token->was_split = 1;
+		last_token->token_had_quotes = (*token_ptr)->token_had_quotes;
+		last_token->token_id = (*token_ptr)->token_id;
+		last_token->token_type = (*token_ptr)->token_type;
 	}
 	//TODO free split
 	return (tmp_master.tokens);	
@@ -172,6 +291,10 @@ t_tokens *split_expanded_token(t_tokens **token_ptr, t_master *master)
 int	go_to_end_of_expand_name(t_tokens *current_ptr, int i)
 {
 	//printf("going to end of expand name\n");
+	if (!ft_isalpha(current_ptr->token[i + 1])
+		&& current_ptr->token[i + 1] != '_'
+		&& current_ptr->token[i + 1] != '?')
+		return (i + 1);
 	i++;
 	while (current_ptr->token[i]
 			&& (ft_isalnum(current_ptr->token[i])
@@ -211,7 +334,8 @@ void	isolate_unquoted_expands(t_tokens *token_ptr, t_master *master)
 	{
 		if (is_quote_character(token_ptr->token[i]))		
 			i += find_matching_quote(&token_ptr->token[i]) + 1;
-		else if (is_unquoted_expand(token_ptr, i))
+		//else if (is_unquoted_expand(token_ptr, i))
+		else if (token_ptr->token[i] == '$' && !is_quote_character(token_ptr->token[i + 1]))
 		{
 			if (i && !follows_unquoted_expand(token_ptr, i))
 			{
@@ -226,7 +350,7 @@ void	isolate_unquoted_expands(t_tokens *token_ptr, t_master *master)
 				token_ptr->was_isolated = 1;
 				split_previous_token(token_ptr, i, master);
 				token_ptr = token_ptr->next;
-				//token_ptr->was_isolated = 1;
+				token_ptr->was_isolated = 0;
 				i = 0;
 			}
 			else
@@ -247,7 +371,11 @@ void	split_previous_token(t_tokens *token_to_split, int i, t_master *master)
 		exit(err_msg("malloc fail [split_token()]", 1, master) && free_all(master, 1));
 	new_token->token = ft_strdup(&token_to_split->token[i]);
 	new_token->token_type = WORD;
+	new_token->token_id = token_to_split->token_id;
+	new_token->token_type = token_to_split->token_type;
+	new_token->was_split = 0;
 	new_token->quotes_removed = 0;
+	new_token->token_had_quotes = 0;
 	token_to_split->token[i] = '\0';
 	tmp_next = token_to_split->next;
 	token_to_split->next = new_token;
@@ -342,10 +470,9 @@ void	check_for_invisible_tokens(t_tokens *token)
 	current = token;
 	while (current)
 	{
-		if (token->token_type == WORD
-			&& token->token[0] == '\0'
-			&& !token->token_had_quotes)
-			token->token_type = INVISIBLE;
+		if ((int)ft_strlen(current->token) == 0
+			&& !current->token_had_quotes)
+				current->token_type = INVISIBLE;
 		current = current->next;
 	}
 }

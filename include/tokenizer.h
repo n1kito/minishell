@@ -14,6 +14,8 @@ typedef struct s_tokens
 	int					was_split;
 	int					was_isolated;
 	int					quotes_removed;
+	int					token_id;
+	int					split_id;
 	struct s_tokens		*next;
 	struct s_tokens		*previous;
 }	t_tokens;
