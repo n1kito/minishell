@@ -164,6 +164,8 @@ void	expander(t_master *master)
 		if (is_only_blanks(current->token))
 		{
 			free(current->token);
+			current->was_isolated = 1;
+			current->was_split = 1;
 			current->token = NULL;
 		}
 		else if (current->token && current->token[0] && token_has_blank(current->token) && current->was_isolated && current->was_split == 0)
@@ -190,8 +192,8 @@ void	expander(t_master *master)
 				current = split_tokens;
 			}
 		}
-		//if (current->was_split == 0)
 		current = current->next;
+		//if (current->was_split == 0)
 	}
 	/*
 	current = master->tokens;
@@ -268,7 +270,7 @@ void	merge_token_with_next(t_tokens *current)
 
 	tmp_token = current->token;
 	merged_token = current->next;
-	current->token = ft_strjoin(current->token, merged_token->token);
+	current->token = str_join(current->token, merged_token->token);
 	current->was_isolated = merged_token->was_isolated;
 	current->split_id = merged_token->split_id; //not sure about this
 	current->was_split = merged_token->was_split;
@@ -292,7 +294,7 @@ t_tokens *split_expanded_token(t_tokens **token_ptr, t_master *master)
 		exit(err_msg("malloc fail [split_expanded_token()]", 1, master) && free_all(master, 1));
 	tmp_master.tokens = NULL;
 	i = -1;
-	while (divided_token[++i])
+	while (divided_token && divided_token[++i])
 	{
 		extract_token(&tmp_master, divided_token[i], &divided_token[i][ft_strlen(divided_token[i])]);
 		last_token = get_last_token(tmp_master.tokens);
