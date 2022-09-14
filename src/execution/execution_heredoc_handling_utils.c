@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution_heredoc_handling_utils.c                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/14 17:26:41 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/14 17:27:23 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* Sets the path of the heredoc file. Each command segment has a single
@@ -67,7 +79,8 @@ int	unlink_heredocs(t_master *master)
 		if (master->commands[i]->heredoc_path)
 			if (access(master->commands[i]->heredoc_path, F_OK) == 0)
 				if (unlink(master->commands[i]->heredoc_path) == -1)
-					return (err_msg("could not unlink all heredoc files. careful!",
+					return (err_msg \
+						("could not unlink all heredoc files. careful!",
 							0, master));
 		i++;
 	}

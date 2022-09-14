@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution_heredoc_handling.c                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/14 17:10:42 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/14 17:22:36 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* Goes through all tokens in the line and treat heredocs found one by one. */
@@ -74,7 +86,7 @@ int	exit_heredoc(t_master *master, char *line, int cmd_index, int return_code)
 /* The heredoc read loop. Will continually get_next_line until line
  * is either only the delimiter, or is completely empty, meaning an
  * EOL character was found. */
-void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
+void	read_heredoc(t_tokens *tok, t_command *cmd_nd, t_master *master, int i)
 {
 	char	*line;
 	char	*tmp;
@@ -84,9 +96,9 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 
 	tmp_minishexit = g_minishexit;
 	g_minishexit = 0;
-	delimiter = token->next->token;
+	delimiter = tok->next->tok;
 	line = NULL;
-	check_if_heredoc_should_expand(token->next, &should_expand);
+	check_if_heredoc_should_expand(tok->next, &should_expand);
 	rl_clear_history();
 	while (1)
 	{
@@ -100,8 +112,8 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 		}
 		else
 			line = tmp;
-		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
-					&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
+		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter)) \
+			&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
 		{
 			print_heredoc_warning(line, i, delimiter, master);
 			exit_heredoc(master, line, i, 0);
@@ -110,7 +122,7 @@ void	read_heredoc(t_tokens *token, t_command *cmd_node, t_master *master, int i)
 			expand_heredoc_line(&line, master, i, tmp_minishexit);
 		if (!heredoc_file_access(master, i))
 			exit_heredoc(master, line, i, 1);
-		write(cmd_node->heredoc_fd, line, ft_strlen(line));
+		write(cmd_nd->heredoc_fd, line, ft_strlen(line));
 		free(line);
 		line = NULL;
 	}
@@ -153,7 +165,7 @@ int	log_heredoc_expansions(char *line, int cmd_index, t_master *master)
 					[log_heredoc_expansions()]", 0, master);
 				exit_heredoc(master, line, cmd_index, 1);
 			}
-				return (0);
+			return (0);
 		}
 		i++;
 	}
@@ -171,8 +183,9 @@ void	print_heredoc_warning(char *line, int cmd_index, char *delimiter, t_master 
 		return ;
 	if (g_minishexit != 130)
 	{
-		tmp_message = ft_strjoin("mini(s)hell: warning: here-document \
-delimited by end-of-file (wanted '", delimiter);
+		tmp_message = ft_strjoin(
+			"mini(s)hell: warning: here-document delimited by EOF (wanted '", \
+			delimiter);
 		warning = ft_strjoin(tmp_message, "')\n");
 		if (!tmp_message || !warning)
 		{
