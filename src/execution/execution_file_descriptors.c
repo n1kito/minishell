@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:00:58 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 22:44:47 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 23:44:43 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 	master->commands[i]->fds[j] = open(current->token, O_RDONLY);
 	if (access(current->token, F_OK) == -1)
 	{
+		close_pipes_and_files(master, master->commands[i]->fds[j]);
 		perror(current->token);
 		g_minishexit = 1;
 		return (0);
@@ -80,6 +81,7 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 	else if (access(current->token, F_OK) == 0
 		&& access(current->token, R_OK) == -1)
 	{
+		close_pipes_and_files(master, master->commands[i]->fds[j]);
 		perror(current->token);
 		g_minishexit = 1;
 		return (0);
@@ -112,9 +114,9 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 			= open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0666);
 	if (access(current->token, F_OK) == 0 && access(current->token, W_OK) == -1)
 	{
-		perror(current->token);
+		close_pipes_and_files(master, master->commands[i]->fds[j]);
 		g_minishexit = 1;
-		return (0);
+		return (perror(current->token), 0);
 	}
 	return (1);
 }

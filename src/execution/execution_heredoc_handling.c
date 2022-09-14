@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 17:10:42 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 22:49:11 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/15 01:24:32 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,51 +27,63 @@ int	exit_heredoc(t_master *master, char *line, int cmd_index, int return_code)
 	exit(return_code);
 }
 
-/* The heredoc read loop. Will continually get_next_line until line
- * is either only the delimiter, or is completely empty, meaning an
- * EOL character was found. */
-void	read_heredoc(t_tokens *token, t_command *cmi, t_master *master, int i)
+char	*join_for_heredoc(t_master *master, char *line, int i, int g_minishexit)
 {
-	char	*line;
 	char	*tmp;
-	char	*delimiter;
+
+	tmp = readline("> ");
+	if (g_minishexit == 130)
+		exit_heredoc(master, line, i, g_minishexit);
+	if (tmp)
+	{
+		line = ft_strjoin(tmp, "\n");
+		if (!line)
+		{
+			exit(err_msg("malloc fail [join_for_heredoc()]",
+					1, master) && free_all(master, 1));
+			exit_heredoc(master, line, i, 1);
+		}
+	}
+	if (tmp)
+		free(tmp);
+	else
+		line = tmp;
+	return (line);
+}
+
+/* The heredoc read loop. Will continually get_next_line until line
+ * is either only the token->next->token, or is completely empty, meaning an
+ * EOL character was found. */
+void	read_heredoc(t_tokens *tk, t_command *cmi, t_master *master, int i)
+{
+	char	*l;
 	int		tmp_minishexit;
 	int		should_expand;
 
 	tmp_minishexit = g_minishexit;
 	g_minishexit = 0;
-	delimiter = token->next->token;
-	line = NULL;
-	check_if_heredoc_should_expand(token->next, &should_expand);
+	check_if_heredoc_should_expand(tk->next, &should_expand);
 	rl_clear_history();
 	while (1)
 	{
-		tmp = readline("> ");
-		if (g_minishexit == 130)
-			exit_heredoc(master, line, i, g_minishexit);
-		if (tmp)
-			line = ft_strjoin(tmp, "\n");
-		if (tmp)
-			free(tmp);
-		else
-			line = tmp;
-		if (!line || (!ft_strncmp(line, delimiter, ft_strlen(delimiter)) \
-			&& ft_strlen(line) - 1 == ft_strlen(delimiter)))
+		l = NULL;
+		l = join_for_heredoc(master, l, i, g_minishexit);
+		if (!l || (!ft_strncmp(l, tk->next->token, ft_strlen(tk->next->token)) \
+			&& ft_strlen(l) - 1 == ft_strlen(tk->next->token)))
 		{
-			print_heredoc_warning(line, i, delimiter, master);
-			exit_heredoc(master, line, i, 0);
+			print_heredoc_warning(l, i, tk->next->token, master);
+			exit_heredoc(master, l, i, 0);
 		}
 		if (should_expand)
-			expand_heredoc_line(&line, master, i, tmp_minishexit);
+			expand_heredoc_line(&l, master, i, tmp_minishexit);
 		if (!heredoc_file_access(master, i))
-			exit_heredoc(master, line, i, 1);
-		write(cmi->heredoc_fd, line, ft_strlen(line));
-		free(line);
-		line = NULL;
+			exit_heredoc(master, l, i, 1);
+		write(cmi->heredoc_fd, l, ft_strlen(l));
+		free(l);
 	}
 }
 
-/* Prints out warning when a heredoc is not delimited by the delimiter
+/* Prints out warning when a heredoc is not delimited by the token->next->token
  * but by an EOF (CTRL + D). */
 void	print_heredoc_warning(char *line, int cmdi, char *del, t_master *master)
 {
