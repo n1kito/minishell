@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 16:36:51 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 17:54:00 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,10 @@ static char	*swap_pointers_for_join(char *buffer, char *str, t_master *master)
 	command = master->cmd_count;
 	tmp = NULL;
 	tmp = buffer;
-	buffer = ft_strjoin(buffer, str);
+	if (!buffer)
+		buffer = ft_strdup(str);
+	else
+		buffer = ft_strjoin(buffer, str);
 	if (!buffer)
 	{
 		if (tmp)
@@ -42,8 +45,10 @@ static char	*join_message_for_write(char **message, t_master *master)
 
 	command = master->cmd_count;
 	buffer = NULL;
+	if (!message || !*message || !**message)
+		return (NULL);
 	buffer = malloc(ft_strlen(*message) + 1);
-	if (!buffer)
+	if (!buffer && message && *message)
 	{
 		write(2, "Minishell failure: malloc error in builtin: echo\n", 50);
 		free_all(master, g_minishexit);

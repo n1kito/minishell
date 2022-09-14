@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 14:21:35 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 18:27:44 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 17:58:24 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	check_malloc_in_builtin(t_master *master, t_env *env)
 			exit(42);
 		exit(1);
 	}
-	if (env->is_env && !env->variable)
+	if (!env->variable)
 	{
 		write(2, "Minishell failure: malloc error in builtin cd\n", 47);
 		free_all(master, g_minishexit);

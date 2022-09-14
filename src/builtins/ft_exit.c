@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 11:45:33 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 17:56:19 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,4 +113,5 @@ void	ft_exit(t_master *master, int cmd_index)
 	}
 	else if (variable[1])
 		exit(ft_atoll(variable[1]));
+	exit(0);
 }
