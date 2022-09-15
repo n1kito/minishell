@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 14:35:42 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/15 14:35:43 by mjallada         ###   ########.fr       */
+/*   Updated: 2022/09/16 00:38:23 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 // fonctions our les builtins
 void	ft_pwd(void);
 void	ft_env(t_env *env, char **arg);
-void	ft_echo(char **arg, t_master *master);
+void	ft_echo(char **arg);
 void	ft_cd(t_master *master, char **path);
 void	ft_unset(t_env **env, char **arg);
 void	ft_export(t_master *master, char **variable);

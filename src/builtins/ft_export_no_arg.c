@@ -97,6 +97,7 @@ void	print_env_by_alphabetical_order(t_env *list, t_master *master)
 	i = -1;
 	while (sorting_table[++i])
 	{
+		safe_printf("export ");
 		safe_printf(sorting_table[i]->name);
 		if (sorting_table[i]->is_env)
 		{
