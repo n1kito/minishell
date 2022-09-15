@@ -1,15 +1,15 @@
 # **************************************************************************** #
+#                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mjallada <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/04/05 10:05:59 by mjallada          #+#    #+#              #
-#    Updated: 2022/08/18 10:10:05 by mjallada         ###   ########.fr        #
+#    Created: 2022/08/18 10:10:05 by mjallada          #+#    #+#              #
+#    Updated: 2022/09/15 10:57:42 by mjallada         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# **************************************************************************** #
 # VARIABLES
 
 NAME			:= minishell
@@ -60,10 +60,14 @@ SRC_FILES		:= 	main\
 					parser/expander\
 					parser/expander_analysers\
 					parser/expander_analysers2\
+					parser/expander_line_expander\
+					parser/expander_quote_handling\
+					parser/expander_utils2\
 					parser/expander_utils\
-					parser/expander_word_splitting\
-					parser/expander_word_splitting_analyser\
+					parser/expander_word_splitting_analysers\
+					parser/expander_word_splitting_handlers\
 					parser/expander_word_splitting_utils\
+					parser/expander_word_splitting\
 					parser/parser\
 					parser/parser_syntax_checker\
 					execution/execution\

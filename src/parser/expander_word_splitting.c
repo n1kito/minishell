@@ -1,75 +1,107 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expander_word_splitting.c                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 10:17:19 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 12:03:32 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-/*
- * dans l'expander finalement, pour chaque token
- 
-	void	expand_and_split()
-	| if token has quotes, give had_quotes = 1
-	| split around individiual unquoted expansions and give quoted = 0
-	| expand what can be (not between single quotes)
-	| in unquoted tokens, split tokens according to blanks and give them split = 1
-	| remove quotes in all non split tokens
-	| merge tokens back together unless both where split
-	| check for invisible tokens: empty tokens that had_quotes = 0
-
-*/
-void	process_for_word_splitting(t_tokens **token_ptr, t_master *master_ptr)
+void	expand_isolater(t_master *master)
 {
-	t_master	tmp_master;
-	char		*token;
-	int			position;
-	int			token_start;
-	int			expansion_status;
+	t_tokens	*current;
 
-	token = (*token_ptr)->token;
-	position = 0;
-	token_start = 0;
-	expansion_status = (*token_ptr)->was_expanded;
-	init_master_structure(&tmp_master);
-	while (position <= (int)ft_strlen(token))
+	current = master->tokens;
+	while (current)
 	{
-		if (token[position] == '\0')
-		{
-			extract_token(&tmp_master, &token[token_start],
-							&token[position - 1]);
-			position++;
-			get_last_token(tmp_master.tokens)->word_splitted = 1;
-			get_last_token(tmp_master.tokens)->was_expanded = expansion_status;
-		}
-		else if (token[position] == DOUBLE_QUOTE)
-			position += find_matching_quote(&token[position]) + 1;
-		else if (is_blank_char(token[position]))
-		{
-			extract_token(&tmp_master, &token[token_start],
-							&token[position - 1]);
-			position += get_next_non_blank_char(&token[position]);
-			token_start = position;
-			get_last_token(tmp_master.tokens)->word_splitted = 1;
-			get_last_token(tmp_master.tokens)->was_expanded = expansion_status;
-		}
-		else
-			position++;
+		if (current->token_type != DELIMITER)
+			isolate_unquoted_expands(current, master);
+		current = current->next;
 	}
-	insert_tokens(token_ptr, &tmp_master, master_ptr);
 }
 
-void	insert_tokens(t_tokens **token_ptr, t_master *tmp_m, t_master *og_m)
+void	token_expander(t_master *master)
 {
-	set_tokens_as_words(tmp_m->tokens);
-	tmp_m->tokens->previous = (*token_ptr)->previous;
-	get_last_token(tmp_m->tokens)->next = (*token_ptr)->next;
-	if ((*token_ptr)->previous)
+	t_tokens	*current;
+
+	current = master->tokens;
+	while (current)
 	{
-		(*token_ptr)->previous->next = tmp_m->tokens;
-		free((*token_ptr)->token);
-		free(*token_ptr);
-		(*token_ptr) = tmp_m->tokens;
+		if (current->token_type != DELIMITER)
+			expand_token(current, master);
+		current = current->next;
+	}
+}
+
+void	expanded_token_splitter(t_master *master)
+{
+	t_tokens	*current;
+
+	current = master->tokens;
+	if (is_only_blanks(current->token))
+		{
+			free(current->token);
+			current->was_isolated = 1;
+			current->was_split = 1;
+			current->token = NULL;
+		}
+		else if (current->token && current->token[0] && token_has_blank(current->token) && current->was_isolated && current->was_split == 0)
+		{
+			split_token(current, master);
+		}
+		current = current->next;
+}
+
+void	token_merger(t_master *master)
+{
+	t_tokens	*current;
+
+	current = master->tokens;
+	while (current)
+	{
+		if (current->next
+			&& (current->token_id == current->next->token_id)
+			&& (current->was_split != current->next->was_split
+				|| current->split_id > current->next->split_id))
+					merge_token_with_next(current, master);
+		else if (current->next
+			&& current->token_id == current->next->token_id
+			&& !current->was_split && !current->next->was_split)
+				merge_token_with_next(current, master);
+		else
+			current = current->next;
+	}
+}
+
+void	split_token(t_tokens *current, t_master *master)
+{
+	t_tokens	*split_tokens;
+
+	split_tokens = NULL;
+	split_tokens = split_expanded_token(&current, master);
+	if (current->next)
+	{
+		current->next->previous = get_last_token(split_tokens);
+		current->next->previous->next = current->next;
+	}
+	if (!current->previous)
+	{
+		free(current->token);
+		free(current);
+		master->tokens = split_tokens;
+		current = master->tokens;
 	}
 	else
 	{
-		free((*token_ptr)->token);
-		free(*token_ptr);
-		og_m->tokens = tmp_m->tokens;
-		(*token_ptr) = og_m->tokens;
+		current->previous->next = split_tokens;
+		split_tokens->previous = current->previous;
+		free(current->token);
+		free(current);
+		current = split_tokens;
 	}
 }
