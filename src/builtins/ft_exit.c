@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 17:56:19 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 22:02:30 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static int	is_above_atoll(char const *str, int neg)
 	while (max_int[i + 1] && max_int[i])
 	{
 		if (str[i] < max_int[i])
-			return(0);
+			return (0);
 		if (str[i] > max_int[i])
-			return(1);
+			return (1);
 		i++;
 	}
 	if (neg == 1 && str[i] > '8')
@@ -67,11 +67,11 @@ static void	check_arg1_is_valid(char *var)
 	}
 }
 
-long int    ft_atoll(const char *nptr)
+long long int	ft_atoll(const char *nptr)
 {
-	long long int    num;
-	int            sign;
-	int            i;
+	long long int	num;
+	int				sign;
+	int				i;
 
 	num = 0;
 	sign = 1;
@@ -98,7 +98,7 @@ void	ft_exit(t_master *master, int cmd_index)
 	char	**variable;
 
 	variable = master->commands[cmd_index]->cmd_array;
-	if (master->cmd_count == 1) 
+	if (master->cmd_count == 1)
 	{
 		ft_putstr_fd("exit\n", 0);
 		close_files(master, cmd_index);
@@ -110,8 +110,9 @@ void	ft_exit(t_master *master, int cmd_index)
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_minishexit = 1;
+		return ;
 	}
 	else if (variable[1])
 		exit(ft_atoll(variable[1]));
-	exit(0);
+	exit(g_minishexit);
 }

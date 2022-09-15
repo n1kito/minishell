@@ -1,10 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/14 11:42:35 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/14 11:43:20 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	process_open_heredoc(t_master *master, int i)
 {
 	if (master->commands[i]->heredoc_path)
 	{
-		master->commands[i]->heredoc_fd = open(master->commands[i]->heredoc_path, O_RDONLY);
+		master->commands[i]->heredoc_fd \
+			= open(master->commands[i]->heredoc_path, O_RDONLY);
 		if (master->commands[i]->heredoc_fd == -1)
 		{
 			perror(master->commands[i]->heredoc_path);
@@ -18,6 +31,7 @@ int	process_open_heredoc(t_master *master, int i)
 	}
 	return (1);
 }
+
 /* Opens all necessary files and plugs pipes accordingly.
  * Builtin functions are launched without execve(). */
 void	launch_exec(t_master *master, int i)

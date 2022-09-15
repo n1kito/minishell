@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 17:54:00 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/14 23:21:38 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	*join_message_for_write(char **message, t_master *master)
 
 	command = master->cmd_count;
 	buffer = NULL;
-	if (!message || !*message || !**message)
+	if (!message || !*message)
 		return (NULL);
 	buffer = malloc(ft_strlen(*message) + 1);
 	if (!buffer && message && *message)
@@ -65,7 +65,7 @@ static char	*join_message_for_write(char **message, t_master *master)
 		buffer = swap_pointers_for_join(buffer, *message, master);
 		message++;
 	}
-	return(buffer);
+	return (buffer);
 }
 
 static int	echo_option_check(char *str)
