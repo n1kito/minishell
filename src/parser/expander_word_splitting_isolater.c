@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   expander_word_splitting_isolater.c                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/15 13:58:54 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/15 13:58:58 by mjallada         ###   ########.fr       */
+/*   Created: 2022/09/15 14:18:56 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 14:18:57 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,6 @@ void	split_previous_token(t_tokens *token_to_split, int i, t_master *master)
 	new_token->token_type = token_to_split->token_type;
 	new_token->split_id = token_to_split->split_id;
 	new_token->was_split = 0;
-	new_token->quotes_removed = 0;
 	new_token->token_had_quotes = 0;
 	token_to_split->token[i] = '\0';
 	tmp_next = token_to_split->next;

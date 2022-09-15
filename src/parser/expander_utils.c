@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   expander_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/15 13:58:54 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/15 13:58:58 by mjallada         ###   ########.fr       */
+/*   Created: 2022/09/15 14:18:28 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 14:18:30 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int	expand_token(t_tokens *token, t_master *master)
 		if (!expand_line(&current->token, master))
 			exit(err_msg("failed to expand token [expander()]",
 					1, master));
-		current->was_expanded = 1;
 	}
 	free_expansions(&master->expansions);
 	return (1);

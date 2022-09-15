@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser.c                                           :+:      :+:    :+:   */
+/*   expander_quotes_handler.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/15 13:58:54 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/15 13:58:58 by mjallada         ###   ########.fr       */
+/*   Created: 2022/09/15 14:18:09 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 14:18:11 by mjallada         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	process_and_remove_quotes(t_tokens *token_node, t_master *master)
 		else
 			i++;
 	}
-	token_node->quotes_removed = 1;
 }
 
 /* Removes quote pairs from current token. */

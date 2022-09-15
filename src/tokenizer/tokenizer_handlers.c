@@ -1,5 +1,16 @@
-#include "../../include/minishell.h"
-#include "../../include/tokenizer.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_handlers.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 14:22:17 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 14:22:18 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 /* Called when EOL character is found in line. */
 void	handle_end_of_line(t_tokenizer_helpers *t, t_master	*master)
@@ -7,7 +18,7 @@ void	handle_end_of_line(t_tokenizer_helpers *t, t_master	*master)
 	if (follows_open_token(t))
 	{
 		extract_token(master, &t->line[t->token_start],
-				&t->line[t->position - 1]);
+			&t->line[t->position - 1]);
 		t->last_token_end = t->position - 1;
 	}
 	t->position++;
@@ -30,7 +41,7 @@ void	handle_blank_char(t_tokenizer_helpers *t, t_master *master)
 	if (follows_open_token(t))
 	{
 		extract_token(master, &t->line[t->token_start],
-				&t->line[t->position - 1]);
+			&t->line[t->position - 1]);
 		t->last_token_end = t->position - 1;
 	}
 	t->position++;

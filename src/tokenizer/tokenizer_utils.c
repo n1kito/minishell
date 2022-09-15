@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 14:21:19 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 14:21:20 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* Adds the characters between token_start & token_end to the tokens struct. */
@@ -33,9 +45,6 @@ void	init_token_values(t_tokens *token)
 {
 	token->token_had_quotes = 0;
 	token->token_type = 0;
-	//token->word_splitted = 0;
-	token->was_expanded = 0;
-	token->quotes_removed = 0;
 	token->was_isolated = 0;
 	token->was_split = 0;
 	token->next = NULL;
