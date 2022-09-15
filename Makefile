@@ -41,8 +41,9 @@ END_COLOR		:= \033[0;39m
 # SOURCES
 
 SRC_FILES		:= 	main\
-					minishell_utils\
 					minishell_master_utils\
+					minishell_utils\
+					builtins/builtin_utils\
 					builtins/ft_echo\
 					builtins/ft_export\
 					builtins/ft_export_no_arg\
@@ -75,10 +76,13 @@ SRC_FILES		:= 	main\
 					execution/execution_array_exports_utils\
 					execution/execution_command_path_utils\
 					execution/execution_builtins\
+					execution/execution_command_error_check\
 					execution/execution_file_descriptors\
 					execution/execution_heredoc_handling\
+					execution/execution_heredoc_handling_2\
 					execution/execution_heredoc_handling_utils\
 					execution/execution_loop_utils\
+					execution/execution_loop_utils_2\
 					execution/execution_pipe_utils\
 					execution/execution_setup\
 					execution/execution_utils\

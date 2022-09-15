@@ -15,6 +15,8 @@
 
 // execution.c
 int			exec_loop(t_master *master);
+void		launch_exec(t_master *master, int i);
+int			process_open_heredoc(t_master *master, int i);
 
 // execution_array_exports.c
 void		generate_command_structure(t_master *master);
@@ -61,6 +63,7 @@ void		expand_heredoc_line(char **line, t_master *master, int cmd_index,
 				int tmp_minishexit);
 void		print_heredoc_warning(char *line, int cmd_index, char *delimiter,
 				t_master *master);
+int			exit_heredoc(t_master *master, char *line, int cmd_index, int return_code);
 
 // execution_heredoc_handling_utils.c
 void		set_heredoc_path(t_master *master, int i);

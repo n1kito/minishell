@@ -77,7 +77,6 @@ void	read_prompt(t_master *master)
 			if (!execute_command(line, master))
 				exit(free_all(master, 1));
 			free_master(master, 1);
-//			sigemptyset(&new_action.sa_mask);
 		}
 		if (!line)
 		{

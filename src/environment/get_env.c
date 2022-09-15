@@ -17,7 +17,6 @@
 // This function takes the linked list and writes the env variables in it
 // the first string called NAME takes the beggininning of the string until the =
 // the second string VARIABLE takes the rest of the string
-
 static t_env	*env_init(char *envp, t_master *master)
 {
 	int		equal;

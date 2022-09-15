@@ -1,6 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution_setup.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/14 11:48:40 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/14 13:12:01 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-// TODO move somewhere else
 /* Checks the current tokens for a heredoc token. */
 int	heredoc_found(t_master *master)
 {
@@ -26,11 +37,10 @@ void	prep_execution_resources(t_master *master)
 		exit(free_all(master, 1));
 	allocate_file_descriptors(master);
 	setup_heredocs(master);
-	if (heredoc_found(master) && g_minishexit == 130) // did we CTRL + C out of heredocs ?
+	if (heredoc_found(master) && g_minishexit == 130)
 		return ;
 	setup_process_array(master);
 	setup_pipes(master);
-	return ;
 }
 
 /* Allocates memory for the int array used to
@@ -68,12 +78,10 @@ void	setup_pipes(t_master *master)
 		if (!master->pipes[i])
 			exit(err_msg("malloc failed [setup_pipes()][2]", 1, master)
 				&& free_all(master, 1));
-	}
-	while (--i >= 0)
-	{
 		master->pipes[i][0] = -1;
 		master->pipes[i][1] = -1;
 	}
+	i = -1;
 	while (++i < master->cmd_count - 1)
 		if (pipe(master->pipes[i]) == -1)
 			exit(err_msg("pipe failed [setup_pipes()]", 1, master)

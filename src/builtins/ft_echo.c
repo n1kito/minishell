@@ -44,16 +44,15 @@ static char	*join_message_for_write(char **message, t_master *master)
 	int		command;
 
 	command = master->cmd_count;
-	buffer = NULL;
 	if (!message || !*message || !**message)
 		return (NULL);
 	buffer = malloc(ft_strlen(*message) + 1);
 	if (!buffer && message && *message)
 	{
 		write(2, "Minishell failure: malloc error in builtin: echo\n", 50);
-		free_all(master, g_minishexit);
 		if (command > 1)
-			exit(42);
+			exit(free_all(master, 42));
+		free_all(master, g_minishexit);
 		exit(1);
 	}
 	ft_strlcpy(buffer, *message, ft_strlen(*message) + 1);
@@ -65,7 +64,7 @@ static char	*join_message_for_write(char **message, t_master *master)
 		buffer = swap_pointers_for_join(buffer, *message, master);
 		message++;
 	}
-	return(buffer);
+	return (buffer);
 }
 
 static int	echo_option_check(char *str)

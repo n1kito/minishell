@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution_command_path_utils.c                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/14 11:33:27 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/14 11:39:14 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* This function will split the $PATH environment variable into an array
@@ -27,7 +39,7 @@ int	assign_command_paths(t_master *master)
 					= master->commands[i]->cmd_array[0];
 			else if (!get_cmd_path(&master->commands[i]->cmd_path,
 					master->commands[i]->cmd_array[0], paths, master))
-				return(free_paths(paths), 0);
+				return (free_paths(paths), 0);
 		}
 	}
 	free_paths(paths);
@@ -43,14 +55,13 @@ int	get_cmd_path(char **cmd_path, char *command, char **paths, t_master *master)
 	char	*tmp_path;
 	char	*full_path;
 
-	i = 0;
-	if (command &&
-		(ft_strcmp(command, ".") == 0
+	if (command && (ft_strcmp(command, ".") == 0 \
 		|| ft_strcmp(command, "..") == 0))
 		return (1);
+	i = 0;
 	while (command && command[0] && paths && paths[i])
 	{
-		tmp_path = ft_strjoin(paths[i], "/");
+		tmp_path = ft_strjoin(paths[i++], "/");
 		if (!tmp_path)
 			return (err_msg("malloc failed [get_cmd_path()][1]", 1, master));
 		full_path = ft_strjoin(tmp_path, command);
@@ -63,7 +74,6 @@ int	get_cmd_path(char **cmd_path, char *command, char **paths, t_master *master)
 			break ;
 		}
 		free(full_path);
-		i++;
 	}
 	return (1);
 }

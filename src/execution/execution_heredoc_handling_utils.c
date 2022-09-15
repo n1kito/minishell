@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution_heredoc_handling_utils.c                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/14 17:26:41 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/14 17:27:23 by vrigaudy         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* Sets the path of the heredoc file. Each command segment has a single
@@ -23,8 +35,8 @@ void	open_heredoc(t_master *master, int i)
 {
 	if (master->commands[i]->heredoc_fd >= 0)
 		if (close(master->commands[i]->heredoc_fd) == -1)
-			exit(err_msg("could not close fd [open_heredoc()]",
-					1, master) && free_all(master, 1));
+			exit(err_msg("could not close fd [open_heredoc()]", 1, master)
+				&& free_all(master, 1));
 	master->commands[i]->heredoc_fd
 		= open(master->commands[i]->heredoc_path,
 			O_RDWR | O_CREAT | O_TRUNC, 0600);
@@ -55,7 +67,6 @@ int	heredoc_file_access(t_master *master, int cmd_index)
 	return (1);
 }
 
-//TODO move somewhere else
 /* Will attempt to unlink all heredoc files created by the current process. */
 int	unlink_heredocs(t_master *master)
 {
@@ -67,7 +78,8 @@ int	unlink_heredocs(t_master *master)
 		if (master->commands[i]->heredoc_path)
 			if (access(master->commands[i]->heredoc_path, F_OK) == 0)
 				if (unlink(master->commands[i]->heredoc_path) == -1)
-					return (err_msg("could not unlink all heredoc files. careful!",
+					return (err_msg \
+						("could not unlink all heredoc files. careful!",
 							0, master));
 		i++;
 	}

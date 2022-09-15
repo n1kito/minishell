@@ -26,9 +26,9 @@ static int	is_above_atoll(char const *str, int neg)
 	while (max_int[i + 1] && max_int[i])
 	{
 		if (str[i] < max_int[i])
-			return(0);
+			return (0);
 		if (str[i] > max_int[i])
-			return(1);
+			return (1);
 		i++;
 	}
 	if (neg == 1 && str[i] > '8')
@@ -38,7 +38,7 @@ static int	is_above_atoll(char const *str, int neg)
 	return (0);
 }
 
-static void	check_arg1_is_valid(char *var)
+static void	check_arg1_is_valid(t_master *master, char *var)
 {
 	int	i;
 	int	j;
@@ -63,15 +63,15 @@ static void	check_arg1_is_valid(char *var)
 		ft_putstr_fd(var, 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		g_minishexit = 2;
-		exit(2);
+		exit(free_all(master, 2));
 	}
 }
 
-long int    ft_atoll(const char *nptr)
+long long int	ft_atoll(const char *nptr)
 {
-	long long int    num;
-	int            sign;
-	int            i;
+	long long int	num;
+	int				sign;
+	int				i;
 
 	num = 0;
 	sign = 1;
@@ -98,20 +98,21 @@ void	ft_exit(t_master *master, int cmd_index)
 	char	**variable;
 
 	variable = master->commands[cmd_index]->cmd_array;
-	if (master->cmd_count == 1) 
+	if (master->cmd_count == 1)
 	{
 		ft_putstr_fd("exit\n", 0);
 		close_files(master, cmd_index);
 		close_pipes(master);
 	}
 	if (variable[1])
-		check_arg1_is_valid(variable[1]);
+		check_arg1_is_valid(master, variable[1]);
 	if (variable[1] && variable[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
 		g_minishexit = 1;
+		return ;
 	}
 	else if (variable[1])
-		exit(ft_atoll(variable[1]));
-	exit(0);
+		exit(free_all(master, ft_atoll(variable[1])));
+	exit(free_all(master, g_minishexit));
 }

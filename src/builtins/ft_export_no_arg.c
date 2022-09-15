@@ -52,7 +52,7 @@ static void	sort_table_alphabetically(t_env **sorting_table, int list_len)
 
 /* Populates the sorting table with the address of each node of the environment
  * list. */
-static void	populate_sorting_table(t_env *list, t_env **sorting_table, int list_len)
+static void	populate_sorting_table(t_env *list, t_env **sort_tab, int list_len)
 {
 	int		i;
 	t_env	*current;
@@ -61,10 +61,16 @@ static void	populate_sorting_table(t_env *list, t_env **sorting_table, int list_
 	current = list;
 	while (i < list_len)
 	{
-		sorting_table[i] = current;
+		sort_tab[i] = current;
 		i++;
 		current = current->next;
 	}
+}
+
+static void	safe_printf(char *to_print)
+{
+	if (write(1, to_print, ft_strlen(to_print)) == -1)
+		g_minishexit = 1;
 }
 
 /* Takes the environment linked list and creates a sorting table that stores
@@ -85,15 +91,15 @@ void	print_env_by_alphabetical_order(t_env *list)
 	i = -1;
 	while (sorting_table[++i])
 	{
-		printf("export %s", sorting_table[i]->name);
+		safe_printf(sorting_table[i]->name);
 		if (sorting_table[i]->is_env)
 		{
-			printf("=\"");
+			safe_printf("=\"");
 			if (sorting_table[i]->variable && sorting_table[i]->variable[0])
-				printf("%s", sorting_table[i]->variable);
-			printf("\"");
+				safe_printf(sorting_table[i]->variable);
+			safe_printf("\"");
 		}
-		printf("\n");
+		safe_printf("\n");
 	}
 	free(sorting_table);
 }

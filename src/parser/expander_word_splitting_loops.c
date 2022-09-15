@@ -58,9 +58,9 @@ void	expanded_token_split_loop(t_master *master, t_tokens **split_tokens)
 	current = master->tokens;
 	while (current)
 	{
-		if (current->token && is_only_blanks(current->token))
+		if (current->token && current->was_isolated
+			&& is_only_blanks(current->token))
 		{
-			printf("OK\n");
 			free(current->token);
 			current->was_isolated = 1;
 			current->was_split = 1;

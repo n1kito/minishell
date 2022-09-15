@@ -7,14 +7,11 @@ int	execute_single_builtin(t_master *master)
 {
 	int	in_redir;
 	int	out_redir;
-	//
-	// TODO check what happens if there is an error opening file descriptors with single builtin	
+
 	if (!open_file_descriptors(master, 0))
 		return (1);
 	in_redir = last_input_fd(master, 0);
 	out_redir = last_output_fd(master, 0);
-	//TODO proteger tmp_stdin et tmp_stdout
-	// et les set dans le setup_sing_builtin en passant les pointeurs sur int
 	set_builtin_redir(in_redir, out_redir, master);
 	run_builtin(master, 0);
 	reset_builtin_redir(in_redir, out_redir, master);
@@ -39,7 +36,7 @@ int	run_builtin(t_master *master, int cmd_index)
 	else if (ft_strcmp(command, "exit") == 0)
 		ft_exit(master, cmd_index);
 	else if (ft_strcmp(command, "env") == 0)
-			ft_env(master->env, arguments);
+		ft_env(master->env, arguments);
 	else if (ft_strcmp(command, "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(command, "cd") == 0)
