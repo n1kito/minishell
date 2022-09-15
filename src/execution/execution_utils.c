@@ -88,7 +88,8 @@ int	command_error_check(t_command *command, t_master *master)
 			|| ft_strcmp(command->cmd_array[0], "..") == 0
 			|| (command->cmd_array && is_directory && !ft_strchr(command->cmd_array[0], '/'))))
 	{
-		close(is_directory);
+		if (is_directory >= 0)
+			close(is_directory);
 		error_message
 			= ft_strjoin(command->cmd_array[0], ": command not found\n");
 		if (!error_message)
