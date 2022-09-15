@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 21:37:58 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/15 14:19:58 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ static void	add_elem_to_env(t_master *master, t_env *save, char *str)
 		ft_strlcpy(new->name, str, i + 1);
 	if (str[i] && str[i] == '+')
 		i++;
-	if (str[i + 1])
-		new->variable = ft_strdup(&str[i + 1]);
-	else
+	if (!str || !str[i])
 		new->variable = ft_strdup("");
+	else
+		new->variable = ft_strdup(&str[i + 1]);
 	check_malloc_in_builtin(master, save);
 	save->next = new;
 }
