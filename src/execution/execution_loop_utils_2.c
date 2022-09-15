@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/wait.h>
 
 /* Waits for all processes one by one and stores the exit code of the
  * latest function in the global g_minishexit variable. */

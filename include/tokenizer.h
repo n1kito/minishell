@@ -15,6 +15,13 @@
 
 // STRUCTURES
 
+typedef struct s_env {
+	char			*name;
+	char			*variable;
+	int				is_env;
+	struct s_env	*next;
+}	t_env;
+
 typedef struct s_tokens
 {
 	char				*token;
@@ -84,7 +91,6 @@ typedef struct s_master
 # define L_CHEVRON 60
 # define R_CHEVRON 62
 // Quote Characters
-//# define BACKSLASH 92
 # define SINGLE_QUOTE 39
 # define DOUBLE_QUOTE 34
 

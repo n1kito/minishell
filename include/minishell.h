@@ -13,15 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-extern int g_minishexit;
-
-typedef struct s_env {
-	char			*name;
-	char			*variable;
-	int				is_env;
-	struct s_env	*next;
-}	t_env;
-
 // INCLUDES
 # include <stdlib.h>
 # include <stdio.h>
@@ -44,7 +35,12 @@ typedef struct s_env {
 # include "execution.h"
 # include "signals.h"
 
+extern int	g_minishexit;
+
 // main.c
+int		found_open_quotes(t_master *master);
+int		execute_command(char *command_line, t_master *master);
+void	read_prompt(t_master *master);
 
 // minishell_utils.c
 void	init_master_structure(t_master *master);
@@ -54,7 +50,6 @@ int		err_msg(char *error, int error_code, t_master *master);
 // minishell_master_utils.c
 int		free_all(t_master *master, int return_code);
 void	free_tokens_structure(t_master *master);
-void	clean_master_memory(t_master *master);
 void	free_commands_structure(t_master *master);
 void	free_pipes(t_master *master);
 

@@ -51,9 +51,9 @@ void	free_divided_token(char **divided_token)
 	free(divided_token);
 }
 
-void	tok_splitter(t_tokens **current, t_tokens **split_toks, t_master *master)
+void	tok_splitter(t_tokens **current, t_tokens **split_toks, t_master *m)
 {
-	*split_toks = split_expanded_token(current, master);
+	*split_toks = split_expanded_token(current, m);
 	if ((*current)->next)
 	{
 		(*current)->next->previous = get_last_token(*split_toks);
@@ -63,8 +63,8 @@ void	tok_splitter(t_tokens **current, t_tokens **split_toks, t_master *master)
 	{
 		free((*current)->token);
 		free((*current));
-		master->tokens = *split_toks;
-		(*current) = master->tokens;
+		m->tokens = *split_toks;
+		(*current) = m->tokens;
 	}
 	else
 	{

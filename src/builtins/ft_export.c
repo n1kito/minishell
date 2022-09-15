@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
 
 static char	*update_env_plus(char *init_value, char *added_value, t_master *m)
 {
@@ -128,7 +127,7 @@ void	ft_export(t_master *master, char **variable)
 	i = 1;
 	g_minishexit = 0;
 	if (!variable[1])
-		print_env_by_alphabetical_order(master->env);
+		print_env_by_alphabetical_order(master->env, master);
 	while (variable[i])
 	{
 		if (arg_is_ok_for_env(variable[i]) == 0)
