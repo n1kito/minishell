@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 13:58:54 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 13:58:58 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* Search for variable name in env.
@@ -34,16 +46,11 @@ void	log_expansions(char *token, t_master *master)
 	while (token[++i])
 	{
 		if (token[i] == '$' && token[i + 1] && !is_single_quoting
-			&& (expansion_name_len(&token[i]) 
-			|| (!is_double_quoting && is_quote_character(token[i + 1]))))
-			/*&& !is_blank_char(token[i + 1])
-			&& !(is_quote_character(token[i + 1]) && is_double_quoting)
-			&& (ft_isalpha(token[i + 1])
-				|| token[i + 1] == '_' || token[i + 1] == '?'
-				|| token[i + 1] == DOUBLE_QUOTE))*/
+			&& (expansion_name_len(&token[i])
+				|| (!is_double_quoting && is_quote_character(token[i + 1]))))
 		{
 			if (!add_exp_node(master, token, i))
-				exit(free_all(master, 1) 
+				exit(free_all(master, 1)
 					&& err_msg("failed to log expansions [log_expansions()]",
 						1, master));
 		}
@@ -97,4 +104,21 @@ int	add_exp_node(t_master *master, char *token, int i)
 		master->expansions = new_expand;
 	}
 	return (1);
+}
+
+/* If the token passed as parameter is of type WORD, is empty
+ * and did not initially have empty quotes in it, it will be
+ * typed as INVISIBLE. */
+void	check_for_invisible_tokens(t_tokens *token)
+{
+	t_tokens	*current;
+
+	current = token;
+	while (current)
+	{
+		if ((int)ft_strlen(current->token) == 0
+			&& !current->token_had_quotes)
+			current->token_type = INVISIBLE;
+		current = current->next;
+	}
 }

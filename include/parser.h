@@ -28,8 +28,8 @@ int			syntax_checker(t_tokens *tokens, t_master *master, int err);
 
 // expander.c
 void		expander(t_master *master);
-void		remove_quotes(t_tokens **token_node, int first_quote,
-			int second_quote, t_master *master);
+void		remove_quotes(t_tokens **token_node, int quot1,
+						  int quot2, t_master *master);
 void		process_and_remove_quotes(t_tokens *token_node, t_master *master);
 int			expand_line(char **line, t_master *master);
 void		check_for_invisible_tokens(t_tokens	*token);
@@ -37,6 +37,24 @@ void		isolate_unquoted_expands(t_tokens *token_ptr, t_master *master);
 void		split_previous_token(t_tokens *token_to_split, int position, t_master *master);
 t_tokens	*split_expanded_token(t_tokens **token_ptr, t_master *master);
 void		merge_token_with_next(t_tokens *current);
+int			go_to_end_of_expand_name(t_tokens *current_ptr, int i);
+int			is_unquoted_expand(t_tokens *token_ptr, int i);
+int			follows_unquoted_expand(t_tokens *token_ptr, int i);
+void		split_previous_token(t_tokens *token_to_split, int i, t_master *master);
+void		merge_token_with_next(t_tokens *current);
+void		add_token_ids(t_tokens *token);
+void		check_for_quotes(t_tokens *tokens);
+int			token_has_blank(char *token);
+int			is_only_blanks(char *str);
+
+void		isolate_loop(t_master *master);
+void		expand_loop(t_master *master);
+void		quotes_removal_loop(t_master *master);
+void		expanded_token_split_loop(t_master *master, t_tokens **split_tokens);
+void		merge_back_loop(t_master *master);
+void		handle_expand_extraction(t_tokens *token_ptr, int *i, t_master *master);
+void		tok_splitter(t_tokens *current, t_tokens **split_tokens, t_master *master);
+void	free_divided_token(char **divided_token);
 
 // expander_analysers.c
 char		*search_env(t_env *env, char *name, int name_len);
