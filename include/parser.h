@@ -85,7 +85,7 @@ void		merge_token_with_next(t_tokens *current);
 // expander_word_splitting_splitter.c
 t_tokens	*split_expanded_token(t_tokens **token_ptr, t_master *master);
 void		free_divided_token(char **divided_token);
-void		tok_splitter(t_tokens *current, t_tokens **split_toks, t_master *m);
+void		tok_splitter(t_tokens **current, t_tokens **split_toks, t_master *m);
 
 // expander_word_splitting_utils.c
 void		add_token_ids(t_tokens *token);

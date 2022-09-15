@@ -25,7 +25,7 @@ void	expander(t_master *master)
 	check_for_quotes(master->tokens);
 	expand_loop(master);
 	quotes_removal_loop(master);
-	expanded_token_split_loop(master, &split_tokens);
+	expanded_token_split_loop(master, &split_tokens); // ca merde ici
 	merge_back_loop(master);
 	check_for_invisible_tokens(master->tokens);
 }

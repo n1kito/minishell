@@ -58,18 +58,23 @@ void	expanded_token_split_loop(t_master *master, t_tokens **split_tokens)
 	current = master->tokens;
 	while (current)
 	{
-		if (is_only_blanks(current->token))
+		if (current->token && is_only_blanks(current->token))
 		{
+			printf("OK\n");
 			free(current->token);
 			current->was_isolated = 1;
 			current->was_split = 1;
 			current->token = NULL;
+			current = current->next;
 		}
 		else if (current->token && current->token[0]
 			&& token_has_blank(current->token)
 			&& current->was_isolated && current->was_split == 0)
-			tok_splitter(current, split_tokens, master);
-		current = current->next;
+		{
+			tok_splitter(&current, split_tokens, master);
+		}
+		else
+			current = current->next;
 	}
 }
 

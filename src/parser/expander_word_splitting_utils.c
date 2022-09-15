@@ -61,6 +61,8 @@ int	is_only_blanks(char *str)
 {
 	int	i;
 
+	if (!str || !str[0])
+		return (0);
 	i = -1;
 	while (str[++i])
 	{
