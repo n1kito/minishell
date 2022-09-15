@@ -70,6 +70,7 @@ int	open_file_descriptors(t_master *master, int i)
  * does not exist or cannot be read. */
 int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 {
+<<<<<<< HEAD
 	master->commands[i]->fds[j] = open(current->token, O_RDONLY);
 	if (access(current->token, F_OK) == -1)
 	{
@@ -80,12 +81,18 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 	}
 	else if (access(current->token, F_OK) == 0
 		&& access(current->token, R_OK) == -1)
+=======
+	if (access(current->token, F_OK) == -1
+		|| (access(current->token, F_OK) == 0
+		&& access(current->token, R_OK) == -1))
+>>>>>>> 1ab04d9cfcb7e90dc28e3484df40fa164e706393
 	{
 		close_pipes_and_files(master, master->commands[i]->fds[j]);
 		perror(current->token);
 		g_minishexit = 1;
 		return (0);
 	}
+	master->commands[i]->fds[j] = open(current->token, O_RDONLY);
 	return (1);
 }
 
@@ -112,7 +119,9 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 	else if (current->previous->token_type == APPEND)
 		master->commands[i]->fds[j]
 			= open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0666);
-	if (access(current->token, F_OK) == 0 && access(current->token, W_OK) == -1)
+	if (access(current->token, F_OK) == -1
+		|| (access(current->token, F_OK) == 0
+		&& access(current->token, W_OK) == -1))
 	{
 		close_pipes_and_files(master, master->commands[i]->fds[j]);
 		g_minishexit = 1;

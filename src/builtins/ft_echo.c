@@ -21,7 +21,11 @@ static char	*swap_pointers_for_join(char *buffer, char *str, t_master *master)
 	tmp = NULL;
 	tmp = buffer;
 	if (!buffer)
+<<<<<<< HEAD
 		buffer = ft_strdup(buffer);
+=======
+		buffer = ft_strdup(str);
+>>>>>>> 1ab04d9cfcb7e90dc28e3484df40fa164e706393
 	else
 		buffer = ft_strjoin(buffer, str);
 	if (!buffer)
@@ -47,7 +51,7 @@ static char	*join_message_for_write(char **message, t_master *master)
 	if (!message || !*message || !**message)
 		return (NULL);
 	buffer = malloc(ft_strlen(*message) + 1);
-	if (!buffer)
+	if (!buffer && message && *message)
 	{
 		write(2, "Minishell failure: malloc error in builtin: echo\n", 50);
 		free_all(master, g_minishexit);

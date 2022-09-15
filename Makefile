@@ -102,7 +102,7 @@ $(NAME): $(OBJ_FILES)
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c Makefile libft/src/*.c | $(BIN_DIR)
 	@$(CC) -MD -g -c $(CFLAGS) -I $(INC_DIR) -I $(LIB_DIR)/$(INC_DIR) $< -o $@
-	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)\t\t\t"
+	@printf "\r> $(BLUE)compiling $(notdir $<)$(END_COLOR)"
 
 $(BIN_DIR):
 	@mkdir $(BIN_DIR) $(BIN_DIR)/tokenizer $(BIN_DIR)/parser $(BIN_DIR)/execution\
