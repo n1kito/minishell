@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_export_no_arg.c                                 :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/13 21:05:44 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 21:06:57 by vrigaudy         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
@@ -63,7 +52,7 @@ static void	sort_table_alphabetically(t_env **sorting_table, int list_len)
 
 /* Populates the sorting table with the address of each node of the environment
  * list. */
-static void	populate_sorting_table(t_env *list, t_env **sort_tab, int list_len)
+static void	populate_sorting_table(t_env *list, t_env **sorting_table, int list_len)
 {
 	int		i;
 	t_env	*current;
@@ -72,7 +61,7 @@ static void	populate_sorting_table(t_env *list, t_env **sort_tab, int list_len)
 	current = list;
 	while (i < list_len)
 	{
-		sort_tab[i] = current;
+		sorting_table[i] = current;
 		i++;
 		current = current->next;
 	}

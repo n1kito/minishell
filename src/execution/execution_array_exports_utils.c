@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execution_array_exports_utils.c                    :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/14 11:39:45 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 11:42:02 by vrigaudy         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 /* Iterates through tokens to find the beginning of the nth command segment. */

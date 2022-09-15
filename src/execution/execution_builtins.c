@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execution_builtins.c                               :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/14 11:46:12 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 11:49:31 by vrigaudy         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 /* Takes care of setting up fds/redirections for builtin functions
@@ -19,8 +7,8 @@ int	execute_single_builtin(t_master *master)
 {
 	int	in_redir;
 	int	out_redir;
-	// TODO check what happens if there is an error when
-	// opening file descriptors with single builtin	
+	//
+	// TODO check what happens if there is an error opening file descriptors with single builtin	
 	if (!open_file_descriptors(master, 0))
 		return (1);
 	in_redir = last_input_fd(master, 0);
@@ -51,7 +39,7 @@ int	run_builtin(t_master *master, int cmd_index)
 	else if (ft_strcmp(command, "exit") == 0)
 		ft_exit(master, cmd_index);
 	else if (ft_strcmp(command, "env") == 0)
-		ft_env(master->env, arguments);
+			ft_env(master->env, arguments);
 	else if (ft_strcmp(command, "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(command, "cd") == 0)

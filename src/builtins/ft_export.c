@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 21:37:58 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/13 17:01:16 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ static void	check_if_in_env(t_master *master, t_env *save, char *str)
 			return ;
 		}
 		if (!save->next)
-			break ;
+			break;
 		save = save->next;
 	}
 	if (!save->next)
@@ -109,6 +109,29 @@ static void	check_if_in_env(t_master *master, t_env *save, char *str)
 			i++;
 		add_elem_to_env(master, save, str);
 	}
+}
+
+int	arg_is_ok_for_env(char const *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str[0])
+		return (2);
+	if ((str[0] == '_' && (str[1] == '+' || str[1] == '=')))
+		return (2);
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (1);
+	i++;
+	while (str[i])
+	{
+		if (str[i] == '=' || (str[i] == '+' && str[i + 1] == '='))
+			return (0);
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 void	ft_export(t_master *master, char **variable)
