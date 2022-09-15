@@ -1,5 +1,18 @@
 #include "minishell.h"
 
+/*
+ * dans l'expander finalement, pour chaque token
+ 
+	void	expand_and_split()
+	| if token has quotes, give had_quotes = 1
+	| split around individiual unquoted expansions and give quoted = 0
+	| expand what can be (not between single quotes)
+	| in unquoted tokens, split tokens according to blanks and give them split = 1
+	| remove quotes in all non split tokens
+	| merge tokens back together unless both where split
+	| check for invisible tokens: empty tokens that had_quotes = 0
+
+*/
 void	process_for_word_splitting(t_tokens **token_ptr, t_master *master_ptr)
 {
 	t_master	tmp_master;
