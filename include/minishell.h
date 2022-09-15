@@ -1,16 +1,17 @@
-#ifndef MINISHELL_H
-# define MINISHELL_H 
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 14:36:03 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 14:36:04 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-/*
-typedef struct s_master
-{
-	t_tokens			*tokens;
-	t_tokenizer_helpers	helpers;
-	t_expand			expand_utils;	
-	t_env				*env;
-	int					malloc_success;
-}	t_master;
-*/
+#ifndef MINISHELL_H
+# define MINISHELL_H
 
 extern int g_minishexit;
 

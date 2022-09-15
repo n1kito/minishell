@@ -1,19 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokenizer.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 14:32:46 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 14:32:48 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef TOKENIZER_H
 # define TOKENIZER_H
 
 // STRUCTURES
 
-// TODO : Move all structure to minishell.h ?
 typedef struct s_tokens
 {
 	char				*token;
 	int					token_type;
 	int					token_had_quotes;
-	int					word_splitted; // old word splitting
-	int					was_expanded;
 	int					was_split;
 	int					was_isolated;
-	int					quotes_removed;
 	int					token_id;
 	int					split_id;
 	struct s_tokens		*next;
@@ -35,7 +43,6 @@ typedef struct s_expand
 	int					name_start;
 	int					name_len;
 	int					name_end;
-	int					quoting_status;
 	char				*name;
 	char				*value;
 	struct s_expand		*next;
@@ -45,7 +52,7 @@ typedef struct s_command
 {
 	char				**cmd_array;
 	char				*cmd_path;
-	int					*fds; //they're all initialized at -1
+	int					*fds;
 	int					redirections_count;
 	int					error_code;
 	int					heredoc_fd;
@@ -62,7 +69,6 @@ typedef struct s_master
 	int					*processes;
 	int					**pipes;
 	t_env				*env;
-	char				**env_array;
 	char				**env_for_exec;
 	t_tokens			*next_command_start;
 	int					printed_error_msg;
@@ -112,9 +118,5 @@ void		handle_blank_char(t_tokenizer_helpers *t, t_master *master);
 void		start_expansion_token(t_tokenizer_helpers *t);
 void		start_operator_token(t_tokenizer_helpers *t, t_master *master);
 void		close_operator_token(t_tokenizer_helpers *t, t_master *master);
-
-// tokenizer_test_utils.c
-//void		print_tokens(t_tokens *token);
-void		print_tokens(t_master *master);
 
 #endif
