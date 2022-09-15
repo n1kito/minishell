@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/16 00:46:58 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 01:48:25 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,17 @@ void	ft_echo(char **arg)
 		option_n = echo_option_check(arg[i]);
 	while (arg[i] && echo_option_check(arg[i]))
 		i++;
-	while (arg[i])
+	while (arg[i] && ret >= 0)
 	{
-		if (printf("%s", arg[i]) == -1)
+		ret = printf("%s", arg[i]);
+		if (ret == -1)
 			g_minishexit = 1;
-		if (arg[i + 1])
-			if (printf(" ") == -1)
-				g_minishexit = 1;
-		i++;
+		if (arg[i++ + 1] && ret >= 0)
+			ret = printf(" ");
 	}
-	if (!option_n)
+	if (ret == -1)
+		g_minishexit = 1;
+	if (!option_n && g_minishexit == 0)
 		if (printf("\n") == -1)
 			g_minishexit = 1;
 }

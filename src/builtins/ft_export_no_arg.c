@@ -9,7 +9,7 @@ static int	is_sorted_list(t_env *list[])
 	i = 0;
 	while (list[i + 1])
 	{
-		if (ft_strncmp(list[i]->name, list[i + 1]->name) < 0)
+		if (ft_strcmp(list[i]->name, list[i + 1]->name) < 0)
 			i++;
 		else
 			return (0);
