@@ -6,31 +6,39 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/13 17:01:16 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 00:56:37 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
 
-static char	*update_env_plus(char *initial_value, char *added_value)
+static char	*update_env_plus(char *init_value, char *added_value, t_master *m)
 {
 	char	*tmp;
+	int		command;
 
+	command = m->cmd_count;
 	tmp = NULL;
 	if (!added_value || !added_value[0])
-		return (initial_value);
-	if (!initial_value)
-		initial_value = ft_strdup(added_value);
+		return (init_value);
+	if (!init_value)
+		init_value = ft_strdup(added_value);
 	else
 	{
-		tmp = initial_value;
-		initial_value = ft_strjoin(initial_value, added_value);
+		tmp = init_value;
+		init_value = ft_strjoin(init_value, added_value);
 		free(tmp);
 	}
-	if (!initial_value)
-		return (NULL);
-	return (initial_value);
+	if (!init_value)
+	{
+		write(2, "Minishell failure: malloc error in builtin: export\n", 52);
+		free_all(m, g_minishexit);
+		if (command > 1)
+			exit(42);
+		exit(1);
+	}
+	return (init_value);
 }
 
 static void	update_env(t_master *master, t_env *env, char *str)
@@ -39,7 +47,7 @@ static void	update_env(t_master *master, t_env *env, char *str)
 
 	command = master->cmd_count;
 	if (str[0] == '+' && str[1] == '=')
-		env->variable = update_env_plus(env->variable, str + 2);
+		env->variable = update_env_plus(env->variable, str + 2, master);
 	if (str[0] == '=')
 	{
 		if (env->variable)

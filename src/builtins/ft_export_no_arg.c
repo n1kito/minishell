@@ -9,7 +9,7 @@ static int	is_sorted_list(t_env *list[])
 	i = 0;
 	while (list[i + 1])
 	{
-		if (ft_strcmp(list[i]->name, list[i + 1]->name) < 0)
+		if (ft_strncmp(list[i]->name, list[i + 1]->name) < 0)
 			i++;
 		else
 			return (0);
@@ -91,6 +91,7 @@ void	print_env_by_alphabetical_order(t_env *list)
 	i = -1;
 	while (sorting_table[++i])
 	{
+		safe_printf("export ");
 		safe_printf(sorting_table[i]->name);
 		if (sorting_table[i]->is_env)
 		{

@@ -32,7 +32,7 @@ int	run_builtin(t_master *master, int cmd_index)
 	else if (ft_strcmp(command, "unset") == 0)
 		ft_unset(&master->env, arguments);
 	else if (ft_strcmp(command, "echo") == 0)
-		ft_echo(arguments, master);
+		ft_echo(arguments);
 	else if (ft_strcmp(command, "exit") == 0)
 		ft_exit(master, cmd_index);
 	else if (ft_strcmp(command, "env") == 0)
