@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 13:58:54 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 13:58:58 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /* Joins two strings of characters. Will still work if either is NULL. */
@@ -33,22 +45,6 @@ void	toggle_quoting(int *quoting_status)
 		*quoting_status = 0;
 }
 
-/* Counts how many expansions are logged in the expand linked list. */
-int	count_expands(t_expand *expansions)
-{
-	int			count;
-	t_expand	*current;
-
-	current = expansions;
-	count = 0;
-	while (current)
-	{
-		count++;
-		current = current->next;
-	}
-	return (count);
-}
-
 /* Free the structure used to log expansions. */
 int	free_expansions(t_expand **expansions)
 {
@@ -82,5 +78,34 @@ int	expand_token(t_tokens *token, t_master *master)
 		current->was_expanded = 1;
 	}
 	free_expansions(&master->expansions);
+	return (1);
+}
+
+/* Expands all expansions, back to front. */
+int	expand_line(char **line, t_master *master)
+{
+	char		*tmp_token;
+	char		*new_token;
+	t_expand	*exp;
+
+	exp = master->expansions;
+	while (exp)
+	{
+		tmp_token = str_join(exp->value, *line + exp->name_end + 1);
+		if (!tmp_token)
+			return (0);
+		*(*line + exp->start) = '\0';
+		new_token = str_join(*line, tmp_token);
+		if (!new_token)
+		{
+			free(tmp_token);
+			return (0);
+		}
+		free(tmp_token);
+		tmp_token = *line;
+		*line = new_token;
+		free(tmp_token);
+		exp = exp->next;
+	}
 	return (1);
 }

@@ -12,20 +12,22 @@
 
 #include "minishell.h"
 
-/* Goes through tokens, checks that there are no single quotes.
- * If there are not, identifies variables to expand and expands them.
- * Then removes all removable quotes. */
-void	expander(t_master *master)
+void	merge_token_with_next(t_tokens *current)
 {
-	t_tokens	*split_tokens;
+	char		*tmp_token;
+	t_tokens	*merged_token;
 
-	split_tokens = NULL;
-	add_token_ids(master->tokens);
-	isolate_loop(master);
-	check_for_quotes(master->tokens);
-	expand_loop(master);
-	quotes_removal_loop(master);
-	expanded_token_split_loop(master, &split_tokens);
-	merge_back_loop(master);
-	check_for_invisible_tokens(master->tokens);
+	tmp_token = current->token;
+	merged_token = current->next;
+	current->token = str_join(current->token, merged_token->token);
+	current->was_isolated = merged_token->was_isolated;
+	current->split_id = merged_token->split_id;
+	current->was_split = merged_token->was_split;
+	current->token_had_quotes = merged_token->token_had_quotes;
+	free(tmp_token);
+	free(merged_token->token);
+	current->next = merged_token->next;
+	if (current->next)
+		current->next->previous = current;
+	free(merged_token);
 }

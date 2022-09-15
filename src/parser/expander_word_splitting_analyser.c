@@ -1,35 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 13:58:54 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 13:58:58 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	token_has_unquoted_blanks(t_tokens *token)
+int	go_to_end_of_expand_name(t_tokens *current_ptr, int i)
 {
-	int	i;
-
-	i = 0;
-	while (token->token[i])
-	{
-		if (token->token[i] == DOUBLE_QUOTE)
-			i += find_matching_quote(&token->token[i]) + 1;
-		else if (is_blank_char(token->token[i]))
-			return (1);
-		else
-			i++;
-	}
-	return (0);
+	if (!ft_isalpha(current_ptr->token[i + 1])
+		&& current_ptr->token[i + 1] != '_'
+		&& current_ptr->token[i + 1] != '?')
+		return (i + 1);
+	i++;
+	while (current_ptr->token[i]
+		&& (ft_isalnum(current_ptr->token[i])
+			|| current_ptr->token[i] == '_'
+			|| current_ptr->token[i] == '?'))
+		i++;
+	return (i);
 }
 
-int	has_single_quotes(char *str)
+int	is_unquoted_expand(t_tokens *token_ptr, int i)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
+	if (token_ptr->token[i] == '$')
 	{
-		if (str[i] == DOUBLE_QUOTE)
-			i += find_matching_quote(&str[i]) + 1;
-		if (str[i] == SINGLE_QUOTE && find_matching_quote(&str[i]))
+		i++;
+		if (ft_isalpha(token_ptr->token[i])
+			|| token_ptr->token[i] == '_'
+			|| token_ptr->token[i] == '?')
 			return (1);
-		else
-			i++;
 	}
 	return (0);
 }
