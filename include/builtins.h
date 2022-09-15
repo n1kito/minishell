@@ -23,9 +23,11 @@ void	ft_export(t_master *master, char **variable);
 void	ft_exit(t_master *master, int cmd_index);
 
 // utils pour les builtins
-void	print_env_by_alphabetical_order(t_env *list);
+void	print_env_by_alphabetical_order(t_env *list, t_master *master);
 int		arg_is_ok_for_env(char const *str);
 void	check_malloc_in_builtin(t_master *master, t_env *env);
 void	safe_printf(char *to_print);
+void	exit_env_printer(t_master *master);
+int		ft_strcmp2(char *s1, char *s2);
 
 #endif

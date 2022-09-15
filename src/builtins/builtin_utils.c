@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
 
 void	safe_printf(char *to_print)
 {
@@ -63,4 +62,24 @@ void	check_malloc_in_builtin(t_master *master, t_env *env)
 			exit(42);
 		exit(1);
 	}
+}
+
+void	exit_env_printer(t_master *master)
+{
+	write(2, "Minishell: export: malloc fail\n", 50);
+	if (master->cmd_count > 1)
+		exit(free_all(master, 42));
+	exit(free_all(master, 1));
+}
+
+int	ft_strcmp2(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] == s2[i] && s1[i] && s2[i])
+	{
+		i++;
+	}
+	return (s1[i] - s2[i]);
 }

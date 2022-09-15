@@ -30,8 +30,8 @@ void	create_command_structures(t_master *master, int cmd_count)
 
 	master->commands = malloc(sizeof(t_command *) * (cmd_count + 1));
 	if (!master->commands)
-		exit(err_msg("malloc failed [init_command_structures()][1]", 1, \
-			master) && free_all(master, 1));
+		exit(err_msg("malloc failed [init_command_structures()][1]", 1, master)
+			&& free_all(master, 1));
 	i = 0;
 	while (i < cmd_count)
 	{

@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include "builtins.h"
 
 static int	is_sorted_list(t_env *list[])
 {
@@ -20,7 +19,7 @@ static int	is_sorted_list(t_env *list[])
 	i = 0;
 	while (list[i + 1])
 	{
-		if (ft_strcmp(list[i]->name, list[i + 1]->name) < 0)
+		if (ft_strcmp2(list[i]->name, list[i + 1]->name) < 0)
 			i++;
 		else
 			return (0);
@@ -49,7 +48,7 @@ static void	sort_table_alphabetically(t_env **sorting_table, int list_len)
 	i = 0;
 	while (!is_sorted_list(sorting_table))
 	{
-		if (ft_strcmp(sorting_table[i]->name, sorting_table[i + 1]->name) > 0)
+		if (ft_strcmp2(sorting_table[i]->name, sorting_table[i + 1]->name) > 0)
 		{
 			tmp = sorting_table[i];
 			sorting_table[i] = sorting_table[i + 1];
@@ -82,7 +81,7 @@ static void	populate_sorting_table(t_env *list, t_env **sort_tab, int list_len)
  * each one of its nodes, so they can easily be swapped to sort by name
  * variables without affecting the actual environment list. Then the table is
  * sorted and the list is printed. Table is then freed. */
-void	print_env_by_alphabetical_order(t_env *list)
+void	print_env_by_alphabetical_order(t_env *list, t_master *master)
 {
 	int		i;
 	int		list_len;
@@ -90,6 +89,8 @@ void	print_env_by_alphabetical_order(t_env *list)
 
 	list_len = lstlen(list);
 	sorting_table = malloc(sizeof(t_env *) * (list_len + 1));
+	if (sorting_table == NULL)
+		exit_env_printer(master);
 	sorting_table[list_len] = NULL;
 	populate_sorting_table(list, sorting_table, list_len);
 	sort_table_alphabetically(sorting_table, list_len);

@@ -46,15 +46,6 @@ int	can_form_operator(char *token_start, char *current_char)
 	return (0);
 }
 
-// TODO Remove, it's in tthe libft
-int	ft_isdigit(int checkme)
-{
-	if (checkme >= 48 && checkme <= 57)
-		return (1);
-	else
-		return (0);
-}
-
 /* Checks that the current position does not directly follow the latest
  * extracted token, that it is not the start of the line and whether
  * the previous character is actually part of a token or not. */

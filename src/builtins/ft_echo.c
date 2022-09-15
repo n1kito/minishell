@@ -52,8 +52,7 @@ static char	*join_message_for_write(char **message, t_master *master)
 		write(2, "Minishell failure: malloc error in builtin: echo\n", 50);
 		if (command > 1)
 			exit(free_all(master, 42));
-		free_all(master, g_minishexit);
-		exit(1);
+		exit(free_all(master, 1));
 	}
 	ft_strlcpy(buffer, *message, ft_strlen(*message) + 1);
 	message++;
