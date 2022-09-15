@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/18 23:11:50 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 23:52:17 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/15 10:39:43 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,7 @@ static char	*swap_pointers_for_join(char *buffer, char *str, t_master *master)
 	tmp = NULL;
 	tmp = buffer;
 	if (!buffer)
-<<<<<<< HEAD
-		buffer = ft_strdup(buffer);
-=======
 		buffer = ft_strdup(str);
->>>>>>> 1ab04d9cfcb7e90dc28e3484df40fa164e706393
 	else
 		buffer = ft_strjoin(buffer, str);
 	if (!buffer)

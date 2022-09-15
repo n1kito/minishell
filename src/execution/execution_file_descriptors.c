@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 16:00:58 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 23:44:43 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/15 10:52:11 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,10 @@ int	open_file_descriptors(t_master *master, int i)
 	{
 		if (current->token_type == FILE_NAME)
 		{
-			if (current->previous->token_type == REDIRECT_TO
-				|| current->previous->token_type == APPEND)
-			{
-				if (!check_output_file(master, current, i, j))
-					return (0);
-			}
+			if ((current->previous->token_type == REDIRECT_TO \
+				|| current->previous->token_type == APPEND) \
+				&& (!check_output_file(master, current, i, j)))
+				return (0);
 			else if (current->previous->token_type == REDIRECT_FROM)
 			{
 				if (!check_input_file(master, current, i, j))
@@ -70,7 +68,6 @@ int	open_file_descriptors(t_master *master, int i)
  * does not exist or cannot be read. */
 int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 {
-<<<<<<< HEAD
 	master->commands[i]->fds[j] = open(current->token, O_RDONLY);
 	if (access(current->token, F_OK) == -1)
 	{
@@ -81,11 +78,6 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 	}
 	else if (access(current->token, F_OK) == 0
 		&& access(current->token, R_OK) == -1)
-=======
-	if (access(current->token, F_OK) == -1
-		|| (access(current->token, F_OK) == 0
-		&& access(current->token, R_OK) == -1))
->>>>>>> 1ab04d9cfcb7e90dc28e3484df40fa164e706393
 	{
 		close_pipes_and_files(master, master->commands[i]->fds[j]);
 		perror(current->token);
@@ -109,9 +101,8 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 		if (!error_message)
 			exit(err_msg("malloc failed [check_output_file()]", 1, master)
 				&& free_all(master, 1));
-		ft_printf_fd(2, "%s", error_message);
 		g_minishexit = 1;
-		return (free(error_message), 0);
+		return (ft_printf_fd(2, "%s", error_message), free(error_message), 0);
 	}
 	else if (current->previous->token_type == REDIRECT_TO)
 		master->commands[i]->fds[j]
@@ -119,9 +110,8 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 	else if (current->previous->token_type == APPEND)
 		master->commands[i]->fds[j]
 			= open(current->token, O_WRONLY | O_CREAT | O_APPEND, 0666);
-	if (access(current->token, F_OK) == -1
-		|| (access(current->token, F_OK) == 0
-		&& access(current->token, W_OK) == -1))
+	if (access(current->token, F_OK) == -1 || (access(current->token, F_OK) == 0
+			&& access(current->token, W_OK) == -1))
 	{
 		close_pipes_and_files(master, master->commands[i]->fds[j]);
 		g_minishexit = 1;

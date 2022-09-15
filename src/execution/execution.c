@@ -6,7 +6,7 @@
 /*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 11:42:35 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/15 00:42:54 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/15 10:40:44 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,12 @@ void	launch_exec(t_master *master, int i)
 
 	if (!open_file_descriptors(master, i) || !process_open_heredoc(master, i))
 		exit(free_all(master, 1));
-<<<<<<< HEAD
 	if ((master->commands[i]->cmd_array[0]) \
 		&& (!is_builtin_function(master->commands[i]->cmd_array[0])) \
 		&& (!command_error_check(master->commands[i], master)))
 	{
 		close_pipes_and_files(master, i);
 		exit(free_all(master, master->commands[i]->error_code));
-=======
-	if (master->commands[i]->cmd_array[0])
-	{
-		if (!is_builtin_function(master->commands[i]->cmd_array[0]))
-		{
-			if (!command_error_check(master->commands[i], master))
-			{
-				close_pipes_and_files(master, i);
-				exit(free_all(master, master->commands[i]->error_code));
-			}
-		}
->>>>>>> 1ab04d9cfcb7e90dc28e3484df40fa164e706393
 	}
 	input_redirection = last_input_fd(master, i);
 	output_redirection = last_output_fd(master, i);
