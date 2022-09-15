@@ -51,7 +51,6 @@ SRC_FILES		:= 	main\
 					builtins/ft_exit\
 					builtins/ft_cd\
 					builtins/ft_pwd\
-					builtins/builtins_utils\
 					tokenizer/tokenizer\
 					tokenizer/tokenizer_analysers\
 					tokenizer/tokenizer_analysers_2\
@@ -74,14 +73,11 @@ SRC_FILES		:= 	main\
 					execution/execution_builtins\
 					execution/execution_file_descriptors\
 					execution/execution_heredoc_handling\
-					execution/execution_heredoc_handling_2\
 					execution/execution_heredoc_handling_utils\
 					execution/execution_loop_utils\
-					execution/execution_loop_utils_2\
 					execution/execution_pipe_utils\
 					execution/execution_setup\
 					execution/execution_utils\
-					execution/execution_command_error_check\
 					environment/env_for_exe\
 					environment/get_env\
 					environment/env_utils\

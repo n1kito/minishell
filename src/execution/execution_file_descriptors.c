@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   execution_file_descriptors.c                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: mjallada <marvin@42.fr>                    +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/14 16:00:58 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/14 22:44:47 by vrigaudy         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "minishell.h"
 
 void	allocate_file_descriptors(t_master *master)
@@ -25,8 +13,8 @@ void	allocate_file_descriptors(t_master *master)
 		master->commands[i]->fds
 			= malloc(sizeof(int) * master->commands[i]->redirections_count);
 		if (!master->commands[i]->fds)
-			exit(err_msg("malloc failed [open_file_descriptors()]", 1, master)
-				&& free_all(master, 1));
+			exit(free_all(master, 1)
+				&& err_msg("malloc failed [open_file_descriptors()]", 1, master));
 		j = 0;
 		while (j < master->commands[i]->redirections_count)
 			master->commands[i]->fds[j++] = -1;
@@ -92,12 +80,11 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 	if (open(current->token, O_DIRECTORY) != -1)
 	{
 		error_message = ft_strjoin(current->token, ": Is a directory\n");
-		if (!error_message)
-			exit(err_msg("malloc failed [check_output_file()]", 1, master)
-				&& free_all(master, 1));
+		//TODO protect strjoin
 		ft_printf_fd(2, "%s", error_message);
+		free(error_message);
 		g_minishexit = 1;
-		return (free(error_message), 0);
+		return (0);
 	}
 	else if (current->previous->token_type == REDIRECT_TO)
 		master->commands[i]->fds[j]
