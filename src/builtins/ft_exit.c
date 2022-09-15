@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 22:02:30 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/15 10:31:32 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static int	is_above_atoll(char const *str, int neg)
 	return (0);
 }
 
-static void	check_arg1_is_valid(char *var)
+static void	check_arg1_is_valid(t_master *master, char *var)
 {
 	int	i;
 	int	j;
@@ -63,7 +63,7 @@ static void	check_arg1_is_valid(char *var)
 		ft_putstr_fd(var, 2);
 		ft_putstr_fd(": numeric argument required\n", 2);
 		g_minishexit = 2;
-		exit(2);
+		exit(free_all(master, 2));
 	}
 }
 
@@ -105,7 +105,7 @@ void	ft_exit(t_master *master, int cmd_index)
 		close_pipes(master);
 	}
 	if (variable[1])
-		check_arg1_is_valid(variable[1]);
+		check_arg1_is_valid(master, variable[1]);
 	if (variable[1] && variable[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
@@ -113,6 +113,6 @@ void	ft_exit(t_master *master, int cmd_index)
 		return ;
 	}
 	else if (variable[1])
-		exit(ft_atoll(variable[1]));
-	exit(g_minishexit);
+		exit(free_all(master, ft_atoll(variable[1])));
+	exit(free_all(master, g_minishexit));
 }
