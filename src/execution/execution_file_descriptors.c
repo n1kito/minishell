@@ -87,7 +87,7 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 	return (1);
 }
 
-int	file_is_directory(t_master *master, t_tokens *current)
+static int	file_is_directory(t_master *master, t_tokens *current)
 {
 	char		*error_message;
 	int			is_directory;
@@ -99,7 +99,7 @@ int	file_is_directory(t_master *master, t_tokens *current)
 		error_message = ft_strjoin(current->token, ": Is a directory\n");
 		if (!error_message)
 			exit(err_msg("malloc failed [check_output_file()]", 1, master)
-				 && free_all(master, 1));
+				&& free_all(master, 1));
 		g_minishexit = 1;
 		return (ft_printf_fd(2, "%s", error_message), free(error_message), 1);
 	}

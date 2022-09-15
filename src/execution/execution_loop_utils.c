@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <sys/wait.h>
 
 /* Looks through a command segment and returns the index
  * of the lastest input redirection node in the tokens. */
@@ -77,47 +76,4 @@ void	plug_pipes(t_master *master, int i, int infile, int outfile)
 		plug_last_cmd(master, i, infile, outfile);
 	else
 		plug_middle_cmd(master, i, infile, outfile);
-}
-
-/* Loops through all heredocs in the command line, closes them and unlinks
- * the files. */
-void	close_heredocs(t_master *master)
-{
-	int		i;
-
-	i = -1;
-	// TODO DOUBLE CHECK BUT I THINK THIS ONE IS NOT USED ANYWHERE
-	while (++i < master->cmd_count)
-	{
-		if (master->commands[i]->heredoc_fd)
-		{
-			if (close(master->commands[i]->heredoc_fd) == -1)
-				exit(err_msg("could not close heredoc [close_heredocs()]",
-						1, master) && free_all(master, 1));
-		}
-	}
-}
-
-int	close_and_unlink_heredocs(t_master *master)
-{
-	int		i;
-
-	i = -1;
-	//TODO not sure I'm using this one
-	while (++i < master->cmd_count)
-	{
-		if (master->commands[i]->heredoc_fd)
-		{
-			if (close(master->commands[i]->heredoc_fd) == -1)
-				return (err_msg \
-					("could not close heredoc [close_and_unlink_heredocs()]", \
-					0, master));
-			if (access(master->commands[i]->heredoc_path, F_OK) == 0 \
-				&& unlink(master->commands[i]->heredoc_path) == -1)
-				return (err_msg \
-					("could not unlink heredoc [close_and_unlink_heredocs()]", \
-					0, master));
-		}
-	}
-	return (1);
 }

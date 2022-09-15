@@ -46,30 +46,37 @@ void		free_paths(char **paths);
 // execution_file_descriptors.c
 void		allocate_file_descriptors(t_master *master);
 int			open_file_descriptors(t_master *master, int i);
+int			check_input_file(t_master *master, t_tokens *current, int i, int j);
 int			check_output_file(t_master *m, t_tokens *current, int i, int j);
 
 // execution_loop_utils.c
-void		plug_pipes(t_master *master, int i, int infile, int outfile);
-void		process_waiter(t_master *master);
 int			last_input_fd(t_master *master, int i);
 int			last_output_fd(t_master *master, int i);
+void		plug_pipes(t_master *master, int i, int infile, int outfile);
+
+// execution_loop_utils_2.c
+void		process_waiter(t_master *master);
 
 // execution_heredoc_handling.c
-int			setup_heredocs(t_master *master);
-int			heredoc_process(t_master *master, t_tokens *tokens, int i);
+int			exit_heredoc(t_master *master, char *line, int cmd_index,
+				int return_code);
 void		read_heredoc(t_tokens *heredoc_token, t_command *command_node,
 				t_master *master, int i);
-void		expand_heredoc_line(char **line, t_master *master, int cmd_index,
-				int tmp_minishexit);
 void		print_heredoc_warning(char *line, int cmd_index, char *delimiter,
 				t_master *master);
-int			exit_heredoc(t_master *master, char *line, int cmd_index, int return_code);
+
+// execution_heredoc_handling_2.c
+int			setup_heredocs(t_master *master);
+int			heredoc_process(t_master *master, t_tokens *tokens, int i);
+void		expand_heredoc_line(char **line, t_master *master, int cmd_index,
+				int tmp_minishexit);
+int			log_heredoc_expansions(char *line, int cmd_index,
+				t_master *master);
 
 // execution_heredoc_handling_utils.c
 void		set_heredoc_path(t_master *master, int i);
 void		open_heredoc(t_master *master, int i);
-int			log_heredoc_expansions(char *line, int cmd_index,
-				t_master *master);
+
 void		check_if_heredoc_should_expand(t_tokens *delimiter,
 				int *should_expand);
 int			heredoc_file_access(t_master *master, int cmd_index);
@@ -94,6 +101,5 @@ int			is_builtin_function(char *name);
 
 //
 int			command_error_check(t_command *command, t_master *master);
-int			check_input_file(t_master *master, t_tokens *current, int i, int j);
 
 #endif

@@ -14,6 +14,25 @@
 
 int	g_minishexit = 0;
 
+int	main(int argc, char **argv, char **envp)
+{
+	t_master			master;
+	struct sigaction	sa;
+
+	if (argc != 1)
+		return (1);
+	(void)argc;
+	(void)argv;
+	master.env = NULL;
+	master.sa = &sa;
+	master.exit_code = NULL;
+	get_env(envp, &master);
+	init_master_structure(&master);
+	setup_signals(sa, &signal_handler);
+	read_prompt(&master);
+	return (free_all(&master, g_minishexit));
+}
+
 /* Goes through all tokens and returns 0 if an unclosed quote was found. */
 int	found_open_quotes(t_master *master)
 {
@@ -85,23 +104,4 @@ void	read_prompt(t_master *master)
 		}
 		free(line);
 	}
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	t_master			master;
-	struct sigaction	sa;
-
-	if (argc != 1)
-		return (1);
-	(void)argc;
-	(void)argv;
-	master.env = NULL;
-	master.sa = &sa;
-	master.exit_code = NULL;
-	get_env(envp, &master);
-	init_master_structure(&master);
-	setup_signals(sa, &signal_handler);
-	read_prompt(&master);
-	return (free_all(&master, g_minishexit));
 }

@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export_no_arg.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/09/15 23:51:52 by mjallada          #+#    #+#             */
+/*   Updated: 2022/09/15 23:51:54 by mjallada         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 #include "builtins.h"
@@ -65,12 +76,6 @@ static void	populate_sorting_table(t_env *list, t_env **sort_tab, int list_len)
 		i++;
 		current = current->next;
 	}
-}
-
-static void	safe_printf(char *to_print)
-{
-	if (write(1, to_print, ft_strlen(to_print)) == -1)
-		g_minishexit = 1;
 }
 
 /* Takes the environment linked list and creates a sorting table that stores

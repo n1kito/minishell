@@ -13,6 +13,12 @@
 #include "minishell.h"
 #include "builtins.h"
 
+void	safe_printf(char *to_print)
+{
+	if (write(1, to_print, ft_strlen(to_print)) == -1)
+		g_minishexit = 1;
+}
+
 int	arg_is_ok_for_env(char const *str)
 {
 	int	i;
