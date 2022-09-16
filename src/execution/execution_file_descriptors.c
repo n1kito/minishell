@@ -71,7 +71,7 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 	if (access(current->token, F_OK) == -1)
 	{
 		perror(current->token);
-		close_pipes_and_files(master, master->commands[i]->fds[j]);
+		close_pipes(master);
 		g_minishexit = 1;
 		return (0);
 	}
