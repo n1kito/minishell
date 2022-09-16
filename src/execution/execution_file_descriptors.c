@@ -79,7 +79,7 @@ int	check_input_file(t_master *master, t_tokens *current, int i, int j)
 		&& access(current->token, R_OK) == -1)
 	{
 		perror(current->token);
-		close_pipes(master);
+		close_pipes_and_files(master, i);
 		g_minishexit = 1;
 		return (0);
 	}
@@ -123,7 +123,7 @@ int	check_output_file(t_master *master, t_tokens *current, int i, int j)
 			&& access(current->token, W_OK) == -1))
 	{
 		perror(current->token);
-		close_pipes(master);
+		close_pipes_and_files(master, i);
 		g_minishexit = 1;
 		return (0);
 	}
