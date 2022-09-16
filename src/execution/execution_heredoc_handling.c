@@ -27,7 +27,7 @@ int	exit_heredoc(t_master *master, char *line, int cmd_index, int return_code)
 	exit(return_code);
 }
 
-char	*join_for_heredoc(t_master *master, char *line, int i, int g_minishexit)
+char	*join_for_heredoc(t_master *master, char *line, int i)
 {
 	char	*tmp;
 
@@ -67,7 +67,7 @@ void	read_heredoc(t_tokens *tk, t_command *cmi, t_master *master, int i)
 	while (1)
 	{
 		l = NULL;
-		l = join_for_heredoc(master, l, i, g_minishexit);
+		l = join_for_heredoc(master, l, i);
 		if (!l || (!ft_strncmp(l, tk->next->token, ft_strlen(tk->next->token)) \
 			&& ft_strlen(l) - 1 == ft_strlen(tk->next->token)))
 		{
