@@ -8,70 +8,12 @@ Our work on the 42Born2Code <b>minishell</b> project.<br /><br />
 Yes, your own little bash.
 You will learn a lot about processes and file descriptors.
 
-# [Minishell B*tch](https://www.notion.so/Task-List-Matthieu-Victor-09bcc22ebede42a09f040a39379b5baf)
+[![mjallada's 42 minishell Score](https://badge42.vercel.app/api/v2/cl4dwkra3004009maahzpjn6g/project/2635687)](https://github.com/JaeSeoKim/badge42)
 
-# To-do
+# Project review
 
-- [ ] Ajouter clear_history functions a la fin de minishell et dans les fonctions d'exit
-- [ ] Attention jái des putains de segault si je `CTRL + D` sans avoir rien run dans minishell. Essaye de free des trucs qui sont meme pas initialises. 
-  - Si j'init master dans le main avant le prompt ca me fait des `still reachable`
-  - En fait j'ai des trucs qui sont pas free dans le fork du heredoc je pense quand j'exit en cas derreur, ou de `CTRL + C`. A voir parce que la c'est le mega bordel.u
-- [ ] `CTRL+C`in cat process has to exit with code `130`
-- [ ] `segfault` when `unset` is ran with no env.
-- [ ] `segfault` when `unset` is ran with variable that is not in env (might be the same as previous error, not sure)
-- [ ] builtins: rajouter messages d'erreur malloc (pas urgent)
-- [ ] builtins: proteger tous les strjoin & cie
-- [ ] `env` : print err message when two many arguments
-- [ ] `export` : bug lors des assignamtions
-- [ ] `export` `+=` ne fonctionne pas
-- [ ] `cd` suppression du dossier parent: voir erreurs de bash
-- [ ] Protext all open() and close() calls
-- [ ] Do a bunch of `heredoc` + `chmod 0` tests
-- [ ] `CTRL + C` from minishell should print out `\n`?
-- [ ] `CTRL + C` from heredo leaves current heredoc and exec ?
-- [ ] If the program is launched with a empty env, hard code the 3 basic variables
-    - Actually, when `./minishell` is launched, env is checked and if the three variables in question are not in there, they are added.
-- [ ] Increment `$SHLVL` when the program is lauched
-- [ ] Check exit errors codes when passed invalid arguments
-- [ ] Test commands with empty sections (token that only has quotes between two `|`)
-- [ ] `unset` all variables and see if it craches
-- [ ] `top -bn1` et grep le process qu'on veut pour verifier qu'il n'y a pas des process qu'on a pas close
-- [ ] env -i les chemins absolus doivent fonctionner quand meme
-- [ ] Write the easiest tester possible
-- [ ] Fix norminette problem in Makefile ! (not urgent)
-- [x] move heredoc writing to child processes. source: Shells Use Temp Files to Implement Here Documents (from oilshell.org)
-- [x] Exit exits only with the code of the latest command ran in minishell
-- [x] if I run an unknown command but a file with the same name is in the directory, no error is thrown [command_error_check()]
-- [x] if I run a command that only has quotes, there is no error message (command not found) [command_error_check()]
-- [x] check what needs to be freed after every execution
-      - [x] create `reset_master_structure()` and call it at the very beginning of `init_master_structure()`
-          - [x] move `init_master_structure()` to right before `execute_command()` in `readline()` loop.
-      - free tokens and set to NULL
-      - free helpers and set to NULL
-      - free expansions and set to NULL
-      - KEEP env
-      - free commands and set to null
-      - free processes and set to null
-      - free pipes and set to null
-      - env for exec should always be NULL since it's set in the fork
-      - next_command_start set to null
-      - malloc_ok set to 1
-      - printed_error_msg set to 0
-- [x] implementer env_for_exe
-- [x] redirection to file with single builtin `echo` does not work
-- [x] If `env` is empty, commands should return `command not found` not `no such filr or directory`
-    - Actually the should return `No such file or directory`. To test, launch `bash` and `unset PATH`. Running any command will give `No such file or directory`.
-- [x] `< Makefile | ls` doit faire le ls ]
-- [x] Quand je pipe un truc ver `wc` mais que le mot suivant la commande est une expansion vide (avec quotes donc pas invisible), `wc` renvoie une erreur `invalid zero-length file name`, puisque le token du name existe mais est vide.
-- [x] `bash | bash` renvoie des erreurs dans minishell et pas dans bash
-
-### Teamwork Guidelines
-
-- Utilisation d'un [Trello](https://trello.com/b/2fylEX2B/mod%C3%A8le-kanban) pour faciliter le suivi de l'avancement et des choses à faire.
-- Points réguliers à 11h00.
-- Fonctionnement avec branches et Pull Requests.
-	- Les PRs doivent être reviewed par nous deux avant d'être `merged`.
-	- Tout ce qui est `merged` doit être normé.
+- Taking time on the [tokenization process](src/tokenizer/README.md) made the project so much easier. Once we knew the tokens were divided and recognized correctly, it turned out to be quite easy to implement the execution process as close to bash as possible. While some students used a variation the `split()` function to divide the command line according to blanks, I decided to try to replicate the [Bash rules](src/tokenizer/README.md) as closely as possible and would definitely recommend that approach.
+- To aid in that process I decided to take this opportunity to improve my skills in creating testers and automatising the testing process for some of the early stages in the project: `token recognition`, `parsing`/`syntax`, `quote removal` and `variable expansion`. Using the `read` command in my script, I was able to create various raw test files that had `command to test` on the first line, `expected result` on the second line, with a blank line separating each one of those tests. My script would then use those files to run some tests using my functions. It was fire 🔥
 
 # Project Requirement Checklist
 
@@ -119,6 +61,11 @@ You will learn a lot about processes and file descriptors.
 
 > You should limit yourself to the subject description. Anything that is not asked is not required. If you have any doubt about a requirement, take bash as a reference.
 
+# Testing notes
+
+- Use [this](valgrind_cmd) command to test the project with Valgrind. The flags will allow you to track the leaks and fds in all processes.
+- The [readline.supp](readline.supp) file and `--suppressions=readline.supp` flag in the `valgrind` command allows to mark the `readline()` function leaks as `suppressed` to tracking other leaks is easier.
+
 </details>
 
 # Research
@@ -127,46 +74,18 @@ You will learn a lot about processes and file descriptors.
 
 Shell reads and executes commands in the following way:
 1. Reads its input from a file or terminal.
-2. Breaks this input into words and operators, obeying the shell quoting rules.
-   - Alias expansion is performed here.
-3. Parses the token in to _simple_ and _compound_ commands.
+2. Breaks this input into words and operators, obeying the shell quoting rules. (See [[Bash Rules for Token Recognition]](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03) & [[Our README]](src/tokenizer/README.md).
+3. Parses the token (See [Our README](src/parser/README.md))
 4. Perfoms the various shell expansions, breaking expanded tokens into lists of filenames and commands and arguments.
 5. Performs any necessary redirections and removes the redirection operators and their operands from the argument list.
 6. Executes the command.
 7. Optionally waits for the command to complete and collects its exit status.
 
-## Token Recognition
-
-[See README](src/tokenizer/README.md)
-
-## Simple Command Expansion
-
-When a simple command is executed, the shell performs the following expansions, assignments, and redirections, from left to right, in the following order:
-1. The words that the parser has marked as variable assignments (those preceding the command name) and redirections are saved for later processing.
-2. The words that are not variable assignments or redirections are expanded. If any words remain after expansion, the first word is taken to be the name of the command and the remaining words are the arguments.
-3. Redirections are performed.
-4. The text after the `=` in each variable assignment undergoes tilde expansion, parameter expansion, command substitution, arithmetic expansion, and quote removal before being assigned to the variable.  
-
-(Look at docs for details)
-
-# Minishell Process
-
-```mermaid
-graph TD;
-    A[Lexer]-->B[Parser];
-    B-->C[Execution];
-```
-
-## Lexer
-### Token Recognition
-
-[See Bash Rules for Token Recognition](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_03)
-
+Note: After expanding whatever variables (`$USER` for example), `bash` will run a [word splitting](https://www.gnu.org/software/bash/manual/html_node/Word-Splitting.html). This is something to really think about as it's pretty tricky. While not being specifically asked for this project, we did our best to implement a basic version of it. For example, running `$> export var="cat Makefile"` then `$> $var` would split the expansion content into two different tokens and actually `cat` the `Makefile` file. However, after splitting the words in the command line when `blanks` are present, `bash` will merge them back together following very specific rules that we did not implement completely as it is not really the point of the project.
 
 # Resources
 
-## Online
-
+- [x] [Manuel bash](https://www.gnu.org/software/bash/manual/bash.html) ⭐
 - [x] 🎥 [Shell Code Explained (1/2)](https://www.youtube.com/watch?v=ubt-UjcQUYg&t=337s) ⭐⭐
 - [x] 🎥 [Shell Code - More Details (2/2)](https://www.youtube.com/watch?v=ZjzMdsTWF0U&t=1614s) ⭐⭐
 - [x] [Recursive Descent Parsing](https://www.youtube.com/watch?v=SToUyjAsaFk) ⭐⭐
@@ -176,7 +95,6 @@ graph TD;
     - [ ] [Understanding the shell syntax](https://pubs.opengroup.org/onlinepubs/009695399/utilities/xcu_chap02.html) ⭐
     - [ ] [lexer -> parser -> expander -> executor](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 - [ ] [Effective shell](https://effective-shell.com/)
-- [ ] [Manuel bash](https://www.gnu.org/software/bash/manual/bash.html) ⭐
 - [ ] [POSIX Docs](https://pubs.opengroup.org/onlinepubs/9699919799/)
 - [ ] [Writing your own shell](https://www.cs.purdue.edu/homes/grr/SystemsProgrammingBook/Book/Chapter5-WritingYourOwnShell.pdf)
 - [x] [Bash one liners explained](https://catonmat.net/bash-one-liners-explained-part-three)
@@ -187,8 +105,7 @@ graph TD;
 
 ## From other 42 students
 
-- @vietdu91's [project](https://github.com/vietdu91/42_minishell)  
-    - And his [minishell bible](https://docs.google.com/spreadsheets/d/1uJHQu0VPsjjBkR4hxOeCMEt3AOM1Hp_SmUzPFhAH-nA/edit#gid=0) ✝
+- @vietdu91's [project](https://github.com/vietdu91/42_minishell) and his [minishell bible](https://docs.google.com/spreadsheets/d/1uJHQu0VPsjjBkR4hxOeCMEt3AOM1Hp_SmUzPFhAH-nA/edit#gid=0) ✝
 - @bboisset's [checklist](https://docs.google.com/spreadsheets/d/1ssdLRjY8lJu4GK5IuoA3nf5Plkt7Kx-dNfc5KxvIcXg/edit?usp=sharing) ✅
 
 # Contributors
