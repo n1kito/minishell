@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/13 21:36:25 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/16 04:00:20 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 04:11:31 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	safe_printf(char *to_print)
 		g_minishexit = 1;
 }
 
-int	arg_is_ok_for_env(char const *str)
+int	arg_is_ok_for_env(char const *str, int exprt)
 {
 	int	i;
 
@@ -31,8 +31,11 @@ int	arg_is_ok_for_env(char const *str)
 		return (1);
 	while (str[i])
 	{
-		if (str[i] == '=' || (str[i] == '+' && str[i + 1] == '='))
-			return (0);
+		if (exprt)
+		{
+			if (str[i] == '=' || (str[i] == '+' && str[i + 1] == '='))
+				return (0);
+		}
 		if (!ft_isalnum(str[i]) && str[i] != '_')
 			return (1);
 		i++;

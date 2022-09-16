@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/16 03:01:03 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 04:13:06 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	ft_unset(t_env **env, char **arg)
 	g_minishexit = 0;
 	while (arg[i] && *env)
 	{
-		if (arg_is_ok_for_env(arg[i]) == 0 && *env)
+		if (arg_is_ok_for_env(arg[i], 0) == 0 && *env)
 		{
 			while (check_match((*env)->name, arg[i]))
 			{
@@ -96,7 +96,7 @@ void	ft_unset(t_env **env, char **arg)
 			if (*env)
 				*env = unset_middle(*env, start);
 		}
-		else if (arg_is_ok_for_env(arg[i]) == 1)
+		else if (arg_is_ok_for_env(arg[i], 0) == 1)
 			g_minishexit = ft_print_error(arg[i]);
 		i++;
 		*env = start;

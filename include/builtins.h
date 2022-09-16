@@ -6,7 +6,7 @@
 /*   By: mjallada <mjallada@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 14:35:42 by mjallada          #+#    #+#             */
-/*   Updated: 2022/09/16 00:38:23 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 04:10:38 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	ft_exit(t_master *master, int cmd_index);
 
 // utils pour les builtins
 void	print_env_by_alphabetical_order(t_env *list, t_master *master);
-int		arg_is_ok_for_env(char const *str);
+int		arg_is_ok_for_env(char const *str, int exprt);
 void	check_malloc_in_builtin(t_master *master, t_env *env);
 void	safe_printf(char *to_print);
 void	exit_env_printer(t_master *master);
