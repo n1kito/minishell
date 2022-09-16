@@ -27,7 +27,7 @@ static int	is_sorted_list(t_env *list[])
 	return (1);
 }
 
-static int	lstlen(t_env *list)
+int	lstlen(t_env *list)
 {
 	int	i;
 
