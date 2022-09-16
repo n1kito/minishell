@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/16 03:34:33 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 04:12:46 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,9 @@ void	ft_export(t_master *master, char **variable)
 		print_env_by_alphabetical_order(master->env, master);
 	while (variable[i])
 	{
-		if (arg_is_ok_for_env(variable[i]) == 0)
+		if (arg_is_ok_for_env(variable[i], 1) == 0)
 			check_if_in_env(master, save, variable[i]);
-		else if (arg_is_ok_for_env(variable[i]) == 1)
+		else if (arg_is_ok_for_env(variable[i], 1) == 1)
 		{
 			write (2, "Export: Error: '", 16);
 			write (2, variable[i], ft_strlen(variable[i]));
