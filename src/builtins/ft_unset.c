@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/21 16:33:40 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/12 16:36:28 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 03:01:03 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,10 +55,22 @@ static t_env	*ft_swap(t_env *env)
 
 	start = env->next;
 	tmp = env;
-	while (env && env->next)
-		env = env->next;
-	env->next = tmp;
+	if (env->name)
+	{
+		free(tmp->name);
+		tmp->name = NULL;
+	}
+	if (tmp->name)
+	{
+		free(tmp->name);
+		tmp->name = NULL;
+	}
 	tmp->next = NULL;
+	if (tmp)
+	{
+		free(tmp);
+		tmp = NULL;
+	}
 	return (start);
 }
 
@@ -84,7 +96,7 @@ void	ft_unset(t_env **env, char **arg)
 			if (*env)
 				*env = unset_middle(*env, start);
 		}
-		else if (arg_is_ok_for_env(arg[i]))
+		else if (arg_is_ok_for_env(arg[i]) == 1)
 			g_minishexit = ft_print_error(arg[i]);
 		i++;
 		*env = start;
