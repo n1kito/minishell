@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/10 15:12:00 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 17:56:19 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 03:23:42 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	check_arg1_is_valid(t_master *master, char *var)
 	j = 0;
 	while (*(var + j) == ' ' || (*(var + j) >= 9 && *(var + j) <= 13))
 		j++;
-	if (*(var + j) == '=' || *(var + j) == '-')
+	if (*(var + j) == '=' || *(var + j) == '-' || *(var + j) == '+')
 	{
 		if (*(var + j) == '-')
 			neg = 1;

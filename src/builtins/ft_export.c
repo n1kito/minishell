@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 05:57:14 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/16 00:56:37 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 03:34:33 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ static char	*update_env_plus(char *init_value, char *added_value, t_master *m)
 	{
 		write(2, "Minishell failure: malloc error in builtin: export\n", 52);
 		free_all(m, g_minishexit);
-		if (command > 1)
-			exit(42);
 		exit(1);
 	}
 	return (init_value);
@@ -60,8 +58,6 @@ static void	update_env(t_master *master, t_env *env, char *str)
 	{
 		write(2, "Minishell failure: malloc error in builtin: export\n", 52);
 		free_all(master, g_minishexit);
-		if (command > 1)
-			exit(42);
 		exit(1);
 	}
 }

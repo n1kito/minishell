@@ -6,7 +6,7 @@
 /*   By: vrigaudy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/14 17:33:23 by vrigaudy          #+#    #+#             */
-/*   Updated: 2022/09/14 17:35:48 by vrigaudy         ###   ########.fr       */
+/*   Updated: 2022/09/16 03:33:46 by vrigaudy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,6 @@ void	process_waiter(t_master *master)
 		if (waitpid(master->processes[i], &g_minishexit, 0) == -1)
 			exit(err_msg("waitpid() failed [process_waiter()]", 1, master)
 				&& free_master(master, 1));
-		if (WIFEXITED(g_minishexit) && WEXITSTATUS(g_minishexit) == 42)
-			exit(free_all(master, 1));
 	}
 	if (WIFEXITED(g_minishexit))
 		g_minishexit = WEXITSTATUS(g_minishexit);
