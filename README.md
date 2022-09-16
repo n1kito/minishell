@@ -15,6 +15,10 @@ You will learn a lot about processes and file descriptors.
 - Taking time on the [tokenization process](src/tokenizer/README.md) made the project so much easier. Once we knew the tokens were divided and recognized correctly, it turned out to be quite easy to implement the execution process as close to bash as possible. While some students used a variation the `split()` function to divide the command line according to blanks, I decided to try to replicate the [Bash rules](src/tokenizer/README.md) as closely as possible and would definitely recommend that approach.
 - To aid in that process I decided to take this opportunity to improve my skills in creating testers and automatising the testing process for some of the early stages in the project: `token recognition`, `parsing`/`syntax`, `quote removal` and `variable expansion`. Using the `read` command in my script, I was able to create various raw test files that had `command to test` on the first line, `expected result` on the second line, with a blank line separating each one of those tests. My script would then use those files to run some tests using my functions. It was fire 🔥
 
+<p align="center">
+<img src="img/minishell_tester.gif"><br/>
+</p>
+
 # Project Requirement Checklist
 
 <details><summary><i>(+ click to expand)</i></summary>
