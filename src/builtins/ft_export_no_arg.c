@@ -84,16 +84,14 @@ static void	populate_sorting_table(t_env *list, t_env **sort_tab, int list_len)
 void	print_env_by_alphabetical_order(t_env *list, t_master *master)
 {
 	int		i;
-	int		list_len;
 	t_env	**sorting_table;
 
-	list_len = lstlen(list);
-	sorting_table = malloc(sizeof(t_env *) * (list_len + 1));
+	sorting_table = malloc(sizeof(t_env *) * (lstlen(list) + 1));
 	if (sorting_table == NULL)
 		exit_env_printer(master);
-	sorting_table[list_len] = NULL;
-	populate_sorting_table(list, sorting_table, list_len);
-	sort_table_alphabetically(sorting_table, list_len);
+	sorting_table[lstlen(list)] = NULL;
+	populate_sorting_table(list, sorting_table, lstlen(list));
+	sort_table_alphabetically(sorting_table, lstlen(list));
 	i = -1;
 	while (sorting_table[++i])
 	{
