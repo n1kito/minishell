@@ -8,8 +8,6 @@ Our work on the 42Born2Code <b>minishell</b> project.<br /><br />
 Yes, your own little bash.
 You will learn a lot about processes and file descriptors.
 
-[![mjallada's 42 minishell Score](https://badge42.vercel.app/api/v2/cl4dwkra3004009maahzpjn6g/project/2635687)](https://github.com/JaeSeoKim/badge42)
-
 # Project review
 
 - Taking time on the [tokenization process](src/tokenizer/README.md) made the project so much easier. Once we knew the tokens were divided and recognized correctly, it turned out to be quite easy to implement the execution process as close to bash as possible. While some students used a variation the `split()` function to divide the command line according to blanks, I decided to try to replicate the [Bash rules](src/tokenizer/README.md) as closely as possible and would definitely recommend that approach.
